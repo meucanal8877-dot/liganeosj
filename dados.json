@@ -20,8 +20,8 @@
   "origem": "",
   "objetivo": "Uma competição entre amigos, para competir, se divertir e manter o ambiente organizado, garantindo uma experiência justa e positiva para todos.",
   "oQueE": "A Liga Neo SJ é uma liga de Fut7 disputada na Arena Lobos, em São José dos Ramos (PB). Todo mês os capitães montam seus times no Draft e as equipes disputam o título mensal em uma série inspirada nos playoffs da NBA.",
-  "videoApresentacao": "video/apresentacao-liga.mp4",
-  "videoApresentacaoPoster": "video/apresentacao-liga.jpg",
+  "videoApresentacao": "apresentacao-liga.mp4",
+  "videoApresentacaoPoster": "apresentacao-liga.jpg",
   "temporada": "2026/27",
   "regraPrincipal": "Respeito, compromisso e espírito esportivo. A Liga Neo SJ é uma competição entre amigos. A intenção é competir, se divertir e manter o ambiente organizado, garantindo uma experiência justa e positiva para todos.",
   "totaisReferencia": "Totais oficiais após o Jogo 03 • Outubro de 2026",
@@ -35,7 +35,7 @@
    "sigla": "AL EC",
    "cor": "#2f6dff",
    "identidade": "Azul",
-   "escudo": "img/escudo-al-ec.png",
+   "escudo": "escudo-al-ec.png",
    "capitaoId": "jose-hilton",
    "descricao": ""
   },
@@ -45,7 +45,7 @@
    "sigla": "AL FC",
    "cor": "#e5303f",
    "identidade": "Vermelho",
-   "escudo": "img/escudo-al-fc.png",
+   "escudo": "escudo-al-fc.png",
    "capitaoId": "caio-silva",
    "descricao": ""
   }
@@ -58,8 +58,8 @@
    "numero": "09",
    "posicao": "Atacante",
    "timeId": "",
-   "foto": "img/players/caio-silva.jpg",
-   "retrato": "img/players/caio-silva-retrato.jpg"
+   "foto": "jogador-caio-silva.jpg",
+   "retrato": "jogador-caio-silva-retrato.jpg"
   },
   {
    "id": "carlos-henrique",
@@ -68,8 +68,8 @@
    "numero": "06",
    "posicao": "Meio-campo",
    "timeId": "",
-   "foto": "img/players/carlos-henrique.jpg",
-   "retrato": "img/players/carlos-henrique-retrato.jpg"
+   "foto": "jogador-carlos-henrique.jpg",
+   "retrato": "jogador-carlos-henrique-retrato.jpg"
   },
   {
    "id": "danilo-ramos",
@@ -78,8 +78,8 @@
    "numero": "08",
    "posicao": "Meio-campo",
    "timeId": "",
-   "foto": "img/players/danilo-ramos.jpg",
-   "retrato": "img/players/danilo-ramos-retrato.jpg"
+   "foto": "jogador-danilo-ramos.jpg",
+   "retrato": "jogador-danilo-ramos-retrato.jpg"
   },
   {
    "id": "gabriel-gb",
@@ -88,8 +88,8 @@
    "numero": "08",
    "posicao": "Meio-campo",
    "timeId": "",
-   "foto": "img/players/gabriel-gb.jpg",
-   "retrato": "img/players/gabriel-gb-retrato.jpg"
+   "foto": "jogador-gabriel-gb.jpg",
+   "retrato": "jogador-gabriel-gb-retrato.jpg"
   },
   {
    "id": "giliard",
@@ -98,8 +98,8 @@
    "numero": "10",
    "posicao": "Atacante",
    "timeId": "",
-   "foto": "img/players/giliard.jpg",
-   "retrato": "img/players/giliard-retrato.jpg"
+   "foto": "jogador-giliard.jpg",
+   "retrato": "jogador-giliard-retrato.jpg"
   },
   {
    "id": "gleysson-nascimento",
@@ -108,8 +108,8 @@
    "numero": "10",
    "posicao": "Atacante",
    "timeId": "",
-   "foto": "img/players/gleysson-nascimento.jpg",
-   "retrato": "img/players/gleysson-nascimento-retrato.jpg"
+   "foto": "jogador-gleysson-nascimento.jpg",
+   "retrato": "jogador-gleysson-nascimento-retrato.jpg"
   },
   {
    "id": "joao-batista",
@@ -118,8 +118,8 @@
    "numero": "06",
    "posicao": "Zagueiro",
    "timeId": "",
-   "foto": "img/players/joao-batista.jpg",
-   "retrato": "img/players/joao-batista-retrato.jpg"
+   "foto": "jogador-joao-batista.jpg",
+   "retrato": "jogador-joao-batista-retrato.jpg"
   },
   {
    "id": "jose-hilton",
@@ -128,8 +128,8 @@
    "numero": "03",
    "posicao": "Zagueiro",
    "timeId": "",
-   "foto": "img/players/jose-hilton.jpg",
-   "retrato": "img/players/jose-hilton-retrato.jpg"
+   "foto": "jogador-jose-hilton.jpg",
+   "retrato": "jogador-jose-hilton-retrato.jpg"
   },
   {
    "id": "laerty-torres",
@@ -138,8 +138,8 @@
    "numero": "05",
    "posicao": "Zagueiro",
    "timeId": "",
-   "foto": "img/players/laerty-torres.jpg",
-   "retrato": "img/players/laerty-torres-retrato.jpg"
+   "foto": "jogador-laerty-torres.jpg",
+   "retrato": "jogador-laerty-torres-retrato.jpg"
   },
   {
    "id": "marcelo-cavalcanti",
@@ -148,8 +148,8 @@
    "numero": "03",
    "posicao": "Zagueiro",
    "timeId": "",
-   "foto": "img/players/marcelo-cavalcanti.jpg",
-   "retrato": "img/players/marcelo-cavalcanti-retrato.jpg"
+   "foto": "jogador-marcelo-cavalcanti.jpg",
+   "retrato": "jogador-marcelo-cavalcanti-retrato.jpg"
   },
   {
    "id": "marcio-smith",
@@ -158,8 +158,8 @@
    "numero": "07",
    "posicao": "Meio-campo",
    "timeId": "",
-   "foto": "img/players/marcio-smith.jpg",
-   "retrato": "img/players/marcio-smith-retrato.jpg"
+   "foto": "jogador-marcio-smith.jpg",
+   "retrato": "jogador-marcio-smith-retrato.jpg"
   },
   {
    "id": "mateus-son",
@@ -168,8 +168,8 @@
    "numero": "01",
    "posicao": "Goleiro",
    "timeId": "",
-   "foto": "img/players/mateus-son.jpg",
-   "retrato": "img/players/mateus-son-retrato.jpg"
+   "foto": "jogador-mateus-son.jpg",
+   "retrato": "jogador-mateus-son-retrato.jpg"
   },
   {
    "id": "matheus-cavalcanti",
@@ -178,8 +178,8 @@
    "numero": "05",
    "posicao": "Zagueiro",
    "timeId": "",
-   "foto": "img/players/matheus-cavalcanti.jpg",
-   "retrato": "img/players/matheus-cavalcanti-retrato.jpg"
+   "foto": "jogador-matheus-cavalcanti.jpg",
+   "retrato": "jogador-matheus-cavalcanti-retrato.jpg"
   },
   {
    "id": "neto-brito",
@@ -188,8 +188,8 @@
    "numero": "11",
    "posicao": "Meio-campo",
    "timeId": "",
-   "foto": "img/players/neto-brito.jpg",
-   "retrato": "img/players/neto-brito-retrato.jpg"
+   "foto": "jogador-neto-brito.jpg",
+   "retrato": "jogador-neto-brito-retrato.jpg"
   },
   {
    "id": "renan-carioca",
@@ -198,8 +198,8 @@
    "numero": "01",
    "posicao": "Goleiro",
    "timeId": "",
-   "foto": "img/players/renan-carioca.jpg",
-   "retrato": "img/players/renan-carioca-retrato.jpg"
+   "foto": "jogador-renan-carioca.jpg",
+   "retrato": "jogador-renan-carioca-retrato.jpg"
   },
   {
    "id": "sergio-leopoldino",
@@ -208,8 +208,8 @@
    "numero": "09",
    "posicao": "Atacante",
    "timeId": "",
-   "foto": "img/players/sergio-leopoldino.jpg",
-   "retrato": "img/players/sergio-leopoldino-retrato.jpg"
+   "foto": "jogador-sergio-leopoldino.jpg",
+   "retrato": "jogador-sergio-leopoldino-retrato.jpg"
   },
   {
    "id": "vinni-mago",
@@ -218,8 +218,8 @@
    "numero": "11",
    "posicao": "Atacante",
    "timeId": "",
-   "foto": "img/players/vinni-mago.jpg",
-   "retrato": "img/players/vinni-mago-retrato.jpg"
+   "foto": "jogador-vinni-mago.jpg",
+   "retrato": "jogador-vinni-mago-retrato.jpg"
   },
   {
    "id": "wellington-silva",
@@ -228,8 +228,8 @@
    "numero": "07",
    "posicao": "Meio-campo",
    "timeId": "",
-   "foto": "img/players/wellington-silva.jpg",
-   "retrato": "img/players/wellington-silva-retrato.jpg"
+   "foto": "jogador-wellington-silva.jpg",
+   "retrato": "jogador-wellington-silva-retrato.jpg"
   }
  ],
  "drafts": [
@@ -621,7 +621,7 @@
    "data": "2026-10-21",
    "categoria": "Comunicado",
    "titulo": "Arena Lobos Esporte Clube é o campeão de outubro",
-   "imagem": "img/escudo-al-ec.png",
+   "imagem": "escudo-al-ec.png",
    "texto": "O Arena Lobos Esporte Clube venceu os três primeiros jogos da série e conquistou o título de outubro da Liga Neo SJ. Na campanha, vitórias por 10 x 06 no Jogo 01, 12 x 9 no Jogo 02 e 15 x 10 no Jogo 03.",
    "ordem": 1
   },
@@ -630,7 +630,7 @@
    "data": "2026-10-21",
    "categoria": "Ranking",
    "titulo": "Ranking atualizado após o Jogo 03",
-   "imagem": "video/ranking-jogo-03.jpg",
+   "imagem": "ranking-jogo-03.jpg",
    "texto": "Gleysson lidera a artilharia com 14 gols. Serjão, Neto e GB vêm em seguida, com 7 gols cada. Nas assistências, Serjão é o líder com 9 passes para gol, seguido por Gleysson, com 6. O destaque do Jogo 03 foi Serjão, com 4 gols e 2 assistências.",
    "ordem": 2
   },
@@ -639,7 +639,7 @@
    "data": "2026-10-12",
    "categoria": "Resultado",
    "titulo": "Mais uma partida concluída: 12 x 9",
-   "imagem": "img/escudo-al-ec.png",
+   "imagem": "escudo-al-ec.png",
    "texto": "O Arena Lobos Esporte Clube venceu o Arena Lobos Futebol Clube por 12 x 9, garantindo mais uma vitória na caminhada da Liga Neo SJ. Foi mais um jogo de muita disputa, gols e emoção.",
    "ordem": 3
   },
@@ -648,7 +648,7 @@
    "data": "2026-10-05",
    "categoria": "Resultado",
    "titulo": "Foi dado o primeiro passo da Liga Neo SJ",
-   "imagem": "img/artes/capa-estreia.jpg",
+   "imagem": "arte-capa-estreia.jpg",
    "texto": "No jogo de estreia, em 05 de outubro, o Arena Lobos Esporte Clube venceu o Arena Lobos Futebol Clube por 10 x 06. O primeiro jogo do mês de outubro foi concluído com sucesso.",
    "ordem": 4
   },
@@ -657,7 +657,7 @@
    "data": "2026-09-08",
    "categoria": "Regras",
    "titulo": "Como funciona a Liga Neo SJ",
-   "imagem": "img/artes/como-funciona.jpg",
+   "imagem": "arte-como-funciona.jpg",
    "texto": "Capitães, Draft das equipes, jogos do mês, disputa pelo título, melhor jogador do mês e, no mês seguinte, tudo recomeça. Além da competição, respeito, compromisso e espírito esportivo são fundamentais para a Liga acontecer da melhor forma para todos.",
    "ordem": 5
   },
@@ -666,7 +666,7 @@
    "data": "2026-09-06",
    "categoria": "Comunicado",
    "titulo": "Novos coletes, novas identidades",
-   "imagem": "img/escudo-al-fc.png",
+   "imagem": "escudo-al-fc.png",
    "texto": "Apresentados os coletes oficiais do Arena Lobos Esporte Clube (azul) e do Arena Lobos Futebol Clube (vermelho). Numeração: 03, 05, 06, 07, 08, 09, 10 e 11, disponível para os dois times, e 2 coletes especiais para os goleiros.",
    "ordem": 6
   }
@@ -677,8 +677,8 @@
    "categoria": "Apresentação da liga",
    "titulo": "Conheça a Liga Neo SJ",
    "data": "2026-10-19",
-   "arquivo": "video/apresentacao-liga.mp4",
-   "poster": "video/apresentacao-liga.jpg",
+   "arquivo": "apresentacao-liga.mp4",
+   "poster": "apresentacao-liga.jpg",
    "url": "",
    "descricao": "Como funciona a liga, os times, as regras e o título mensal.",
    "ordem": 1
@@ -688,8 +688,8 @@
    "categoria": "Ranking",
    "titulo": "Ranking atualizado após o Jogo 03",
    "data": "2026-10-21",
-   "arquivo": "video/ranking-jogo-03.mp4",
-   "poster": "video/ranking-jogo-03.jpg",
+   "arquivo": "ranking-jogo-03.mp4",
+   "poster": "ranking-jogo-03.jpg",
    "url": "",
    "descricao": "Artilharia, assistências e o destaque do Jogo 03.",
    "ordem": 2
@@ -763,7 +763,7 @@
    "data": "2026-10-05",
    "tipo": "Post",
    "titulo": "Foi dado o primeiro passo da Liga Neo SJ",
-   "imagem": "img/artes/capa-estreia.jpg",
+   "imagem": "arte-capa-estreia.jpg",
    "url": "https://www.instagram.com/liganeosj/p/DeIhcBZiSTI/",
    "ordem": 3
   },
@@ -781,7 +781,7 @@
    "data": "2026-09-08",
    "tipo": "Arte oficial",
    "titulo": "Como funciona a Liga Neo SJ",
-   "imagem": "img/artes/como-funciona.jpg",
+   "imagem": "arte-como-funciona.jpg",
    "url": "https://www.instagram.com/liganeosj/p/DdB3br_Floo/",
    "ordem": 5
   },
@@ -790,7 +790,7 @@
    "data": "2026-09-08",
    "tipo": "Arte oficial",
    "titulo": "Regras básicas",
-   "imagem": "img/artes/regras-basicas.jpg",
+   "imagem": "arte-regras-basicas.jpg",
    "url": "https://www.instagram.com/liganeosj/p/DdB3br_Floo/",
    "ordem": 6
   },
@@ -819,7 +819,7 @@
    "ordem": 1,
    "nome": "Arena Lobos",
    "descricao": "São José dos Ramos. Casa da Liga Neo SJ.",
-   "logo": "img/sponsors/arena-lobos.jpg",
+   "logo": "apoiador-arena-lobos.jpg",
    "instagram": "",
    "whatsapp": "",
    "site": "",
@@ -830,7 +830,7 @@
    "ordem": 2,
    "nome": "Matheus Prefeito",
    "descricao": "",
-   "logo": "img/sponsors/matheus-prefeito.jpg",
+   "logo": "apoiador-matheus-prefeito.jpg",
    "instagram": "",
    "whatsapp": "",
    "site": "",
@@ -841,7 +841,7 @@
    "ordem": 3,
    "nome": "S.A Bebidas",
    "descricao": "Depósito de bebidas.",
-   "logo": "img/sponsors/sa-bebidas.jpg",
+   "logo": "apoiador-sa-bebidas.jpg",
    "instagram": "",
    "whatsapp": "83 98890-8351",
    "site": "",
@@ -852,7 +852,7 @@
    "ordem": 4,
    "nome": "Chapa Burguer Artesanal",
    "descricao": "",
-   "logo": "img/sponsors/chapa-burguer.jpg",
+   "logo": "apoiador-chapa-burguer.jpg",
    "instagram": "chapa.burguer",
    "whatsapp": "83 98688-1900",
    "site": "",
@@ -863,7 +863,7 @@
    "ordem": 5,
    "nome": "CS Multicanais",
    "descricao": "Entretenimento sem limites.",
-   "logo": "img/sponsors/cs-multicanais.jpg",
+   "logo": "apoiador-cs-multicanais.jpg",
    "instagram": "",
    "whatsapp": "83 98110-8562",
    "site": "",
@@ -874,7 +874,7 @@
    "ordem": 6,
    "nome": "Fernando Peças e Serviços",
    "descricao": "",
-   "logo": "img/sponsors/fernando-pecas-e-servicos.jpg",
+   "logo": "apoiador-fernando-pecas-e-servicos.jpg",
    "instagram": "fernandopecaseservicos",
    "whatsapp": "83 99379-5991",
    "site": "",
@@ -885,7 +885,7 @@
    "ordem": 7,
    "nome": "Thiago do Ovo",
    "descricao": "",
-   "logo": "img/sponsors/thiago-do-ovo.jpg",
+   "logo": "apoiador-thiago-do-ovo.jpg",
    "instagram": "",
    "whatsapp": "83 98196-3717",
    "site": "",
@@ -896,7 +896,7 @@
    "ordem": 8,
    "nome": "JH Móveis",
    "descricao": "",
-   "logo": "img/sponsors/jh-moveis.jpg",
+   "logo": "apoiador-jh-moveis.jpg",
    "instagram": "",
    "whatsapp": "83 98804-7494",
    "site": "",
@@ -907,7 +907,7 @@
    "ordem": 9,
    "nome": "VD",
    "descricao": "",
-   "logo": "img/sponsors/vd-viniciusdg.jpg",
+   "logo": "apoiador-vd-viniciusdg.jpg",
    "instagram": "_viniciusdg.1",
    "whatsapp": "",
    "site": "",
@@ -918,7 +918,7 @@
    "ordem": 10,
    "nome": "Marcelo Cavalcanti",
    "descricao": "",
-   "logo": "img/sponsors/marcelo-cavalcanti.jpg",
+   "logo": "apoiador-marcelo-cavalcanti.jpg",
    "instagram": "",
    "whatsapp": "",
    "site": "",
@@ -930,7 +930,7 @@
    "id": "arte-como-funciona",
    "ordem": 1,
    "titulo": "Como funciona a Liga Neo SJ",
-   "imagem": "img/artes/como-funciona.jpg",
+   "imagem": "arte-como-funciona.jpg",
    "categoria": "Arte oficial",
    "data": "2026-09-08"
   },
@@ -938,7 +938,7 @@
    "id": "arte-regras",
    "ordem": 2,
    "titulo": "Regras básicas",
-   "imagem": "img/artes/regras-basicas.jpg",
+   "imagem": "arte-regras-basicas.jpg",
    "categoria": "Arte oficial",
    "data": "2026-09-08"
   },
@@ -946,7 +946,7 @@
    "id": "arte-estreia",
    "ordem": 3,
    "titulo": "Foi dado o primeiro passo da Liga Neo SJ",
-   "imagem": "img/artes/capa-estreia.jpg",
+   "imagem": "arte-capa-estreia.jpg",
    "categoria": "Arte oficial",
    "data": "2026-10-05"
   },
@@ -954,7 +954,7 @@
    "id": "escudo-al-ec",
    "ordem": 4,
    "titulo": "Escudo do Arena Lobos Esporte Clube",
-   "imagem": "img/escudo-al-ec.png",
+   "imagem": "escudo-al-ec.png",
    "categoria": "Identidade",
    "data": ""
   },
@@ -962,7 +962,7 @@
    "id": "escudo-al-fc",
    "ordem": 5,
    "titulo": "Escudo do Arena Lobos Futebol Clube",
-   "imagem": "img/escudo-al-fc.png",
+   "imagem": "escudo-al-fc.png",
    "categoria": "Identidade",
    "data": ""
   }
