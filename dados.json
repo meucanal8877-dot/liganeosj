@@ -15,9 +15,9 @@
   "instagramUrl": "https://www.instagram.com/liganeosj/",
   "instagramHandle": "@liganeosj",
   "siteUrl": "https://liganeosj.vercel.app",
-  "fundador": "Caio (@ufcaio) — Fundador e Organizador",
-  "fundacao": "",
-  "origem": "",
+  "fundador": "Caio Silva (@ufcaio), fundador e organizador",
+  "fundacao": "27 de agosto de 2026",
+  "origem": "O nascimento de uma nova era no futebol de São José dos Ramos.\n\nFundada em 27 de agosto de 2026, a Liga Neo SJ nasceu da visão de Caio Silva, que, após dois anos organizando a tradicional Pelada da Segunda, idealizou uma nova forma de viver o futebol em São José dos Ramos.\n\nCom o objetivo de transformar a pelada em uma competição mais organizada, competitiva e estruturada, Caio desenvolveu um formato inovador para a cidade, com equipes personalizadas, pagamento mensal e uma organização inspirada no modelo de uma liga esportiva.\n\nA proposta foi abraçada por Carlos Henrique e Wellington, que acreditaram na iniciativa e se juntaram ao projeto, contribuindo para os primeiros passos dessa nova história.\n\nO que antes era uma reunião de jogadores para praticar futebol passou a representar a oportunidade de construir algo maior: uma competição com identidade própria, equipes organizadas e um ambiente que valoriza a rivalidade saudável, o compromisso e o espírito esportivo.\n\nA criação da Liga Neo SJ marcou o início de uma nova proposta para o futebol de São José dos Ramos, trazendo um formato diferenciado e proporcionando aos jogadores uma experiência mais competitiva e organizada.\n\nMais do que promover partidas, a Liga Neo SJ nasceu com o propósito de fortalecer o futebol local, criar experiências marcantes e dar aos participantes a oportunidade de serem protagonistas de sua própria história dentro de campo.\n\nTudo começou com uma ideia, construída a partir de dois anos de experiência e transformada em realidade por meio da iniciativa de Caio Silva e do apoio daqueles que acreditaram no projeto.\n\nDesde 27 de agosto de 2026, uma nova história começou a ser escrita no futebol de São José dos Ramos.\n\nLIGA NEO SJ\nSeja você o protagonista desse jogo!",
   "objetivo": "Uma competição entre amigos, para competir, se divertir e manter o ambiente organizado, garantindo uma experiência justa e positiva para todos.",
   "oQueE": "A Liga Neo SJ é uma liga de Fut7 disputada na Arena Lobos, em São José dos Ramos (PB). Todo mês os capitães montam seus times no Draft e as equipes disputam o título mensal em uma série inspirada nos playoffs da NBA.",
   "videoApresentacao": "apresentacao-liga.mp4",
@@ -567,9 +567,9 @@
  "linhaDoTempo": [
   {
    "id": "t0",
-   "data": "",
+   "data": "2026-08-27",
    "titulo": "Fundação da Liga Neo SJ",
-   "texto": "Data e história de fundação a confirmar pela organização.",
+   "texto": "Caio Silva funda a Liga Neo SJ, com o apoio de Carlos Henrique e Wellington, após dois anos organizando a tradicional Pelada da Segunda.",
    "ordem": 1
   },
   {
