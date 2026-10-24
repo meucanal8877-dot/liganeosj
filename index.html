@@ -920,7 +920,7 @@ function pgSobre(){
         <div class="fact"><span>Fundador</span><b>${show(c.fundador)}</b></div>
         <div class="fact"><span>Temporada</span><b>${show(c.temporada)}</b></div>
       </div>
-      <div><h3>Como a liga surgiu</h3><p class="muted">${c.origem?esc(c.origem):'A história de fundação será publicada pela organização. '+TBC}</p></div>
+      <div><h3>Como a liga surgiu</h3><p class="muted" style="white-space:pre-line">${c.origem?esc(c.origem):'A história de fundação será publicada pela organização. '+TBC}</p></div>
       <div><h3>Objetivo</h3><p class="muted">${show(c.objetivo)}</p></div>
     </div>
     <div class="card" style="display:grid;gap:12px;align-content:start;background:linear-gradient(140deg,var(--blue-bg),var(--card) 55%,var(--red-bg))">
