@@ -556,8 +556,11 @@ const player = id => byId('jogadores', id);
 const pnm = p => p ? (p.apelido || p.nome) : '';
 const tnm = (id, short) => { const t = team(id); return t ? (short ? (t.sigla||t.nome) : t.nome) : ''; };
 const latestDraft = () => (D().drafts||[]).slice().sort((a,b) => (b.mes||'').localeCompare(a.mes||''))[0] || null;
+const draftFeito = dr => !!dr && !!(dr.goleiroAId || dr.goleiroBId || (dr.jogadoresA||[]).length || (dr.jogadoresB||[]).length);
+const latestDraftFeito = () => (D().drafts||[]).slice().sort((a,b) => (b.mes||'').localeCompare(a.mes||'')).find(draftFeito) || null;
+function capInfo(pid){ const dr = latestDraft(); if(!dr) return ''; const s = dr.capitaoAId === pid ? 'A' : dr.capitaoBId === pid ? 'B' : ''; return s ? `<div class="fact"><span>Capitão em ${esc(mesLabel(dr.mes))}</span><b>${esc(tnm(dr['time'+s+'Id']))}</b></div>` : ''; }
 function teamOf(pid){
-  const dr = latestDraft();
+  const dr = latestDraftFeito();
   if(dr){ if(dr.goleiroAId === pid || (dr.jogadoresA||[]).includes(pid)) return dr.timeAId || ''; if(dr.goleiroBId === pid || (dr.jogadoresB||[]).includes(pid)) return dr.timeBId || ''; }
   const p = player(pid); return p && p.timeId || '';
 }
@@ -864,7 +867,7 @@ function pgInicio(){
   </div></section>
 
   ${latestDraft() ? `<section class="band"><div class="wrap">
-    <div class="sec-head"><div><span class="eyebrow">Draft do mês</span><h2>Os times de ${esc(mesLabel(latestDraft().mes))}</h2></div><a class="btn btn-sm" href="#draft">Ver Draft completo ${ic('arrowR')}</a></div>
+    <div class="sec-head"><div><span class="eyebrow">Draft do mês</span><h2>${draftFeito(latestDraft()) ? 'Os times de ' + esc(mesLabel(latestDraft().mes)) : 'Draft de ' + esc(mesLabel(latestDraft().mes)) + ': capitães definidos'}</h2></div><a class="btn btn-sm" href="#draft">Ver Draft completo ${ic('arrowR')}</a></div>
     <div class="draft">${draftTeamHtml(latestDraft(),'A',true)}${draftTeamHtml(latestDraft(),'B',true)}</div>
   </div></section>` : ''}
 
@@ -1045,6 +1048,11 @@ function draftTeamHtml(dr, side, compact){
   const line = (dr['jogadores'+side]||[]).map(player).filter(Boolean);
   const cls = D().times.indexOf(t) === 1 ? 't-red' : 't-blue';
   const row = (p, isGk) => `<a class="drow ${isGk?'gk':''}" href="#jogador-${esc(p.id)}">${photo(p)?`<img src="${esc(photo(p))}" alt="" loading="lazy">`:'<span></span>'}<span style="min-width:0"><b>${esc(pnm(p))}${cap&&cap.id===p.id?' <span class="tie" style="color:var(--gold2)">capitão</span>':''}</b><small>${esc(p.nome)}${p.numero?' • camisa '+esc(p.numero):''}</small></span><span class="tagpos">${isGk?'GOL':esc(POS_AB[p.posicao]||p.posicao||'')}</span></a>`;
+  if(!draftFeito(dr)) return `<div class="dteam ${cls}">
+    <div class="dteam-head">${crest(tid)}<div><h3>${esc(t ? t.nome : 'Time a confirmar')}</h3><span class="muted small">Draft em breve${t&&t.identidade?' • '+esc(t.identidade):''}</span></div></div>
+    <span class="dlabel">Capitão</span>${cap ? row(cap, false) : `<p>${TBC}</p>`}
+    <p class="small muted">Os demais jogadores serão definidos no Draft.</p>
+  </div>`;
   return `<div class="dteam ${cls}">
     <div class="dteam-head">${crest(tid)}<div><h3>${esc(t ? t.nome : 'Time a confirmar')}</h3><span class="muted small">${line.length + (gk?1:0)} jogadores${t&&t.identidade?' • '+esc(t.identidade):''}</span></div></div>
     <span class="dlabel">Goleiro</span>${gk ? row(gk, true) : `<p>${TBC}</p>`}
@@ -1058,12 +1066,15 @@ function pgDraft(){
   const head = pageHead('Draft do mês', dr ? 'Draft de ' + esc(mesLabel(dr.mes)) : 'Draft do mês', 'No início de cada mês os capitães montam os times no Draft. Virou o mês, tudo recomeça.', '<span>/</span><span>Draft</span>');
   if(!dr) return head + `<section class="band"><div class="wrap">${emptyBox('list','Draft ainda não publicado','Os times do mês aparecem aqui assim que a organização registrar o Draft.')}</div></section>`;
   const inDraft = new Set([dr.goleiroAId, dr.goleiroBId, ...(dr.jogadoresA||[]), ...(dr.jogadoresB||[])].filter(Boolean));
-  const fora = D().jogadores.filter(p => !inDraft.has(p.id)).sort((a,b) => pnm(a).localeCompare(pnm(b),'pt-BR'));
+  const aus = (dr.ausentes||[]).map(player).filter(Boolean), feito = draftFeito(dr);
+  const fora = D().jogadores.filter(p => !inDraft.has(p.id) && !(dr.ausentes||[]).includes(p.id) && p.id !== dr.capitaoAId && p.id !== dr.capitaoBId).sort((a,b) => pnm(a).localeCompare(pnm(b),'pt-BR'));
   return head + `<section class="band" style="padding-top:20px"><div class="wrap">
     ${list.length > 1 ? `<div class="toolbar"><div class="sel"><label for="fd-mes">Mês</label><select id="fd-mes" data-f="draft.mes">${list.map(d => `<option value="${esc(d.mes)}" ${d.mes===dr.mes?'selected':''}>${esc(mesLabel(d.mes))}</option>`).join('')}</select></div></div>` : ''}
     <div class="draft">${draftTeamHtml(dr,'A')}${draftTeamHtml(dr,'B')}</div>
     ${dr.observacao ? `<div class="note" style="margin-top:16px">${ic('info')}<span>${esc(dr.observacao)}</span></div>` : ''}
-    ${fora.length ? `<p class="small muted" style="margin-top:16px">Também cadastrados na liga, fora deste Draft: ${fora.map(p => `<a href="#jogador-${esc(p.id)}">${esc(pnm(p))}</a>`).join(', ')}.</p>` : ''}
+    ${!feito ? `<div class="note" style="margin-top:16px">${ic('calendar')}<span><b style="color:var(--fg)">Draft de ${esc(mesLabel(dr.mes))} em breve.</b> Os capitães já estão definidos. Os times aparecem aqui assim que o Draft for realizado.</span></div>` : ''}
+    ${aus.length ? `<p class="small muted" style="margin-top:16px">Não participam do Draft de ${esc(mesLabel(dr.mes))}: ${aus.map(p => `<a href="#jogador-${esc(p.id)}">${esc(pnm(p))}</a>`).join(', ')}.</p>` : ''}
+    ${feito && fora.length ? `<p class="small muted" style="margin-top:16px">Também cadastrados na liga, fora deste Draft: ${fora.map(p => `<a href="#jogador-${esc(p.id)}">${esc(pnm(p))}</a>`).join(', ')}.</p>` : ''}
     <div class="btns" style="margin-top:18px">${shareBtn('Liga Neo SJ • Draft de ' + mesLabel(dr.mes), 'draft')}<a class="btn btn-sm" href="#competicao">Como funciona o Draft ${ic('arrowR')}</a></div>
   </div></section>`;
 }
@@ -1071,10 +1082,11 @@ function pgDraft(){
 function pgTime(id){
   const t = team(id); if(!t) return notFound('Time não encontrado', '#times', 'Ver times');
   const tb = teamTable('todos').find(r => r.id === t.id) || {};
-  const dr = latestDraft(), side = dr ? (dr.timeAId === t.id ? 'A' : dr.timeBId === t.id ? 'B' : '') : '';
+  const drc = latestDraft(), sidec = drc ? (drc.timeAId === t.id ? 'A' : drc.timeBId === t.id ? 'B' : '') : '';
+  const dr = latestDraftFeito(), side = dr ? (dr.timeAId === t.id ? 'A' : dr.timeBId === t.id ? 'B' : '') : '';
   const gk = side ? player(dr['goleiro'+side+'Id']) : null;
   const elenco = (gk ? [gk] : []).concat(D().jogadores.filter(p => teamOf(p.id) === t.id && (!gk || p.id !== gk.id)).sort((a,b) => pnm(a).localeCompare(pnm(b),'pt-BR')));
-  const cap = player(side ? dr['capitao'+side+'Id'] : '') || player(t.capitaoId), ms = sortedMatches().reverse().filter(p => p.mandanteId === t.id || p.visitanteId === t.id);
+  const cap = player(sidec ? drc['capitao'+sidec+'Id'] : '') || player(t.capitaoId), ms = sortedMatches().reverse().filter(p => p.mandanteId === t.id || p.visitanteId === t.id);
   const tit = D().campeoes.filter(c => c.timeId === t.id);
   return pageHead('Time', esc(t.nome), esc(t.descricao||''), `<span>/</span><a href="#times">Times</a><span>/</span><span>${esc(t.sigla||t.nome)}</span>`) + `
   <section class="band" style="padding-top:16px"><div class="wrap grid" style="gap:24px">
@@ -1106,7 +1118,7 @@ function pgJogador(id){
         <div class="fact"><span>Apelido</span><b>${show(p.apelido)}</b></div>
         <div class="fact"><span>Número</span><b>${show(p.numero)}</b></div>
         <div class="fact"><span>Posição</span><b>${show(p.posicao)}</b></div>
-        <div class="fact"><span>Time no Draft</span><b>${teamOf(p.id)?`<a href="#time-${esc(teamOf(p.id))}">${esc(tnm(teamOf(p.id)))}</a>`:'Fora do Draft atual'}</b></div>
+        <div class="fact"><span>Time no Draft</span><b>${teamOf(p.id)?`<a href="#time-${esc(teamOf(p.id))}">${esc(tnm(teamOf(p.id)))}</a>`:'Fora do Draft atual'}</b></div>${capInfo(p.id)}
         <div class="fact"><span>Artilharia</span><b>${rg?rg.pos+'º lugar'+(rg.tie?' (empatado)':''):'—'}</b></div>
         <div class="fact"><span>Assistências</span><b>${ra?ra.pos+'º lugar'+(ra.tie?' (empatado)':''):'—'}</b></div>
       </div>
@@ -1332,6 +1344,7 @@ const SCHEMA = {
     {k:'jogadoresA',l:'Jogadores de linha do Time A',t:'multiref',ref:'jogadores'},
     {k:'timeBId',l:'Time B',t:'ref',ref:'times',req:true},{k:'goleiroBId',l:'Goleiro do Time B',t:'ref',ref:'jogadores',empty:'A confirmar'},{k:'capitaoBId',l:'Capitão do Time B',t:'ref',ref:'jogadores',empty:'A confirmar'},
     {k:'jogadoresB',l:'Jogadores de linha do Time B',t:'multiref',ref:'jogadores'},
+    {k:'ausentes',l:'Não participam do Draft deste mês',t:'multiref',ref:'jogadores'},
     {k:'observacao',l:'Observação',t:'textarea'}
   ], note:'O time de cada jogador no site vem do Draft mais recente.', validate:validateDraft},
   jogadores:{label:'Jogadores', icon:'users', idFrom:o => o.nome, title:o => (o.apelido||o.nome) + (o.numero?' • '+o.numero:''), sub:o => [o.nome, o.posicao, tnm(teamOf(o.id),true)||'Fora do Draft atual'].filter(Boolean).join(' • '), img:o => media(o.foto), sort:(a,b) => pnm(a).localeCompare(pnm(b),'pt-BR'), fields:[
@@ -1412,8 +1425,10 @@ function validateDraft(o){
   const both = A.filter(id => B.includes(id)); if(both.length) err.push('Jogador nos dois times: ' + both.map(id => pnm(player(id))).join(', ') + '.');
   if(o.goleiroAId && o.jogadoresA.includes(o.goleiroAId)) err.push('O goleiro do Time A também está marcado como jogador de linha.');
   if(o.goleiroBId && o.jogadoresB.includes(o.goleiroBId)) err.push('O goleiro do Time B também está marcado como jogador de linha.');
-  if(o.capitaoAId && !A.includes(o.capitaoAId)) err.push('O capitão do Time A precisa estar no Time A.');
-  if(o.capitaoBId && !B.includes(o.capitaoBId)) err.push('O capitão do Time B precisa estar no Time B.');
+  if(o.capitaoAId && A.length && !A.includes(o.capitaoAId)) err.push('O capitão do Time A precisa estar no Time A.');
+  if(o.capitaoBId && B.length && !B.includes(o.capitaoBId)) err.push('O capitão do Time B precisa estar no Time B.');
+  const aus = o.ausentes || [], conf = aus.filter(id => A.includes(id) || B.includes(id) || id === o.capitaoAId || id === o.capitaoBId);
+  if(conf.length) err.push('Jogador marcado como fora do Draft e também em um time: ' + conf.map(id => pnm(player(id))).join(', ') + '.');
   return err;
 }
 function adminAllowed(){ return S.isAdmin && S.db; }
