@@ -424,6 +424,10 @@ tr:last-child td{border-bottom:0}
 .dline{display:grid;gap:8px}
 .drow{display:grid;grid-template-columns:52px minmax(0,1fr) auto;align-items:center;gap:12px;background:rgba(6,10,20,.55);border:1px solid var(--line);border-radius:14px;padding:6px 12px 6px 6px;color:var(--fg);text-decoration:none}
 .drow:hover{border-color:var(--line2)}
+.arow{grid-template-columns:40px 52px minmax(0,1fr) auto}
+.dnum{font-family:var(--display);font-weight:800;font-size:1.7rem;text-align:center;color:var(--gold2);line-height:1}
+.avail{display:grid;gap:8px;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr))}
+@media (max-width:520px){.dtab-pre{display:none}}
 .drow img{width:52px;height:52px;border-radius:12px;object-fit:cover;background:var(--card2)}
 .drow b{display:block;font-family:var(--display);font-size:1.25rem;text-transform:uppercase;line-height:1}
 .drow small{color:var(--mut);font-size:.82rem}
@@ -1067,12 +1071,16 @@ function pgDraft(){
   if(!dr) return head + `<section class="band"><div class="wrap">${emptyBox('list','Draft ainda não publicado','Os times do mês aparecem aqui assim que a organização registrar o Draft.')}</div></section>`;
   const inDraft = new Set([dr.goleiroAId, dr.goleiroBId, ...(dr.jogadoresA||[]), ...(dr.jogadoresB||[])].filter(Boolean));
   const aus = (dr.ausentes||[]).map(player).filter(Boolean), feito = draftFeito(dr);
+  const nnum = p => p.numero && !isNaN(+p.numero) ? +p.numero : 999;
+  const disp = D().jogadores.filter(p => !(dr.ausentes||[]).includes(p.id) && p.id !== dr.capitaoAId && p.id !== dr.capitaoBId).sort((a,b) => nnum(a) - nnum(b) || pnm(a).localeCompare(pnm(b),'pt-BR'));
   const fora = D().jogadores.filter(p => !inDraft.has(p.id) && !(dr.ausentes||[]).includes(p.id) && p.id !== dr.capitaoAId && p.id !== dr.capitaoBId).sort((a,b) => pnm(a).localeCompare(pnm(b),'pt-BR'));
   return head + `<section class="band" style="padding-top:20px"><div class="wrap">
-    ${list.length > 1 ? `<div class="toolbar"><div class="sel"><label for="fd-mes">Mês</label><select id="fd-mes" data-f="draft.mes">${list.map(d => `<option value="${esc(d.mes)}" ${d.mes===dr.mes?'selected':''}>${esc(mesLabel(d.mes))}</option>`).join('')}</select></div></div>` : ''}
+    ${list.length > 1 ? `<div class="tabs" role="tablist" aria-label="Mês do Draft">${list.slice().reverse().map(d => `<button type="button" class="tab" role="tab" data-act="draft-tab" data-v="${esc(d.mes)}" aria-selected="${d.mes===dr.mes}"><span class="dtab-pre">Draft de </span>${esc(mesLabel(d.mes).split(' de ')[0])}</button>`).join('')}</div>` : ''}
+    ${!feito ? `<div class="sec-head" style="margin:6px 0 14px"><div><span class="eyebrow">Draft de ${esc(mesLabel(dr.mes))}</span><h2>Capitães do mês</h2></div></div>` : ''}
     <div class="draft">${draftTeamHtml(dr,'A')}${draftTeamHtml(dr,'B')}</div>
     ${dr.observacao ? `<div class="note" style="margin-top:16px">${ic('info')}<span>${esc(dr.observacao)}</span></div>` : ''}
     ${!feito ? `<div class="note" style="margin-top:16px">${ic('calendar')}<span><b style="color:var(--fg)">Draft de ${esc(mesLabel(dr.mes))} em breve.</b> Os capitães já estão definidos. Os times aparecem aqui assim que o Draft for realizado.</span></div>` : ''}
+    ${!feito ? `<div style="margin-top:26px"><div class="sec-head" style="margin-bottom:14px"><div><span class="eyebrow">Draft de ${esc(mesLabel(dr.mes))}</span><h2>Disponíveis para o Draft</h2><p class="muted">${disp.length} jogadores, por número de camisa. Os capitães escolhem os times a partir desta lista.</p></div></div><div class="avail">${disp.map(p => `<a class="drow arow" href="#jogador-${esc(p.id)}"><span class="dnum">${p.numero ? esc(p.numero) : '–'}</span>${photo(p)?`<img src="${esc(photo(p))}" alt="" loading="lazy">`:'<span></span>'}<span style="min-width:0"><b>${esc(pnm(p))}</b><small>${esc(p.nome)} • ${p.numero ? 'camisa ' + esc(p.numero) : 'camisa a confirmar'}</small></span><span class="tagpos">${p.posicao==='Goleiro'?'GOL':esc(POS_AB[p.posicao]||p.posicao||'')}</span></a>`).join('')}</div></div>` : ''}
     ${aus.length ? `<p class="small muted" style="margin-top:16px">Não participam do Draft de ${esc(mesLabel(dr.mes))}: ${aus.map(p => `<a href="#jogador-${esc(p.id)}">${esc(pnm(p))}</a>`).join(', ')}.</p>` : ''}
     ${feito && fora.length ? `<p class="small muted" style="margin-top:16px">Também cadastrados na liga, fora deste Draft: ${fora.map(p => `<a href="#jogador-${esc(p.id)}">${esc(pnm(p))}</a>`).join(', ')}.</p>` : ''}
     <div class="btns" style="margin-top:18px">${shareBtn('Liga Neo SJ • Draft de ' + mesLabel(dr.mes), 'draft')}<a class="btn btn-sm" href="#competicao">Como funciona o Draft ${ic('arrowR')}</a></div>
@@ -1727,6 +1735,7 @@ document.addEventListener('click', e => {
     case 'lb': openLb(b.dataset.src, b.dataset.cap); break;
     case 'close-lb': closeLb(); break;
     case 'rank-tab': S.ui.rank.tab = v; rerender(true); break;
+    case 'draft-tab': S.ui.draft.mes = v; rerender(true); break;
     case 'chip': { const [g,k] = b.dataset.f.split('.'); S.ui[g][k] = v; rerender(true); break; }
     case 'copy': navigator.clipboard?.writeText(v).then(() => toast('Link copiado.'), () => toast('Não foi possível copiar. Link: ' + v, true)); break;
     case 'adm-sec': S.adm.sec = v; S.adm.edit = null; S.adm.del = null; S.adm.errs = []; S.editing = false; rerender(true); if(S.pending){ S.pending = false; } break;
