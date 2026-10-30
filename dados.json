@@ -1,6 +1,6 @@
 {
- "versao": 4,
- "atualizadoEm": "2026-10-29T23:40:00-03:00",
+ "versao": 6,
+ "atualizadoEm": "2026-10-29T23:59:30-03:00",
  "config": {
   "nome": "Liga Neo SJ",
   "slogan": "Seja Você o protagonista desse jogo!",
@@ -230,6 +230,39 @@
    "timeId": "",
    "foto": "jogador-wellington-silva.jpg",
    "retrato": "jogador-wellington-silva-retrato.jpg"
+  },
+  {
+   "id": "sergio-alves",
+   "nome": "Sérgio Alves",
+   "apelido": "Sérgio Alves",
+   "numero": "",
+   "posicao": "Meio-campo",
+   "timeId": "",
+   "foto": "jogador-sergio-alves.jpg",
+   "retrato": "jogador-sergio-alves-retrato.jpg",
+   "observacao": "Novo mensalista a partir de novembro de 2026."
+  },
+  {
+   "id": "ramiri",
+   "nome": "Ramiri",
+   "apelido": "Ramiri",
+   "numero": "",
+   "posicao": "Atacante",
+   "timeId": "",
+   "foto": "jogador-ramiri.jpg",
+   "retrato": "jogador-ramiri-retrato.jpg",
+   "observacao": "Novo mensalista a partir de novembro de 2026."
+  },
+  {
+   "id": "eduardo-rato",
+   "nome": "Eduardo Rato",
+   "apelido": "Rato",
+   "numero": "",
+   "posicao": "Meio-campo",
+   "timeId": "",
+   "foto": "jogador-eduardo-rato.jpg",
+   "retrato": "jogador-eduardo-rato-retrato.jpg",
+   "observacao": "Novo mensalista a partir de novembro de 2026."
   }
  ],
  "drafts": [
@@ -261,6 +294,24 @@
     "caio-silva",
     "giliard",
     "vinni-mago"
+   ],
+   "observacao": ""
+  },
+  {
+   "id": "2026-11",
+   "mes": "2026-11",
+   "timeAId": "al-ec",
+   "goleiroAId": "",
+   "capitaoAId": "eduardo-rato",
+   "jogadoresA": [],
+   "timeBId": "al-fc",
+   "goleiroBId": "",
+   "capitaoBId": "gleysson-nascimento",
+   "jogadoresB": [],
+   "ausentes": [
+    "matheus-cavalcanti",
+    "joao-batista",
+    "giliard"
    ],
    "observacao": ""
   }
@@ -368,7 +419,7 @@
    "vencedorId": "",
    "situacao": "encerrado",
    "resumo": "O Arena Lobos Esporte Clube venceu o Arena Lobos Futebol Clube por 11 x 06 no último jogo de outubro e fechou o mês com 4 vitórias em 4 jogos.",
-   "destaque": "",
+   "destaque": "Gleysson: 2 gols e 3 assistências",
    "eventos": [],
    "incluidoNoTotalOficial": true,
    "midia": [
@@ -378,7 +429,8 @@
      "url": "https://www.instagram.com/liganeosj/p/De_8DrjmwV_/"
     }
    ],
-   "fonte": "Post oficial @liganeosj de 27/10/2026"
+   "fonte": "Post oficial @liganeosj de 27/10/2026",
+   "destaqueJogadorId": "gleysson-nascimento"
   }
  ],
  "totais": [
@@ -656,6 +708,15 @@
   }
  ],
  "noticias": [
+  {
+   "id": "capitaes-novembro-2026",
+   "data": "2026-10-29",
+   "categoria": "Comunicado",
+   "ordem": 0,
+   "titulo": "Novembro: capitães definidos e três novos mensalistas",
+   "imagem": "",
+   "texto": "Os capitães de novembro já estão definidos: Eduardo Rato comanda o Arena Lobos Esporte Clube e Gleysson Nascimento comanda o Arena Lobos Futebol Clube.\n\nA Liga Neo SJ também recebe três novos mensalistas: Sérgio Alves (meio-campo), Ramiri (atacante) e Eduardo Rato (meio-campo). Sejam bem-vindos!\n\nMatheus, João Batista e Gil Gol não participam do Draft deste mês. O Draft de novembro acontece em breve."
+  },
   {
    "id": "jogo-04-fecha-outubro",
    "data": "2026-10-27",
