@@ -1,6 +1,6 @@
 {
- "versao": 3,
- "atualizadoEm": "2026-10-22T22:50:00-03:00",
+ "versao": 4,
+ "atualizadoEm": "2026-10-29T23:40:00-03:00",
  "config": {
   "nome": "Liga Neo SJ",
   "slogan": "Seja Você o protagonista desse jogo!",
@@ -24,9 +24,9 @@
   "videoApresentacaoPoster": "apresentacao-liga.jpg",
   "temporada": "2026/27",
   "regraPrincipal": "Respeito, compromisso e espírito esportivo. A Liga Neo SJ é uma competição entre amigos. A intenção é competir, se divertir e manter o ambiente organizado, garantindo uma experiência justa e positiva para todos.",
-  "totaisReferencia": "Totais oficiais após o Jogo 03 • Outubro de 2026",
+  "totaisReferencia": "Ranking final de outubro de 2026 (após o Jogo 04)",
   "totaisMes": "2026-10",
-  "totaisRotulo": "Após o Jogo 03"
+  "totaisRotulo": "Ranking final de outubro"
  },
  "times": [
   {
@@ -330,7 +330,7 @@
    "titulo": "Jogo 03",
    "rodada": 3,
    "mes": "2026-10",
-   "data": "",
+   "data": "2026-10-19",
    "hora": "",
    "local": "Arena Lobos",
    "mandanteId": "al-ec",
@@ -344,52 +344,85 @@
    "destaqueJogadorId": "sergio-leopoldino",
    "eventos": [],
    "incluidoNoTotalOficial": true,
-   "midia": [],
-   "fonte": "Informado pela organização"
+   "midia": [
+    {
+     "tipo": "instagram",
+     "titulo": "Post oficial do Jogo 03 e do título de outubro",
+     "url": "https://www.instagram.com/liganeosj/p/DesqbZtMXX0/"
+    }
+   ],
+   "fonte": "Post oficial @liganeosj de 19/10/2026"
+  },
+  {
+   "id": "2026-10-jogo-04",
+   "titulo": "Jogo 04",
+   "rodada": 4,
+   "mes": "2026-10",
+   "data": "2026-10-26",
+   "hora": "",
+   "local": "Arena Lobos",
+   "mandanteId": "al-ec",
+   "visitanteId": "al-fc",
+   "golsMandante": 11,
+   "golsVisitante": 6,
+   "vencedorId": "",
+   "situacao": "encerrado",
+   "resumo": "O Arena Lobos Esporte Clube venceu o Arena Lobos Futebol Clube por 11 x 06 no último jogo de outubro e fechou o mês com 4 vitórias em 4 jogos.",
+   "destaque": "",
+   "eventos": [],
+   "incluidoNoTotalOficial": true,
+   "midia": [
+    {
+     "tipo": "instagram",
+     "titulo": "Resultado e ranking final de outubro",
+     "url": "https://www.instagram.com/liganeosj/p/De_8DrjmwV_/"
+    }
+   ],
+   "fonte": "Post oficial @liganeosj de 27/10/2026"
   }
  ],
  "totais": [
   {
    "id": "gleysson-nascimento",
    "jogadorId": "gleysson-nascimento",
-   "gols": 14,
-   "assistencias": 6
+   "gols": 16,
+   "assistencias": 10
   },
   {
    "id": "sergio-leopoldino",
    "jogadorId": "sergio-leopoldino",
-   "gols": 7,
-   "assistencias": 9
+   "gols": 10,
+   "assistencias": 10
   },
   {
    "id": "neto-brito",
    "jogadorId": "neto-brito",
-   "gols": 7,
+   "gols": 8,
    "assistencias": 4
   },
   {
    "id": "gabriel-gb",
    "jogadorId": "gabriel-gb",
-   "gols": 7,
+   "gols": 8,
    "assistencias": 2
   },
   {
    "id": "vinni-mago",
    "jogadorId": "vinni-mago",
-   "gols": 6,
-   "assistencias": 3
-  },
-  {
-   "id": "wellington-silva",
-   "jogadorId": "wellington-silva",
-   "gols": 3,
+   "gols": 7,
    "assistencias": 4
   },
   {
    "id": "marcio-smith",
    "jogadorId": "marcio-smith",
-   "gols": 3,
+   "gols": 4,
    "assistencias": 1
+  },
+  {
+   "id": "wellington-silva",
+   "jogadorId": "wellington-silva",
+   "gols": 3,
+   "assistencias": 5
   },
   {
    "id": "carlos-henrique",
@@ -427,16 +460,16 @@
    "id": "2026-10",
    "mes": "2026-10",
    "timeId": "al-ec",
-   "vitorias": 3,
+   "vitorias": 4,
    "derrotas": 0,
-   "campanha": "Jogo 01: 10 x 06 • Jogo 02: 12 x 9 • Jogo 03: 15 x 10",
+   "campanha": "Jogo 01: 10 x 06 • Jogo 02: 12 x 9 • Jogo 03: 15 x 10 • Jogo 04: 11 x 06",
    "destaqueMesId": "",
    "destaqueMesTexto": "",
    "artilheiroId": "gleysson-nascimento",
-   "artilheiroGols": 14,
+   "artilheiroGols": 16,
    "garcomId": "sergio-leopoldino",
-   "garcomAssistencias": 9,
-   "observacao": "Campeão de outubro conforme resultado informado pela organização.",
+   "garcomAssistencias": 10,
+   "observacao": "Campeão antecipado no Jogo 03 e 100% de aproveitamento no mês (4 vitórias em 4 jogos). Nas assistências, Serjão e Gleysson terminaram empatados com 10 cada.",
    "imagem": "",
    "videoUrl": ""
   }
@@ -609,13 +642,38 @@
   },
   {
    "id": "t6",
-   "data": "",
+   "data": "2026-10-19",
    "titulo": "Jogo 03 e título de outubro",
    "texto": "O Arena Lobos Esporte Clube vence o Jogo 03 por 15 x 10 e conquista o título de outubro. Destaque do jogo: Serjão, com 4 gols e 2 assistências.",
    "ordem": 7
+  },
+  {
+   "id": "t7",
+   "ordem": 8,
+   "data": "2026-10-26",
+   "titulo": "Jogo 04 e fim de outubro",
+   "texto": "Arena Lobos Esporte Clube 11 x 06 Arena Lobos Futebol Clube. O time azul fecha o primeiro mês da liga com 4 vitórias em 4 jogos."
   }
  ],
  "noticias": [
+  {
+   "id": "jogo-04-fecha-outubro",
+   "data": "2026-10-27",
+   "categoria": "Resultado",
+   "ordem": 0,
+   "titulo": "AL EC vence o Jogo 04 e fecha outubro com 4 vitórias",
+   "imagem": "escudo-al-ec.png",
+   "texto": "No último jogo de outubro, o Arena Lobos Esporte Clube venceu o Arena Lobos Futebol Clube por 11 x 06 e terminou o mês com 100% de aproveitamento: 4 vitórias em 4 jogos.\n\nParabéns a todos os jogadores que fizeram parte dessa jornada. Foi um mês de muita disputa, gols, assistências e resenha.\n\nEm breve, o Draft de novembro com novos capitães."
+  },
+  {
+   "id": "ranking-final-outubro",
+   "data": "2026-10-27",
+   "categoria": "Ranking",
+   "ordem": 0,
+   "titulo": "Ranking final de outubro: Gleysson artilheiro com 16 gols",
+   "imagem": "",
+   "texto": "Gleysson terminou outubro como artilheiro da Liga Neo SJ, com 16 gols. Serjão ficou em segundo, com 10, seguido por Neto e GB, com 8 cada.\n\nNas assistências, Serjão e Gleysson dividiram a liderança, com 10 passes para gol cada. Wellington veio em seguida, com 5.\n\nConfira o ranking completo na página de Artilharia e Assistências."
+  },
   {
    "id": "campeao-outubro-2026",
    "data": "2026-10-21",
@@ -740,6 +798,38 @@
   }
  ],
  "instagram": [
+  {
+   "id": "ig-jogo04-ranking",
+   "data": "2026-10-27",
+   "tipo": "Post",
+   "titulo": "AL EC 11 x 06 AL FC e ranking final de outubro",
+   "imagem": "",
+   "url": "https://www.instagram.com/liganeosj/p/De_8DrjmwV_/"
+  },
+  {
+   "id": "ig-ranking-j03",
+   "data": "2026-10-19",
+   "tipo": "Reels",
+   "titulo": "Ranking atualizado de artilharia e assistências",
+   "imagem": "",
+   "url": "https://www.instagram.com/liganeosj/reel/Desv8H2MM-R/"
+  },
+  {
+   "id": "ig-campeao-outubro",
+   "data": "2026-10-19",
+   "tipo": "Post",
+   "titulo": "AL EC é o campeão de outubro (Jogo 03: 15 x 10)",
+   "imagem": "",
+   "url": "https://www.instagram.com/liganeosj/p/DesqbZtMXX0/"
+  },
+  {
+   "id": "ig-como-funciona-reel",
+   "data": "2026-10-19",
+   "tipo": "Reels",
+   "titulo": "Como funciona a Liga Neo SJ",
+   "imagem": "",
+   "url": "https://www.instagram.com/liganeosj/reel/DeruivmpEoH/"
+  },
   {
    "id": "ig-jogo02",
    "data": "2026-10-12",
