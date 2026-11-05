@@ -102,6 +102,40 @@ input:focus,select:focus,textarea:focus{border-color:var(--blue)}
 .pk.on{border-color:var(--gold);background:#2a2208}
 .pk.alt{border-style:dashed}
 .pk .ph{width:52px;height:52px;border-radius:12px;display:grid;place-items:center;background:var(--card);font-weight:900;font-size:1.2rem;color:var(--mut)}
+.toast{animation:toastIn .22s ease-out;}
+html{-webkit-tap-highlight-color:transparent;scroll-behavior:smooth}
+main.pgin{animation:pgIn .22s ease-out}
+@keyframes pgIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@keyframes toastIn{from{opacity:0;transform:translate(-50%,8px)}to{opacity:1;transform:translate(-50%,0)}}
+@keyframes sheetIn{from{transform:translateY(24px);opacity:.4}to{transform:none;opacity:1}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.overlay{animation:fadeIn .18s ease-out}.sheet{animation:sheetIn .24s cubic-bezier(.2,.8,.2,1)}
+.btn,.bigbtn,.chip,.nav a,.prow,.rk,.card{transition:transform .12s ease,background-color .18s ease,border-color .18s ease,box-shadow .18s ease,color .18s ease}
+.btn:active,.bigbtn:active,.chip:active,.nav a:active,.prow:active,.rk:active{transform:scale(.97)}
+.btn.pri{box-shadow:0 6px 18px rgba(245,179,1,.22)}
+.bigbtn{box-shadow:0 10px 24px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.18)}
+.nav a.on{box-shadow:inset 0 -2px 0 var(--gold)}
+.card{box-shadow:0 1px 0 rgba(255,255,255,.03) inset,0 8px 24px rgba(0,0,0,.18)}
+@media (hover:hover){.btn:hover{border-color:var(--mut)}.prow:hover,.rk:hover{background:var(--card2)}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+/* Telão do cronômetro */
+.telao{position:fixed;inset:0;z-index:50;background:radial-gradient(120% 80% at 50% 0%,#14224a 0%,var(--bg) 60%);display:grid;grid-template-rows:auto 1fr auto;padding:calc(env(safe-area-inset-top,0px) + 12px) 16px calc(16px + var(--safe-b));gap:10px;overflow:auto}.telao.abre{animation:fadeIn .2s ease-out}
+.telao .tt{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.telao .meio{display:grid;align-content:center;justify-items:center;gap:6px}
+.telao .sc{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px;width:100%;max-width:720px}
+.telao .sc .tm{display:grid;justify-items:center;gap:4px;text-align:center;font-weight:900;text-transform:uppercase;font-size:.9rem}
+.telao .sc .tm img,.telao .sc .tm .crest{width:clamp(44px,13vw,84px);height:clamp(44px,13vw,84px);object-fit:contain}
+.telao .sc .pl{font-size:clamp(3rem,15vw,7rem);font-weight:900;font-variant-numeric:tabular-nums;line-height:1}
+.telao .sc .pl em{font-style:normal;color:var(--mut);font-size:.5em;margin:0 .15em;vertical-align:middle}
+.telao .big{font-size:clamp(5rem,27vw,15rem);font-weight:900;font-variant-numeric:tabular-nums;line-height:.95;letter-spacing:.01em;text-shadow:0 8px 40px rgba(47,109,255,.35)}
+.telao .big.over{color:var(--gold);animation:pul 1s infinite}
+.telao .per{font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);font-size:.85rem}
+.telao .acoes{display:grid;gap:10px;width:100%;max-width:720px;margin:0 auto}
+.telao .ctl{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.telao .ctl .btn{min-height:52px;padding:12px 22px;font-size:.95rem}
+.telao .fl{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.telao .fl .foul{padding:8px 10px}
+@media (orientation:landscape) and (max-height:520px){.telao{grid-template-rows:auto 1fr}.telao .big{font-size:clamp(4rem,22vh,9rem)}.telao .sc .pl{font-size:clamp(2.4rem,14vh,5rem)}.telao .corpo{display:grid;grid-template-columns:1.2fr 1fr;gap:14px;align-items:center}}
 .toast{position:fixed;left:50%;bottom:calc(86px + var(--safe-b));transform:translateX(-50%);z-index:80;background:var(--fg);color:var(--bg);font-weight:800;border-radius:12px;padding:10px 16px;font-size:.88rem;max-width:90vw;box-shadow:0 10px 30px rgba(0,0,0,.4)}
 .toast.err{background:#ff9aa5;color:#2a0006}
 .banner{border-radius:14px;padding:10px 14px;font-size:.85rem;background:#2d230a;border:1px solid #6b5313;color:#ffe08a;display:flex;gap:10px;align-items:flex-start}
@@ -141,7 +175,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--blue)}
 .chipP{display:flex;align-items:center;gap:6px;background:var(--card2);border:1px solid var(--line);border-radius:99px;padding:4px 10px 4px 4px;font-size:.74rem;font-weight:800;text-transform:uppercase;cursor:grab;touch-action:none;user-select:none}
 .chipP img,.chipP .ph{width:28px;height:28px;border-radius:50%;object-fit:cover;background:var(--card)}
 .slot img,.chipP img,.slot .c,.chipP{-webkit-user-drag:none;user-select:none;-webkit-user-select:none}.slot img,.chipP img{pointer-events:none}
-.ghost{position:fixed;z-index:90;pointer-events:none;transform:translate(-50%,-50%);opacity:.9}
+.dragghost{position:fixed;z-index:90;pointer-events:none;transform:translate(-50%,-50%) scale(1.06);opacity:.92;filter:drop-shadow(0 10px 18px rgba(0,0,0,.5))}
 .rk{display:flex;align-items:center;gap:10px;background:var(--card2);border:1px solid var(--line);border-radius:14px;padding:8px 12px 8px 8px}
 .rk .pos{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;font-weight:900;background:var(--card);flex:none}
 .rk .pos.p1{background:var(--gold);color:#1a1300}
@@ -199,7 +233,7 @@ const IC = {
   gear: '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/>',
   hist: '<path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5M12 7v5l4 2"/>',
   cal: '<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',
-  play: '<path d="M7 4l13 8-13 8z"/>', pause: '<path d="M7 4h4v16H7zM14 4h4v16h-4z"/>', reset: '<path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/>',
+  play: '<path d="M7 4l13 8-13 8z"/>', max: '<path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/>', min: '<path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/>', pause: '<path d="M7 4h4v16H7zM14 4h4v16h-4z"/>', reset: '<path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/>',
   plus: '<path d="M12 5v14M5 12h14"/>', down: '<path d="M12 4v12M6 11l6 6 6-6M5 20h14"/>', copy: '<rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/>',
   out: '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/>', phone: '<rect x="6" y="2" width="12" height="20" rx="2"/><path d="M11 18h2"/>', ext: '<path d="M14 3h7v7M10 14L21 3M21 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5"/>',
   whats: '<path d="M3 21l1.6-4.8A8.5 8.5 0 1 1 8 19.6z"/>', edit: '<path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>', trash: '<path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/>'
@@ -393,8 +427,12 @@ function render() {
   const y = window.scrollY, mesmo = render._r === r; render._r = r;
   $('#app').innerHTML = shell(P());
   setSync(); window.scrollTo(0, mesmo ? y : 0);
+  if (!mesmo) { const mn = $('#main'); if (mn) mn.classList.add('pgin'); }
+  UI.telaAnim = false;
   if (pg === 'campo') ligarCampo();
   if (pg === 'jogo') tickRelogio();
+  else if (UI.tela) { UI.tela = false; telaCheia(false); }
+  document.body.style.overflow = UI.tela && pg === 'jogo' ? 'hidden' : '';
 }
 window.addEventListener('hashchange', () => { UI.sel = null; render(); });
 
@@ -602,7 +640,7 @@ function ligarCampo() {
   };
   document.onpointermove = ev => {
     if (!drag) return;
-    if (!drag.moved && Math.hypot(ev.clientX - drag.x, ev.clientY - drag.y) > 8) { drag.moved = true; drag.ghost = drag.src.cloneNode(true); drag.ghost.classList.add('ghost'); drag.ghost.style.width = drag.src.offsetWidth + 'px'; document.body.appendChild(drag.ghost); }
+    if (!drag.moved && Math.hypot(ev.clientX - drag.x, ev.clientY - drag.y) > 8) { drag.moved = true; drag.ghost = drag.src.cloneNode(true); drag.ghost.classList.add('dragghost'); drag.ghost.style.width = drag.src.offsetWidth + 'px'; document.body.appendChild(drag.ghost); }
     if (drag.moved) { ev.preventDefault(); if (ev.clientY > innerHeight - 90) scrollBy(0, 14); else if (ev.clientY < 110) scrollBy(0, -14); drag.ghost.style.left = ev.clientX + 'px'; drag.ghost.style.top = ev.clientY + 'px'; $$('.slot.hov').forEach(s => s.classList.remove('hov')); const t = document.elementFromPoint(ev.clientX, ev.clientY); const s = t && t.closest('[data-slot]'); if (s) s.classList.add('hov'); }
   };
   const fim = ev => {
@@ -663,14 +701,40 @@ function pgJogo(id) {
   return head + `<div class="sec card" style="display:grid;gap:12px">
     <div class="row between"><div class="chips">${[1, 2].map(n => `<button class="chip ${p.relogio.periodo === n ? 'on' : ''}" data-a="rl-per" data-v="${n}">${n}º tempo</button>`).join('')}</div>
     <select data-in="rl-dur" style="width:auto"><option value="0">Sem limite</option>${[10, 15, 20, 25, 30, 35, 40, 45].map(x => `<option value="${x}" ${S.config.duracaoTempo === x ? 'selected' : ''}>${x} min por tempo</option>`).join('')}</select></div>
-    <div class="clock ${dur && ms >= dur ? 'over' : ''}" id="clock">${mmss(ms)}</div>
-    <div class="row" style="justify-content:center">${p.relogio.rodando ? `<button class="btn" data-a="rl-pausar">${ic('pause')} Pausar</button>` : `<button class="btn pri" data-a="rl-iniciar">${ic('play')} ${ms ? 'Continuar' : 'Iniciar jogo'}</button>`}<button class="btn ghost" data-a="rl-zerar">${ic('reset')} Zerar</button></div>
-  </div>
+    <div class="clock ${dur && ms >= dur ? 'over' : ''}" id="clock" data-clock>${mmss(ms)}</div>
+    <div class="row" style="justify-content:center">${p.relogio.rodando ? `<button class="btn" data-a="rl-pausar">${ic('pause')} Pausar</button>` : `<button class="btn pri" data-a="rl-iniciar">${ic('play')} ${ms ? 'Continuar' : 'Iniciar jogo'}</button>`}<button class="btn" data-a="tela-abrir">${ic('max')} Tela cheia</button><button class="btn ghost" data-a="rl-zerar">${ic('reset')} Zerar</button></div>
+    <label class="row small muted" style="justify-content:center;gap:8px;cursor:pointer"><input type="checkbox" data-in="tela-auto" ${S.config.telaCheia !== false ? 'checked' : ''} style="width:auto"> Abrir em tela cheia ao iniciar o jogo</label>
+  </div>${UI.tela ? telao(p, pl, A, B, lA, lB, ms, dur) : ''}
   <div class="sec"><div class="bigbtns"><button class="bigbtn ${lA}" data-a="gol" data-t="${esc(p.timeA)}">⚽ Gol ${esc(A.sigla)}<small>${lA === 'A' ? 'Azul' : 'Vermelho'}</small></button><button class="bigbtn ${lB}" data-a="gol" data-t="${esc(p.timeB)}">⚽ Gol ${esc(B.sigla)}<small>${lB === 'A' ? 'Azul' : 'Vermelho'}</small></button></div>
     <h3 style="margin-top:6px">Faltas</h3><div class="fouls">${[[p.timeA, lA], [p.timeB, lB]].map(([t, l]) => `<div class="foul ${corLado(l)}"><button class="btn sm" data-a="falta-menos" data-t="${esc(t)}" aria-label="Remover falta">−</button><div style="text-align:center"><b>${faltas(p, t)}</b><div class="tiny muted">${esc(time(t).sigla)}</div></div><button class="btn sm" data-a="falta" data-t="${esc(t)}" aria-label="Adicionar falta">+</button></div>`).join('')}</div>
     <div class="row"><button class="btn sm" data-a="assist-avulsa">${ic('plus')} Assistência sem gol</button></div></div>
   ${tl}
   <div class="sec"><button class="btn full ${p.status === 'ao_vivo' ? 'pri' : ''}" data-a="pt-encerrar">Encerrar jogo</button></div>`;
+}
+function telao(p, pl, A, B, lA, lB, ms, dur) {
+  const n = p.relogio.periodo;
+  return `<div class="telao ${UI.telaAnim ? 'abre' : ''}" role="dialog" aria-label="Cronômetro em tela cheia">
+    <div class="tt"><span class="per">${n}º tempo${dur ? ' • ' + (dur / 60000) + ' min' : ''}</span>${p.status === 'ao_vivo' ? '<span class="live">Ao vivo</span>' : ''}<button class="btn sm" data-a="tela-fechar" aria-label="Sair da tela cheia">${ic('min')} Sair</button></div>
+    <div class="corpo" style="display:grid;gap:12px;align-content:center">
+      <div class="meio">
+        <div class="sc"><div class="tm">${crest(A)}<span>${esc(A.sigla)}</span></div><div class="pl">${pl.A}<em>×</em>${pl.B}</div><div class="tm">${crest(B)}<span>${esc(B.sigla)}</span></div></div>
+        <div class="big ${dur && ms >= dur ? 'over' : ''}" data-clock>${mmss(ms)}</div>
+      </div>
+      <div class="acoes">
+        <div class="ctl">${p.relogio.rodando ? `<button class="btn" data-a="rl-pausar">${ic('pause')} Pausar</button>` : `<button class="btn pri" data-a="rl-iniciar">${ic('play')} ${ms ? 'Continuar' : 'Iniciar'}</button>`}${[1, 2].map(x => `<button class="chip ${n === x ? 'on' : ''}" data-a="rl-per" data-v="${x}">${x}º tempo</button>`).join('')}</div>
+        <div class="bigbtns"><button class="bigbtn ${lA}" data-a="gol" data-t="${esc(p.timeA)}">⚽ Gol ${esc(A.sigla)}</button><button class="bigbtn ${lB}" data-a="gol" data-t="${esc(p.timeB)}">⚽ Gol ${esc(B.sigla)}</button></div>
+        <div class="fl">${[[p.timeA, lA], [p.timeB, lB]].map(([t, l]) => `<div class="foul ${corLado(l)}"><button class="btn sm" data-a="falta-menos" data-t="${esc(t)}" aria-label="Remover falta">−</button><div style="text-align:center"><b>${faltas(p, t)}</b><div class="tiny muted">faltas</div></div><button class="btn sm" data-a="falta" data-t="${esc(t)}" aria-label="Adicionar falta">+</button></div>`).join('')}</div>
+      </div>
+    </div>
+  </div>`;
+}
+async function telaCheia(on) {
+  try {
+    const d = document, el = d.documentElement;
+    if (on && !d.fullscreenElement && el.requestFullscreen) await el.requestFullscreen({ navigationUI: 'hide' });
+    else if (!on && d.fullscreenElement && d.exitFullscreen) await d.exitFullscreen();
+  } catch (e) {}
+  try { if (on && screen.orientation && screen.orientation.lock) await screen.orientation.lock('any'); } catch (e) {}
 }
 function evLinha(p, e, m) {
   const l = ladoDoTime(m, e.timeId) || (e.timeId === p.timeA ? 'A' : 'B');
@@ -687,9 +751,8 @@ function tickRelogio() {
   const id = rota().slice(5), p = S.partidas.find(x => x.id === id); if (!p) return;
   const dur = () => (S.config.duracaoTempo || 0) * 60000; let avisou = relogioMs(p) >= dur() && dur() > 0;
   relTimer = setInterval(() => {
-    const el = $('#clock'); if (!el || rota().slice(5) !== id) { clearInterval(relTimer); return; }
-    const ms = relogioMs(p); el.textContent = mmss(ms);
-    const over = dur() && ms >= dur(); el.classList.toggle('over', !!over);
+    const els = document.querySelectorAll('[data-clock]'); if (!els.length || rota().slice(5) !== id) { clearInterval(relTimer); return; }
+    const ms = relogioMs(p), over = dur() && ms >= dur(); els.forEach(el => { const t = mmss(ms); if (el.textContent !== t) el.textContent = t; el.classList.toggle('over', !!over); });
     if (over && !avisou && p.relogio.rodando) { avisou = true; vib([300, 150, 300]); toast('Tempo esgotado!'); }
   }, 250);
 }
@@ -958,7 +1021,9 @@ const ACOES = {
   'pt-reabrir': () => { const p = partidaAtual(); p.status = p.eventos.length || p.relogio.acumulado ? 'ao_vivo' : 'agendada'; commit('Jogo reaberto para correções.'); render(); },
   'pt-encerrar': () => confirmar('Encerrar o jogo?', 'O placar fica registrado e o ranking é atualizado. Dá para reabrir depois para corrigir.', () => { const p = partidaAtual(); if (p.relogio.rodando) { p.relogio.acumulado += Date.now() - p.relogio.inicio; p.relogio.rodando = false; } p.status = 'encerrada'; manterTela(false); commit('Jogo encerrado.'); render(); compartilhar(p); }),
   compartilhar: () => compartilhar(partidaAtual()),
-  'rl-iniciar': () => { const p = partidaAtual(); p.relogio.rodando = true; p.relogio.inicio = Date.now(); if (p.status === 'agendada') p.status = 'ao_vivo'; manterTela(true); commit(); render(); },
+  'rl-iniciar': () => { const p = partidaAtual(); p.relogio.rodando = true; p.relogio.inicio = Date.now(); if (p.status === 'agendada') p.status = 'ao_vivo'; manterTela(true); if (!UI.tela && S.config.telaCheia !== false) { UI.tela = true; UI.telaAnim = true; telaCheia(true); } commit(); render(); },
+    'tela-abrir': () => { UI.tela = true; UI.telaAnim = true; telaCheia(true); manterTela(true); render(); },
+    'tela-fechar': () => { UI.tela = false; telaCheia(false); render(); },
   'rl-pausar': () => { const p = partidaAtual(); p.relogio.acumulado += Date.now() - p.relogio.inicio; p.relogio.rodando = false; manterTela(false); commit(); render(); },
   'rl-zerar': () => confirmar('Zerar o cronômetro?', 'Os lances registrados continuam salvos.', () => { const p = partidaAtual(); p.relogio = { rodando: false, inicio: 0, acumulado: 0, periodo: p.relogio.periodo }; commit(); render(); }),
   'rl-per': b => { const p = partidaAtual(), n = Number(b.dataset.v); if (p.relogio.periodo === n) return; const mudar = () => { p.relogio.periodo = n; if (p.relogio.rodando) { p.relogio.inicio = Date.now(); } p.relogio.acumulado = 0; commit(); render(); }; if (relogioMs(p) > 0) confirmar(`Começar o ${n}º tempo?`, 'O cronômetro volta para 00:00.', mudar); else mudar(); },
@@ -997,6 +1062,7 @@ document.addEventListener('change', e => {
     if (novo && !d[lista].includes(novo)) d[lista].unshift(novo);
     d.ausentes = d.ausentes.filter(x => x !== novo); commit('Capitão definido.'); render();
   }
+  else if (k === 'tela-auto') { S.config.telaCheia = !!e.target.checked; commit(); }
   else if (k === 'rl-dur') { S.config.duracaoTempo = Number(e.target.value) || 0; commit(); render(); }
   else if (k === 'pt-dest') { const p = partidaAtual(); p.destaque = e.target.value.trim(); commit('Destaque salvo.'); }
   else if (k === 'importar') {
