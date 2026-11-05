@@ -426,6 +426,7 @@ tr:last-child td{border-bottom:0}
 .drow:hover{border-color:var(--line2)}
 .arow{grid-template-columns:40px 52px minmax(0,1fr) auto}
 .dnum{font-family:var(--display);font-weight:800;font-size:1.7rem;text-align:center;color:var(--gold2);line-height:1}
+.note-draft{border-color:var(--gold2);color:var(--fg);font-size:1.02rem}.note-draft b{color:var(--gold2)}.tagpos:empty{display:none}
 .avail{display:grid;gap:8px;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr))}
 @media (max-width:520px){.dtab-pre{display:none}}
 .drow img{width:52px;height:52px;border-radius:12px;object-fit:cover;background:var(--card2)}
@@ -562,6 +563,8 @@ const tnm = (id, short) => { const t = team(id); return t ? (short ? (t.sigla||t
 const latestDraft = () => (D().drafts||[]).slice().sort((a,b) => (b.mes||'').localeCompare(a.mes||''))[0] || null;
 const draftFeito = dr => !!dr && !!(dr.goleiroAId || dr.goleiroBId || (dr.jogadoresA||[]).length || (dr.jogadoresB||[]).length);
 const latestDraftFeito = () => (D().drafts||[]).slice().sort((a,b) => (b.mes||'').localeCompare(a.mes||'')).find(draftFeito) || null;
+const draftQuando = dr => { if(!dr || !dr.data) return ''; const dt = new Date(dr.data+'T12:00:00'); if(isNaN(dt)) return ''; const [y,m,d] = String(dr.data).split('-'); return `${dt.toLocaleDateString('pt-BR',{weekday:'long'})}, ${d}/${m}` + (dr.hora ? ` às ${String(dr.hora).replace(':','h')}` : ''); };
+const draftAviso = dr => (!dr || draftFeito(dr) || !draftQuando(dr)) ? '' : `<div class="note note-draft">${ic('calendar')}<span><b>Draft de ${esc(mesLabel(dr.mes).split(' de ')[0])}: ${esc(draftQuando(dr))}.</b> Os times e os números de camisa serão definidos no Draft.</span></div>`;
 function capInfo(pid){ const dr = latestDraft(); if(!dr) return ''; const s = dr.capitaoAId === pid ? 'A' : dr.capitaoBId === pid ? 'B' : ''; return s ? `<div class="fact"><span>Capitão em ${esc(mesLabel(dr.mes))}</span><b>${esc(tnm(dr['time'+s+'Id']))}</b></div>` : ''; }
 function teamOf(pid){
   const dr = latestDraftFeito();
@@ -843,6 +846,7 @@ function pgInicio(){
       <h1 class="slogan" tabindex="-1">${slogan}</h1>
       <p class="hero-sub">${esc(c.oQueE)}</p>
       <div class="btns"><a class="btn btn-gold" href="#jogos">${ic('calendar')} Ver resultados</a><a class="btn" href="#competicao">${ic('book')} Como funciona</a>${igButton('btn')}</div>
+      ${draftAviso(latestDraft()) ? `<a href="#draft" style="display:block;margin-top:18px;text-decoration:none">${draftAviso(latestDraft())}</a>` : ''}
     </div>
     <div class="hero-side">
       ${last ? board(last, 'Último resultado') : `<div class="board">${emptyBox('calendar','Nenhum resultado ainda','Os resultados aparecem aqui após cada partida.')}</div>`}
@@ -872,6 +876,7 @@ function pgInicio(){
 
   ${latestDraft() ? `<section class="band"><div class="wrap">
     <div class="sec-head"><div><span class="eyebrow">Draft do mês</span><h2>${draftFeito(latestDraft()) ? 'Os times de ' + esc(mesLabel(latestDraft().mes)) : 'Draft de ' + esc(mesLabel(latestDraft().mes)) + ': capitães definidos'}</h2></div><a class="btn btn-sm" href="#draft">Ver Draft completo ${ic('arrowR')}</a></div>
+    ${draftAviso(latestDraft()) ? `<div style="margin-bottom:16px">${draftAviso(latestDraft())}</div>` : ''}
     <div class="draft">${draftTeamHtml(latestDraft(),'A',true)}${draftTeamHtml(latestDraft(),'B',true)}</div>
   </div></section>` : ''}
 
@@ -1071,16 +1076,16 @@ function pgDraft(){
   if(!dr) return head + `<section class="band"><div class="wrap">${emptyBox('list','Draft ainda não publicado','Os times do mês aparecem aqui assim que a organização registrar o Draft.')}</div></section>`;
   const inDraft = new Set([dr.goleiroAId, dr.goleiroBId, ...(dr.jogadoresA||[]), ...(dr.jogadoresB||[])].filter(Boolean));
   const aus = (dr.ausentes||[]).map(player).filter(Boolean), feito = draftFeito(dr);
-  const nnum = p => p.numero && !isNaN(+p.numero) ? +p.numero : 999;
-  const disp = D().jogadores.filter(p => !(dr.ausentes||[]).includes(p.id) && p.id !== dr.capitaoAId && p.id !== dr.capitaoBId).sort((a,b) => nnum(a) - nnum(b) || pnm(a).localeCompare(pnm(b),'pt-BR'));
+  const disp = D().jogadores.filter(p => !(dr.ausentes||[]).includes(p.id) && p.id !== dr.capitaoAId && p.id !== dr.capitaoBId).sort((a,b) => pnm(a).localeCompare(pnm(b),'pt-BR'));
   const fora = D().jogadores.filter(p => !inDraft.has(p.id) && !(dr.ausentes||[]).includes(p.id) && p.id !== dr.capitaoAId && p.id !== dr.capitaoBId).sort((a,b) => pnm(a).localeCompare(pnm(b),'pt-BR'));
   return head + `<section class="band" style="padding-top:20px"><div class="wrap">
     ${list.length > 1 ? `<div class="tabs" role="tablist" aria-label="Mês do Draft">${list.slice().reverse().map(d => `<button type="button" class="tab" role="tab" data-act="draft-tab" data-v="${esc(d.mes)}" aria-selected="${d.mes===dr.mes}"><span class="dtab-pre">Draft de </span>${esc(mesLabel(d.mes).split(' de ')[0])}</button>`).join('')}</div>` : ''}
+    ${draftAviso(dr) ? `<div style="margin:4px 0 16px">${draftAviso(dr)}</div>` : ''}
     ${!feito ? `<div class="sec-head" style="margin:6px 0 14px"><div><span class="eyebrow">Draft de ${esc(mesLabel(dr.mes))}</span><h2>Capitães do mês</h2></div></div>` : ''}
     <div class="draft">${draftTeamHtml(dr,'A')}${draftTeamHtml(dr,'B')}</div>
     ${dr.observacao ? `<div class="note" style="margin-top:16px">${ic('info')}<span>${esc(dr.observacao)}</span></div>` : ''}
-    ${!feito ? `<div class="note" style="margin-top:16px">${ic('calendar')}<span><b style="color:var(--fg)">Draft de ${esc(mesLabel(dr.mes))} em breve.</b> Os capitães já estão definidos. Os times aparecem aqui assim que o Draft for realizado.</span></div>` : ''}
-    ${!feito ? `<div style="margin-top:26px"><div class="sec-head" style="margin-bottom:14px"><div><span class="eyebrow">Draft de ${esc(mesLabel(dr.mes))}</span><h2>Disponíveis para o Draft</h2><p class="muted">${disp.length} jogadores, por número de camisa. Os capitães escolhem os times a partir desta lista.</p></div></div><div class="avail">${disp.map(p => `<a class="drow arow" href="#jogador-${esc(p.id)}"><span class="dnum">${p.numero ? esc(p.numero) : '–'}</span>${photo(p)?`<img src="${esc(photo(p))}" alt="" loading="lazy">`:'<span></span>'}<span style="min-width:0"><b>${esc(pnm(p))}</b><small>${esc(p.nome)} • ${p.numero ? 'camisa ' + esc(p.numero) : 'camisa a confirmar'}</small></span><span class="tagpos">${p.posicao==='Goleiro'?'GOL':esc(POS_AB[p.posicao]||p.posicao||'')}</span></a>`).join('')}</div></div>` : ''}
+    ${!feito && !draftQuando(dr) ? `<div class="note" style="margin-top:16px">${ic('calendar')}<span><b style="color:var(--fg)">Draft de ${esc(mesLabel(dr.mes))} em breve.</b> Os capitães já estão definidos. Os times aparecem aqui assim que o Draft for realizado.</span></div>` : ''}
+    ${!feito ? `<div style="margin-top:26px"><div class="sec-head" style="margin-bottom:14px"><div><span class="eyebrow">Draft de ${esc(mesLabel(dr.mes))}</span><h2>Disponíveis para o Draft</h2><p class="muted">${disp.length} jogadores. Os capitães escolhem os times a partir desta lista.</p></div></div><div class="avail">${disp.map(p => `<a class="drow" href="#jogador-${esc(p.id)}">${photo(p)?`<img src="${esc(photo(p))}" alt="" loading="lazy">`:'<span></span>'}<span style="min-width:0"><b>${esc(pnm(p))}</b><small>${esc(p.nome)}</small></span><span class="tagpos">${p.posicao==='Goleiro'?'GOL':esc(POS_AB[p.posicao]||p.posicao||'')}</span></a>`).join('')}</div></div>` : ''}
     ${aus.length ? `<p class="small muted" style="margin-top:16px">Não participam do Draft de ${esc(mesLabel(dr.mes))}: ${aus.map(p => `<a href="#jogador-${esc(p.id)}">${esc(pnm(p))}</a>`).join(', ')}.</p>` : ''}
     ${feito && fora.length ? `<p class="small muted" style="margin-top:16px">Também cadastrados na liga, fora deste Draft: ${fora.map(p => `<a href="#jogador-${esc(p.id)}">${esc(pnm(p))}</a>`).join(', ')}.</p>` : ''}
     <div class="btns" style="margin-top:18px">${shareBtn('Liga Neo SJ • Draft de ' + mesLabel(dr.mes), 'draft')}<a class="btn btn-sm" href="#competicao">Como funciona o Draft ${ic('arrowR')}</a></div>
@@ -1347,7 +1352,7 @@ const SCHEMA = {
     {k:'midia',l:'Links de fotos e vídeos',t:'links',h:'Um por linha: Título | https://link'},{k:'fonte',l:'Fonte da informação',t:'text'}
   ], validate:validatePartida},
   drafts:{label:'Draft do mês', icon:'list', idFrom:o => o.mes, title:o => 'Draft de ' + mesLabel(o.mes), sub:o => `${tnm(o.timeAId,true)}: ${(o.jogadoresA||[]).length + (o.goleiroAId?1:0)} • ${tnm(o.timeBId,true)}: ${(o.jogadoresB||[]).length + (o.goleiroBId?1:0)} jogadores`, sort:(a,b) => (b.mes||'').localeCompare(a.mes||''), fields:[
-    {k:'mes',l:'Mês do Draft',t:'month',req:true},
+    {k:'mes',l:'Mês do Draft',t:'month',req:true},{k:'data',l:'Data do Draft',t:'date'},{k:'hora',l:'Horário do Draft',t:'time'},
     {k:'timeAId',l:'Time A',t:'ref',ref:'times',req:true},{k:'goleiroAId',l:'Goleiro do Time A',t:'ref',ref:'jogadores',empty:'A confirmar'},{k:'capitaoAId',l:'Capitão do Time A',t:'ref',ref:'jogadores',empty:'A confirmar'},
     {k:'jogadoresA',l:'Jogadores de linha do Time A',t:'multiref',ref:'jogadores'},
     {k:'timeBId',l:'Time B',t:'ref',ref:'times',req:true},{k:'goleiroBId',l:'Goleiro do Time B',t:'ref',ref:'jogadores',empty:'A confirmar'},{k:'capitaoBId',l:'Capitão do Time B',t:'ref',ref:'jogadores',empty:'A confirmar'},
