@@ -1,0 +1,8 @@
+{
+  "name": "liganeosj",
+  "private": true,
+  "description": "Site oficial e painel de controle da Liga Neo SJ",
+  "dependencies": {
+    "@vercel/blob": ">=1.0.0"
+  }
+}
