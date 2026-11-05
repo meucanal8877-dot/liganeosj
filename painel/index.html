@@ -118,6 +118,23 @@ main.pgin{animation:pgIn .22s ease-out}
 .card{box-shadow:0 1px 0 rgba(255,255,255,.03) inset,0 8px 24px rgba(0,0,0,.18)}
 @media (hover:hover){.btn:hover{border-color:var(--mut)}.prow:hover,.rk:hover{background:var(--card2)}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+/* Notas, seleção da rodada e frequência */
+.nt{display:inline-block;min-width:38px;padding:3px 7px;border-radius:8px;font-weight:900;font-size:.8rem;color:#fff;font-variant-numeric:tabular-nums;text-align:center;line-height:1.2}
+.n9{background:#2563eb}.n8{background:#0d9488}.n7{background:#16a34a}.n6{background:#ca8a04}.n5{background:#ea580c}.n4{background:#dc2626}
+.pitch2{position:relative;border-radius:18px;padding:16px 6px;background:repeating-linear-gradient(180deg,#0f5132 0 46px,#0c472c 46px 92px);border:2px solid rgba(255,255,255,.18);display:grid;gap:16px;overflow:hidden;max-width:440px;margin:0 auto;width:100%}
+.pitch2::before{content:'';position:absolute;left:50%;top:50%;width:96px;height:96px;border:2px solid rgba(255,255,255,.14);border-radius:50%;transform:translate(-50%,-50%)}
+.pitch2::after{content:'';position:absolute;left:0;right:0;top:50%;border-top:2px solid rgba(255,255,255,.14)}
+.pitch2 .ln{display:flex;justify-content:space-evenly;position:relative;z-index:1}
+.sc7{display:grid;justify-items:center;gap:3px;width:31%;max-width:112px;text-align:center;color:#fff;text-decoration:none}
+.sc7 .av{width:50px;height:50px;border-radius:50%;border:2px solid rgba(255,255,255,.35);object-fit:cover;background:var(--card2)}
+.sc7 b{font-size:.66rem;text-transform:uppercase;line-height:1.1;text-shadow:0 1px 3px #000}
+.sc7 .nt{margin-top:-12px;position:relative;font-size:.72rem;min-width:32px;padding:2px 5px;box-shadow:0 2px 6px rgba(0,0,0,.4)}
+.craque{display:flex;align-items:center;gap:14px;padding:14px;border-radius:var(--r2);background:linear-gradient(135deg,rgba(245,179,1,.18),rgba(245,179,1,.04));border:1px solid rgba(245,179,1,.45)}
+.craque .av{width:62px;height:62px;border-radius:50%;object-fit:cover;border:2px solid var(--gold)}
+.craque .t{flex:1;min-width:0}.craque .nt{font-size:1.15rem;padding:6px 10px}
+.fq{display:grid;gap:8px;padding:10px 0;border-bottom:1px solid var(--line)}
+.fq .chip.on.f{background:var(--red);border-color:var(--red);color:#fff}
+.ajn{display:flex;align-items:center;gap:6px;flex-wrap:nowrap}.ajn .btn{min-width:34px;padding:4px 8px}
 /* Telão do cronômetro */
 .telao{position:fixed;inset:0;z-index:50;background:radial-gradient(120% 80% at 50% 0%,#14224a 0%,var(--bg) 60%);display:grid;grid-template-rows:auto 1fr auto;padding:calc(env(safe-area-inset-top,0px) + 12px) 16px calc(16px + var(--safe-b));gap:10px;overflow:auto}.telao.abre{animation:fadeIn .2s ease-out}
 .telao .tt{display:flex;align-items:center;justify-content:space-between;gap:10px}
@@ -312,7 +329,7 @@ function normalizar(e) {
   s.config = Object.assign(estadoVazio().config, s.config || {});
   ['times', 'jogadores', 'meses', 'partidas', 'baseline', 'campeoesImportados'].forEach(k => { if (!Array.isArray(s[k])) s[k] = []; });
   s.meses.forEach(m => { m.draft = Object.assign({ A: '', B: '', capA: '', capB: '', azul: [], vermelho: [], ausentes: [], escolhas: [], data: '', hora: '', finalizado: false, vez: 'A' }, m.draft || {}); m.escalacao = m.escalacao || {}; });
-  s.partidas.forEach(p => { p.eventos = p.eventos || []; p.relogio = Object.assign({ rodando: false, inicio: 0, acumulado: 0, periodo: 1 }, p.relogio || {}); });
+  s.partidas.forEach(p => { p.eventos = p.eventos || []; p.freq = p.freq || {}; p.ajuste = p.ajuste || {}; p.relogio = Object.assign({ rodando: false, inicio: 0, acumulado: 0, periodo: 1 }, p.relogio || {}); });
   return s;
 }
 async function importarDoSite() {
@@ -392,7 +409,7 @@ function estatisticas(mes) {
 }
 function ranking(mes, k) {
   const st = estatisticas(mes);
-  const lin = Object.entries(st).filter(([id, v]) => v[k] > 0 && jog(id) && !jog(id).excluido).map(([id, v]) => ({ id, v: v[k] })).sort((a, b) => b.v - a.v || nomeJ(a.id).localeCompare(nomeJ(b.id), 'pt-BR'));
+  const lin = Object.entries(st).filter(([id, v]) => (k === 'ga' ? v.g + v.a : v[k]) > 0 && jog(id) && !jog(id).excluido).map(([id, v]) => ({ id, v: k === 'ga' ? v.g + v.a : v[k] })).sort((a, b) => b.v - a.v || nomeJ(a.id).localeCompare(nomeJ(b.id), 'pt-BR'));
   let pos = 0, last = null; lin.forEach((r, i) => { if (r.v !== last) { pos = i + 1; last = r.v; } r.pos = pos; r.tie = lin.filter(x => x.v === r.v).length > 1; });
   return lin;
 }
@@ -405,6 +422,55 @@ function serie(mesId) {
   if (vA >= 3) { campeao = tA; criterio = '3 vitórias'; } else if (vB >= 3) { campeao = tB; criterio = '3 vitórias'; }
   else if (ps.length >= 4) { if (vA > vB) { campeao = tA; criterio = 'mais vitórias'; } else if (vB > vA) { campeao = tB; criterio = 'mais vitórias'; } else if (sA !== sB) { campeao = sA > sB ? tA : tB; criterio = 'saldo de gols'; } else criterio = 'empate total'; }
   return { tA, tB, vA, vB, sA, sB, emp, jogos: ps.length, total: partidasDoMes(mesId).length, campeao, criterio };
+}
+/* ---------- Notas por jogo (estilo SofaScore) ---------- */
+const NOTA = { base: 6, gol: 1, assist: .7, vit: .5, emp: .1, der: -.3, contra: -.8, falta: -.1, gkLimpo: 1, gkSofrido: -.3, zgLimpo: .5, zgSofrido: -.1 };
+const freqDe = (p, id) => (p.freq || {})[id] || { st: 'p', sub: '' };
+const ntCls = n => n >= 9 ? 'n9' : n >= 8 ? 'n8' : n >= 7 ? 'n7' : n >= 6 ? 'n6' : n >= 5 ? 'n5' : 'n4';
+const ntFmt = (n, d = 1) => Number(n).toFixed(d).replace('.', ',');
+const ntTag = (n, d) => `<span class="nt ${ntCls(n)}">${ntFmt(n, d)}</span>`;
+function temNotas(p) { return p.status === 'encerrada' && !(p.placarManual && !p.eventos.some(e => e.tipo === 'gol')); }
+function ehGoleiro(p, id, tid) { const m = getMes(p.mes), e = m && m.escalacao[tid]; if (e && e.gk) return e.gk === id; return /goleir/i.test((jog(id) || {}).posicao || ''); }
+function notasJogo(p) {
+  if (!temNotas(p)) return [];
+  const m = getMes(p.mes), pl = placar(p), out = [];
+  [p.timeA, p.timeB].forEach(tid => elenco(m, tid).forEach(id => {
+    if (freqDe(p, id).st === 'f' || !jog(id)) return;
+    const pro = tid === p.timeA ? pl.A : pl.B, sof = tid === p.timeA ? pl.B : pl.A;
+    let g = 0, a = 0, gc = 0, f = 0;
+    p.eventos.forEach(e => {
+      if (e.tipo === 'gol') { if (e.autorId === id && !e.diarista) { if (e.golContra) gc++; else g++; } if (e.assistId === id && !e.assistDiarista) a++; }
+      else if (e.tipo === 'assistencia') { if (e.autorId === id && !e.diarista) a++; }
+      else if (e.tipo === 'falta' && e.autorId === id) f++;
+    });
+    const gk = ehGoleiro(p, id, tid), zg = !gk && /zague/i.test(jog(id).posicao || '');
+    let n = NOTA.base + g * NOTA.gol + a * NOTA.assist + gc * NOTA.contra + f * NOTA.falta + (pro > sof ? NOTA.vit : pro < sof ? NOTA.der : NOTA.emp);
+    if (gk) n += sof === 0 ? NOTA.gkLimpo : sof * NOTA.gkSofrido; else if (zg) n += sof === 0 ? NOTA.zgLimpo : sof * NOTA.zgSofrido;
+    const aj = Number((p.ajuste || {})[id] || 0); n += aj;
+    out.push({ id, tid, n: Math.round(Math.min(10, Math.max(3, n)) * 10) / 10, g, a, gc, f, gk, zg, aj, res: pro > sof ? 'V' : pro < sof ? 'D' : 'E' });
+  }));
+  return out.sort((x, y) => y.n - x.n || y.g - x.g || y.a - x.a || nomeJ(x.id).localeCompare(nomeJ(y.id), 'pt-BR'));
+}
+function selecaoRodada(p) {
+  const ns = notasJogo(p); if (!ns.length) return null;
+  const gk = ns.find(x => x.gk) || null, L = ns.filter(x => x !== gk).slice(0, 6);
+  const pos = r => (jog(r.id).posicao || '');
+  const take = f => { const i = L.findIndex(f); return i >= 0 ? L.splice(i, 1)[0] : null; };
+  const atk = take(r => /atac/i.test(pos(r))) || take(r => !/zague/i.test(pos(r))) || take(() => true);
+  const back = [take(r => /zague/i.test(pos(r))), take(r => /zague/i.test(pos(r)))].map(x => x || L.pop() || null);
+  return { gk, atk, mid: L.slice(0, 3), back, craque: ns[0], ns };
+}
+function pontuacao(mes) {
+  const st = {}; let jogos = 0;
+  S.partidas.filter(p => !mes || p.mes === mes).forEach(p => {
+    const ns = notasJogo(p); if (!ns.length) return; jogos++;
+    ns.forEach((r, i) => { const j = jog(r.id); if (!j || j.excluido) return; const s = st[r.id] = st[r.id] || { soma: 0, j: 0, mvp: 0 }; s.soma += r.n; s.j++; if (i === 0) s.mvp++; });
+  });
+  const min = Math.max(1, Math.ceil(jogos / 2));
+  const lin = Object.entries(st).map(([id, s]) => ({ id, v: Math.round(s.soma / s.j * 100) / 100, j: s.j, mvp: s.mvp, ok: s.j >= min }))
+    .sort((a, b) => (b.ok - a.ok) || b.v - a.v || b.j - a.j || nomeJ(a.id).localeCompare(nomeJ(b.id), 'pt-BR'));
+  let pos = 0, last = null; lin.forEach((r, i) => { if (!r.ok) { r.pos = 0; return; } if (r.v !== last) { pos = i + 1; last = r.v; } r.pos = pos; r.tie = lin.filter(x => x.ok && x.v === r.v).length > 1; });
+  return { lin, jogos, min };
 }
 const relogioMs = p => p.relogio.acumulado + (p.relogio.rodando ? Date.now() - p.relogio.inicio : 0);
 
@@ -480,7 +546,7 @@ function pgInicio() {
 function rkList(lin, un) {
   if (!lin.length) return '<p class="muted small">Sem registros ainda.</p>';
   const m = mesAtual();
-  return `<div class="plist">${lin.map(r => { const j = jog(r.id), tid = timeDoJogador(r.id, m); return `<a class="rk" href="#jogador-${esc(r.id)}" style="color:inherit;text-decoration:none"><span class="pos ${r.pos === 1 ? 'p1' : ''}">${r.pos}º</span>${av(j, 'av sm')}<span class="t"><b>${esc(nomeJ(r.id))}${r.tie ? ' <span class="badge">empatado</span>' : ''}</b><small>${esc(j.nome)}${tid ? ' • ' + esc(time(tid).sigla) : ''}</small></span><span class="v">${r.v}<small class="tiny muted" style="display:block;text-align:right;font-size:.6rem">${un}</small></span></a>`; }).join('')}</div>`;
+  return `<div class="plist">${lin.map(r => { const j = jog(r.id), tid = timeDoJogador(r.id, m); return `<a class="rk" href="#jogador-${esc(r.id)}" style="color:inherit;text-decoration:none"><span class="pos ${r.pos === 1 ? 'p1' : ''}">${r.pos ? r.pos + 'º' : '–'}</span>${av(j, 'av sm')}<span class="t"><b>${esc(nomeJ(r.id))}${r.tie ? ' <span class="badge">empatado</span>' : ''}</b><small>${r.sub ? esc(r.sub) : esc(j.nome) + (tid ? ' • ' + esc(time(tid).sigla) : '')}</small></span><span class="v">${r.fmt ? r.fmt : r.v}<small class="tiny muted" style="display:block;text-align:right;font-size:.6rem">${un}</small></span></a>`; }).join('')}</div>`;
 }
 
 /* ---------- Jogadores ---------- */
@@ -696,7 +762,7 @@ function pgJogo(id) {
   <div class="sec card"><div class="score"><div class="tm ${corLado(lA)}">${crest(A)}<b>${esc(A.nome)}</b><span class="tag ${corLado(lA)}"><i></i>${lA === 'A' ? 'Azul' : 'Vermelho'}</span></div><div class="pl" id="placar">${pl.A}<em>×</em>${pl.B}</div><div class="tm ${corLado(lB)}">${crest(B)}<b>${esc(B.nome)}</b><span class="tag ${corLado(lB)}"><i></i>${lB === 'A' ? 'Azul' : 'Vermelho'}</span></div></div>
   ${p.status === 'ao_vivo' ? '<div style="text-align:center;margin-top:8px"><span class="live">Ao vivo</span></div>' : enc ? '<div style="text-align:center;margin-top:8px"><span class="badge">Encerrado</span></div>' : ''}</div>`;
   const tl = `<div class="sec"><h2>Lances</h2><div class="tl">${evs.map(e => evLinha(p, e, m)).join('') || '<p class="muted small">Nenhum lance registrado.</p>'}</div>${p.placarManual && !p.eventos.some(e => e.tipo === 'gol') ? '<p class="tiny muted">Placar registrado sem os lances (resultado oficial).</p>' : ''}</div>`;
-  if (enc) return head + tl + `<div class="sec card" style="display:grid;gap:10px"><div class="row between"><b>Faltas</b><span class="num">${esc(A.sigla)} ${faltas(p, p.timeA)} • ${faltas(p, p.timeB)} ${esc(B.sigla)}</span></div><div class="field"><label>Destaque da partida</label><input value="${esc(p.destaque || '')}" data-in="pt-dest" placeholder="Ex.: Gleysson: 2 gols e 3 assistências"></div></div>
+  if (enc) return head + blocoFreq(p) + blocoNotas(p) + tl + `<div class="sec card" style="display:grid;gap:10px"><div class="row between"><b>Faltas</b><span class="num">${esc(A.sigla)} ${faltas(p, p.timeA)} • ${faltas(p, p.timeB)} ${esc(B.sigla)}</span></div><div class="field"><label>Destaque da partida</label><input value="${esc(p.destaque || '')}" data-in="pt-dest" placeholder="Ex.: Gleysson: 2 gols e 3 assistências"></div></div>
     <div class="sec row"><button class="btn pri" data-a="compartilhar">${ic('share')} Relatório e artes</button><button class="btn" data-a="pt-reabrir">Reabrir jogo</button></div>`;
   return head + `<div class="sec card" style="display:grid;gap:12px">
     <div class="row between"><div class="chips">${[1, 2].map(n => `<button class="chip ${p.relogio.periodo === n ? 'on' : ''}" data-a="rl-per" data-v="${n}">${n}º tempo</button>`).join('')}</div>
@@ -708,8 +774,33 @@ function pgJogo(id) {
   <div class="sec"><div class="bigbtns"><button class="bigbtn ${lA}" data-a="gol" data-t="${esc(p.timeA)}">⚽ Gol ${esc(A.sigla)}<small>${lA === 'A' ? 'Azul' : 'Vermelho'}</small></button><button class="bigbtn ${lB}" data-a="gol" data-t="${esc(p.timeB)}">⚽ Gol ${esc(B.sigla)}<small>${lB === 'A' ? 'Azul' : 'Vermelho'}</small></button></div>
     <h3 style="margin-top:6px">Faltas</h3><div class="fouls">${[[p.timeA, lA], [p.timeB, lB]].map(([t, l]) => `<div class="foul ${corLado(l)}"><button class="btn sm" data-a="falta-menos" data-t="${esc(t)}" aria-label="Remover falta">−</button><div style="text-align:center"><b>${faltas(p, t)}</b><div class="tiny muted">${esc(time(t).sigla)}</div></div><button class="btn sm" data-a="falta" data-t="${esc(t)}" aria-label="Adicionar falta">+</button></div>`).join('')}</div>
     <div class="row"><button class="btn sm" data-a="assist-avulsa">${ic('plus')} Assistência sem gol</button></div></div>
-  ${tl}
+  ${blocoFreq(p)}${tl}
   <div class="sec"><button class="btn full ${p.status === 'ao_vivo' ? 'pri' : ''}" data-a="pt-encerrar">Encerrar jogo</button></div>`;
+}
+function blocoFreq(p) {
+  const m = getMes(p.mes), ids = [p.timeA, p.timeB].flatMap(t => elenco(m, t));
+  if (!ids.length) return '';
+  const fl = ids.filter(id => freqDe(p, id).st === 'f');
+  return `<div class="sec card row between" style="flex-wrap:nowrap"><div style="min-width:0"><b>Frequência</b><div class="small muted">${ids.length - fl.length} presentes • ${fl.length} falta${fl.length === 1 ? '' : 's'}${fl.length ? ': ' + fl.map(id => esc(nomeJ(id)) + (freqDe(p, id).sub ? ' → ' + esc(freqDe(p, id).sub) : '')).join(', ') : ''}</div></div><button class="btn sm" data-a="freq">${ic('list')} Lista</button></div>`;
+}
+function blocoNotas(p) {
+  if (!temNotas(p)) return '';
+  const sel = selecaoRodada(p);
+  if (!sel) return '<div class="sec"><p class="small muted">Monte os times no Draft deste mês para gerar as notas e a seleção da rodada.</p></div>';
+  const sc = r => r ? `<a class="sc7" href="#jogador-${esc(r.id)}">${av(jog(r.id))}${ntTag(r.n)}<b>${esc(nomeJ(r.id))}</b></a>` : '';
+  const resumo = r => [r.g ? r.g + ' G' : '', r.a ? r.a + ' A' : '', r.gc ? r.gc + ' GC' : '', r.gk ? 'Goleiro' : '', r.aj ? 'ajuste ' + (r.aj > 0 ? '+' : '') + ntFmt(r.aj) : ''].filter(Boolean).join(' • ');
+  const c = sel.craque;
+  return `<div class="sec"><h2>Craque do jogo</h2><div class="craque">${av(jog(c.id))}<div class="t"><h2 style="margin:0">${esc(nomeJ(c.id))}</h2><small class="muted">${esc(time(c.tid).sigla)}${resumo(c) ? ' • ' + resumo(c) : ''}</small></div>${ntTag(c.n)}</div></div>
+  <div class="sec"><h2>Seleção da rodada</h2><div class="pitch2"><div class="ln">${sc(sel.atk)}</div><div class="ln">${sel.mid.map(sc).join('')}</div><div class="ln">${sel.back.map(sc).join('')}</div><div class="ln">${sc(sel.gk)}</div></div></div>
+  <div class="sec"><h2>Notas do jogo</h2><p class="tiny muted">Calculadas pelos lances: base 6,0, gol +1, assistência +0,7, vitória +0,5, derrota −0,3, goleiro e zagueiro somam sem sofrer gol. Use − e + para ajustar meio ponto.</p>
+  <div class="plist">${sel.ns.map(r => `<div class="prow">${av(jog(r.id))}<span class="t"><b>${esc(nomeJ(r.id))}</b><small>${esc(time(r.tid).sigla)}${resumo(r) ? ' • ' + resumo(r) : ''}</small></span><span class="ajn"><button class="btn sm" data-a="nt-aj" data-id="${esc(r.id)}" data-v="-0.5" aria-label="Diminuir nota">−</button>${ntTag(r.n)}<button class="btn sm" data-a="nt-aj" data-id="${esc(r.id)}" data-v="0.5" aria-label="Aumentar nota">+</button></span></div>`).join('')}</div></div>`;
+}
+function freqModal(p) {
+  const m = getMes(p.mes);
+  const corpo = () => [p.timeA, p.timeB].map(tid => { const ids = elenco(m, tid); return `<h3 style="margin-top:6px">${esc(time(tid).nome)}</h3>` + (ids.length ? ids.map(id => { const f = freqDe(p, id); return `<div class="fq"><div class="row between" style="flex-wrap:nowrap"><span class="row" style="gap:8px;flex-wrap:nowrap;min-width:0">${av(jog(id), 'av sm')}<b>${esc(nomeJ(id))}</b></span><div class="chips" style="flex-shrink:0"><button class="chip ${f.st !== 'f' ? 'on' : ''}" data-a="fq" data-id="${esc(id)}" data-v="p">Presente</button><button class="chip f ${f.st === 'f' ? 'on' : ''}" data-a="fq" data-id="${esc(id)}" data-v="f">Faltou</button></div></div>${f.st === 'f' ? `<input data-fq="${esc(id)}" value="${esc(f.sub || '')}" placeholder="Diarista que substituiu (opcional)">` : ''}</div>`; }).join('') : '<p class="small muted">Time sem jogadores no Draft deste mês.</p>'); }).join('');
+  modal(`<h2>Frequência • Jogo ${String(p.numero).padStart(2, '0')}</h2><p class="tiny muted">Quem faltou não recebe nota. O diarista que entrou no lugar aparece no relatório e nas sugestões de nome dos gols.</p><div id="fqc">${corpo()}</div><button class="btn pri" data-a="fechar">Concluir</button>`, {
+    fq: b => { const id = b.dataset.id; if (b.dataset.v === 'f') p.freq[id] = { st: 'f', sub: freqDe(p, id).sub || '' }; else delete p.freq[id]; commit(); $('#fqc').innerHTML = corpo(); render(); }
+  }, () => MODAL.el.addEventListener('change', e => { const id = e.target.dataset.fq; if (!id) return; p.freq[id] = { st: 'f', sub: e.target.value.trim() }; commit(); render(); }));
 }
 function telao(p, pl, A, B, lA, lB, ms, dur) {
   const n = p.relogio.periodo;
@@ -762,7 +853,8 @@ let ultimoGol = 0;
 function golModal(p, timeId, ev) {
   const m = getMes(p.mes), outro = timeId === p.timeA ? p.timeB : p.timeA, l = ladoDoTime(m, timeId) || (timeId === p.timeA ? 'A' : 'B');
   const e = ev ? { ...ev } : { id: uid(), tipo: 'gol', timeId, autorId: null, diarista: false, nomeDiarista: '', golContra: false, assistId: null, assistDiarista: false, assistNome: '', min: mmss(relogioMs(p)), ms: relogioMs(p), periodo: p.relogio.periodo, ts: Date.now() };
-  const listaTime = t => { const es = m && m.escalacao[t]; const ord = []; if (es) { [es.gk, ...es.linha, ...es.reservas].forEach(x => x && ord.push(x)); } elenco(m, t).forEach(x => ord.includes(x) || ord.push(x)); return ord.length ? ord : ativos().map(j => j.id); };
+  const listaTime = t => { const es = m && m.escalacao[t]; const ord = []; if (es) { [es.gk, ...es.linha, ...es.reservas].forEach(x => x && ord.push(x)); } elenco(m, t).forEach(x => ord.includes(x) || ord.push(x)); const pres = ord.filter(x => freqDe(p, x).st !== 'f'); return ord.length ? pres : ativos().map(j => j.id); };
+  const subs = [...new Set(Object.values(p.freq || {}).map(f => f.sub).filter(Boolean))], dl = subs.length ? `<datalist id="dlsub">${subs.map(s => `<option value="${esc(s)}">`).join('')}</datalist>` : '';
   const draw = () => {
     const autores = e.golContra ? listaTime(outro) : listaTime(e.timeId);
     const assis = listaTime(e.timeId).filter(x => x !== e.autorId);
@@ -770,9 +862,9 @@ function golModal(p, timeId, ev) {
     $('#sheet').innerHTML = `<div class="row between"><h2 class="${corLado(l)}" style="color:var(--tc)">⚽ Gol ${esc(time(e.timeId).sigla)}</h2><input id="gmin" value="${esc(e.min)}" style="width:90px;text-align:center" aria-label="Minuto"></div>
     <div class="row between"><b>Quem fez o gol?</b><label class="row small" style="gap:6px;cursor:pointer"><input type="checkbox" id="gcontra" style="width:20px;height:20px" ${e.golContra ? 'checked' : ''}> Gol contra</label></div>
     <div class="pick">${autores.map(id => pk(id, !e.diarista && e.autorId === id, 'g-autor')).join('')}${e.golContra ? '' : `<button class="pk alt ${e.diarista ? 'on' : ''}" data-a="g-autor-dia"><span class="ph">D</span><b>Diarista</b></button>`}</div>
-    ${e.diarista ? `<input id="gdnome" placeholder="Nome do diarista (opcional)" value="${esc(e.nomeDiarista)}">` : ''}
+    ${e.diarista ? `<input id="gdnome" list="dlsub" placeholder="Nome do diarista (opcional)" value="${esc(e.nomeDiarista)}">${dl}` : ''}
     ${e.golContra ? '' : `<b>Quem deu a assistência?</b><div class="pick"><button class="pk alt ${!e.assistId && !e.assistDiarista ? 'on' : ''}" data-a="g-sem"><span class="ph">—</span><b>Sem assistência</b></button>${assis.map(id => pk(id, !e.assistDiarista && e.assistId === id, 'g-assist')).join('')}<button class="pk alt ${e.assistDiarista ? 'on' : ''}" data-a="g-assist-dia"><span class="ph">D</span><b>Diarista</b></button></div>
-    ${e.assistDiarista ? `<input id="gdanome" placeholder="Nome do diarista da assistência (opcional)" value="${esc(e.assistNome)}">` : ''}`}
+    ${e.assistDiarista ? `<input id="gdanome" list="dlsub" placeholder="Nome do diarista da assistência (opcional)" value="${esc(e.assistNome)}">${dl}` : ''}`}
     ${(e.diarista || e.assistDiarista) ? '<p class="tiny muted">Gols e assistências de diaristas aparecem no jogo e no relatório, mas não contam no ranking.</p>' : ''}
     <div class="row between">${ev ? `<button class="btn ghost" data-a="g-trocar">Mudar para ${esc(time(outro).sigla)}</button>` : '<span></span>'}<div class="row"><button class="btn ghost" data-a="fechar">Cancelar</button><button class="btn pri" data-a="g-ok" ${e.autorId || e.diarista ? '' : 'disabled'}>Confirmar gol</button></div></div>`;
   };
@@ -816,13 +908,25 @@ function assistModal(p, ev) {
 /* ---------- Ranking ---------- */
 function pgRanking() {
   const k = UI.rkTab, mes = UI.rkMes;
-  const lin = ranking(mes, k === 'g' ? 'g' : 'a');
-  const dia = S.partidas.filter(p => !mes || p.mes === mes).reduce((n, p) => n + p.eventos.filter(e => (e.tipo === 'gol' && (k === 'g' ? e.diarista : e.assistDiarista)) || (k === 'a' && e.tipo === 'assistencia' && e.diarista)).length, 0);
-  return `<div class="sec"><span class="eyebrow">Estatísticas</span><h1>${k === 'g' ? 'Artilharia' : 'Assistências'}</h1>
-  <div class="chips"><button class="chip ${k === 'g' ? 'on' : ''}" data-a="rk-tab" data-v="g">Gols</button><button class="chip ${k === 'a' ? 'on' : ''}" data-a="rk-tab" data-v="a">Assistências</button></div>
-  <div class="chips"><button class="chip ${!mes ? 'on' : ''}" data-a="rk-mes" data-v="">Temporada</button>${mesesOrd().map(m => `<button class="chip ${mes === m.id ? 'on' : ''}" data-a="rk-mes" data-v="${m.id}">${esc(mesLabel(m.id))}</button>`).join('')}</div>
-  ${rkList(lin, k === 'g' ? 'gols' : 'assist.')}
-  <p class="tiny muted">Empates dividem a mesma colocação. ${dia ? `${dia} ${k === 'g' ? 'gol(s)' : 'assistência(s)'} de diaristas não entram no ranking.` : 'Gols e assistências de diaristas não entram no ranking.'}${S.baseline.length ? ' Outubro de 2026 usa o ranking oficial publicado pela liga.' : ''}</p></div>`;
+  const TABS = [['g', 'Gols'], ['a', 'Assistências'], ['ga', 'G + A'], ['pt', 'Pontuação']];
+  const tit = { g: 'Artilharia', a: 'Assistências', ga: 'Participação em gols', pt: 'Pontuação geral' }[k] || 'Artilharia';
+  const chipsTab = `<div class="chips">${TABS.map(([v, l]) => `<button class="chip ${k === v ? 'on' : ''}" data-a="rk-tab" data-v="${v}">${l}</button>`).join('')}</div>
+  <div class="chips"><button class="chip ${!mes ? 'on' : ''}" data-a="rk-mes" data-v="">Temporada</button>${mesesOrd().map(m => `<button class="chip ${mes === m.id ? 'on' : ''}" data-a="rk-mes" data-v="${m.id}">${esc(mesLabel(m.id))}</button>`).join('')}</div>`;
+  if (k === 'pt') {
+    const { lin, jogos, min } = pontuacao(mes);
+    lin.forEach(r => { r.fmt = ntTag(r.v, 2); r.sub = `${r.j} jogo${r.j > 1 ? 's' : ''}${r.mvp ? ` • ${r.mvp}× craque do jogo` : ''}${r.ok ? '' : ' • poucos jogos'}`; });
+    const top = lin.filter(r => r.pos === 1);
+    const destaque = top.length ? `<div class="craque">${av(jog(top[0].id))}<div class="t"><span class="eyebrow">${mes ? 'Melhor jogador de ' + esc(mesLabel(mes)) : 'Melhor jogador da temporada'}${top.length > 1 ? ' (empate)' : ''}</span><h2 style="margin:2px 0">${top.map(r => esc(nomeJ(r.id))).join(' e ')}</h2><small class="muted">Média ${ntFmt(top[0].v, 2)} em ${top[0].j} jogo${top[0].j > 1 ? 's' : ''}</small></div>${ntTag(top[0].v, 2)}</div>` : '';
+    return `<div class="sec"><span class="eyebrow">Estatísticas</span><h1>${tit}</h1>${chipsTab}
+    ${jogos ? destaque + rkList(lin, 'média') : '<p class="muted small">As notas aparecem quando um jogo é encerrado com os lances registrados.</p>'}
+    <p class="tiny muted">Média das notas de cada jogo (base 6,0: gols, assistências, resultado, defesa, faltas e ajuste manual). Para disputar a colocação é preciso ter nota em pelo menos ${min} de ${jogos || 0} jogo(s). Empates dividem a mesma colocação. Diaristas não recebem nota.</p></div>`;
+  }
+  const lin = ranking(mes, k === 'ga' ? 'ga' : k === 'a' ? 'a' : 'g');
+  if (k === 'ga') { const st = estatisticas(mes); lin.forEach(r => { const s = st[r.id] || { g: 0, a: 0 }; r.sub = `${s.g} gol${s.g === 1 ? '' : 's'} • ${s.a} assist.`; }); }
+  const dia = S.partidas.filter(p => !mes || p.mes === mes).reduce((n, p) => n + p.eventos.filter(e => (e.tipo === 'gol' && ((k !== 'a' && e.diarista) || (k !== 'g' && e.assistDiarista))) || (k !== 'g' && e.tipo === 'assistencia' && e.diarista)).length, 0);
+  return `<div class="sec"><span class="eyebrow">Estatísticas</span><h1>${tit}</h1>${chipsTab}
+  ${rkList(lin, k === 'g' ? 'gols' : k === 'a' ? 'assist.' : 'G+A')}
+  <p class="tiny muted">Empates dividem a mesma colocação. ${dia ? `${dia} lance(s) de diaristas não entram no ranking.` : 'Gols e assistências de diaristas não entram no ranking.'}${S.baseline.length ? ' Outubro de 2026 usa o ranking oficial publicado pela liga.' : ''}</p></div>`;
 }
 
 /* ---------- Histórico ---------- */
@@ -901,6 +1005,10 @@ function relatorio(p) {
   let t = `🏆 LIGA NEO SJ • Jogo ${String(p.numero).padStart(2, '0')} (${mesLabel(p.mes)})\n${p.data ? fmtData(p.data) : ''}${p.local ? ' • ' + p.local : ''}\n\n${corA} ${A.nome} ${pl.A} x ${pl.B} ${B.nome} ${corB}\n${bloco(p.timeA)}${bloco(p.timeB)}`;
   t += `\n\n🟨 Faltas: ${A.sigla} ${faltas(p, p.timeA)} x ${faltas(p, p.timeB)} ${B.sigla}`;
   if (p.destaque) t += `\n⭐ Destaque: ${p.destaque}`;
+  const fl = [p.timeA, p.timeB].flatMap(tt => elenco(m, tt)).filter(id => freqDe(p, id).st === 'f');
+  if (fl.length) t += `\n🚫 Faltaram: ${fl.map(id => nomeJ(id) + (freqDe(p, id).sub ? ` (entrou ${freqDe(p, id).sub})` : '')).join(', ')}`;
+  const sel = selecaoRodada(p);
+  if (sel) { t += `\n\n🌟 Craque do jogo: ${nomeJ(sel.craque.id)} • nota ${ntFmt(sel.craque.n)}`; t += `\n📋 Seleção da rodada\n${[sel.gk, ...sel.back, ...sel.mid, sel.atk].filter(Boolean).map(r => `${nomeJ(r.id)} – ${ntFmt(r.n)}`).join('\n')}`; }
   t += `\n\n📊 Série do mês: ${time(sr.tA).sigla} ${sr.vA} x ${sr.vB} ${time(sr.tB).sigla}${sr.campeao ? `\n🏆 ${time(sr.campeao).nome} campeão de ${mesCurto(p.mes)}!` : ''}`;
   if (rg.length) t += `\n\n⚽ Artilharia do mês\n${rg.map(r => `${r.pos}º ${nomeJ(r.id)} – ${r.v}`).join('\n')}`;
   if (ra.length) t += `\n\n🅰️ Assistências do mês\n${ra.map(r => `${r.pos}º ${nomeJ(r.id)} – ${r.v}`).join('\n')}`;
@@ -1034,6 +1142,8 @@ const ACOES = {
   'ev-editar': b => { const p = partidaAtual(), e = p.eventos.find(x => x.id === b.dataset.id); if (!e) return; if (e.tipo === 'gol') golModal(p, e.timeId, e); else assistModal(p, e); },
   'ev-apagar': b => confirmar('Apagar este lance?', 'O placar e o ranking serão recalculados.', () => { const p = partidaAtual(); p.eventos = p.eventos.filter(x => x.id !== b.dataset.id); commit('Lance apagado.'); render(); }),
   'rk-tab': b => { UI.rkTab = b.dataset.v; render(); },
+  'freq': () => { const p = partidaAtual(); if (p) freqModal(p); },
+  'nt-aj': b => { const p = partidaAtual(); if (!p) return; const id = b.dataset.id, v = Math.round(((Number(p.ajuste[id]) || 0) + Number(b.dataset.v)) * 10) / 10; if (Math.abs(v) > 3) { toast('Ajuste máximo de 3 pontos.', true); return; } if (v) p.ajuste[id] = v; else delete p.ajuste[id]; commit(); render(); },
   'rk-mes': b => { UI.rkMes = b.dataset.v; render(); }
 };
 document.addEventListener('click', e => {
