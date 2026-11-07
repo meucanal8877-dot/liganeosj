@@ -135,6 +135,18 @@ main.pgin{animation:pgIn .22s ease-out}
 .fq{display:grid;gap:8px;padding:10px 0;border-bottom:1px solid var(--line)}
 .fq .chip.on.f{background:var(--red);border-color:var(--red);color:#fff}
 .ajn{display:flex;align-items:center;gap:6px;flex-wrap:nowrap}.ajn .btn{min-width:34px;padding:4px 8px}
+/* Moeda */
+.coinwrap{perspective:900px;display:grid;place-items:center;padding:18px 0 6px}
+.coinwrap.jogando{animation:toss 2.2s cubic-bezier(.3,.7,.4,1)}
+@keyframes toss{0%{transform:translateY(0)}35%{transform:translateY(-120px)}70%{transform:translateY(0)}82%{transform:translateY(-14px)}100%{transform:translateY(0)}}
+.coin{width:150px;height:150px;position:relative;transform-style:preserve-3d}
+.coin .f{position:absolute;inset:0;border-radius:50%;backface-visibility:hidden;-webkit-backface-visibility:hidden;display:grid;place-items:center;align-content:center;gap:2px;background:radial-gradient(circle at 35% 30%,#fff1b0,#f5b301 55%,#a87400);border:6px solid #d49b00;box-shadow:inset 0 0 0 3px rgba(255,255,255,.35),0 10px 30px rgba(0,0,0,.45)}
+.coin .f .crest,.coin .f img{width:74px;height:74px;object-fit:contain}
+.coin .f span{font-weight:900;font-size:.75rem;letter-spacing:.14em;color:#3a2a00}
+.coin .f.b{transform:rotateY(180deg)}
+.coinres{text-align:center;min-height:52px;display:grid;place-items:center}
+.coinres b{font-size:1.25rem;font-weight:900}
+.moedainfo{font-size:.8rem;color:var(--mut);text-align:center}
 /* Telão do cronômetro */
 .telao{position:fixed;inset:0;z-index:50;background:radial-gradient(120% 80% at 50% 0%,#14224a 0%,var(--bg) 60%);display:grid;grid-template-rows:auto 1fr auto;padding:calc(env(safe-area-inset-top,0px) + 12px) 16px calc(16px + var(--safe-b));gap:10px;overflow:auto}.telao.abre{animation:fadeIn .2s ease-out}
 .telao .tt{display:flex;align-items:center;justify-content:space-between;gap:10px}
@@ -335,7 +347,7 @@ function normalizar(e) {
 async function importarDoSite() {
   const r = await fetch('/dados.json', { cache: 'no-store' }); if (!r.ok) throw new Error('dados.json');
   const d = await r.json();
-  const s = estadoVazio();
+  const s = estadoVazio(); s.siteVersao = d.versao || 0;
   s.config.nome = (d.config && d.config.nome) || 'Liga Neo SJ'; s.config.local = (d.config && d.config.local) || 'Arena Lobos';
   s.times = (d.times || []).map(t => ({ id: t.id, nome: t.nome, sigla: t.sigla, cor: t.cor, identidade: t.identidade, escudo: media(t.escudo) }));
   s.jogadores = (d.jogadores || []).map(j => ({ id: j.id, nome: j.nome, apelido: j.apelido || '', numero: j.numero || '', posicao: j.posicao || '', foto: media(j.foto), indisponivel: false, excluido: false, obs: j.observacao || '' }));
@@ -648,6 +660,7 @@ function pgDraft() {
   <div class="sec"><div class="draft-cols">${col('A')}${col('B')}</div></div>
   <div class="sec">
     <button class="turn ${corLado(vez)}" data-a="dr-vez" style="border:0;cursor:pointer;width:100%">Vez de escolher: ${esc(tVez.sigla || tVez.nome)} ${ic('reset')}</button>
+    ${(d.escolhas || []).length ? (d.moeda ? `<p class="moedainfo">🪙 Na moeda, ${esc(time(d.moeda === 'A' ? d.A : d.B).sigla)} começou escolhendo.</p>` : '') : `<div class="row" style="justify-content:center"><button class="btn sm" data-a="moeda-draft">🪙 Jogar moeda: quem começa escolhendo</button></div>${d.moeda ? `<p class="moedainfo">Deu ${esc(time(d.moeda === 'A' ? d.A : d.B).sigla)} na moeda.</p>` : ''}`}
     <div class="row between"><h2>Disponíveis (${pool.length})</h2><div class="row"><button class="btn sm" data-a="dr-desfazer" ${(d.escolhas || []).length ? '' : 'disabled'}>Desfazer última</button></div></div>
     <p class="small muted">Toque no jogador para colocá-lo no time da vez. Use o botão ⋯ para escolher o outro time ou marcar fora do Draft.</p>
     <div class="pool">${pool.map(j => `<div class="pc" data-a="dr-pick" data-id="${esc(j.id)}" role="button" tabindex="0">${av(j, '')}<b>${esc(j.apelido || j.nome)}</b><span class="tiny muted">${esc(POS_AB[j.posicao] || j.posicao || 'Posição a confirmar')}</span><button class="more" data-a="dr-mais" data-id="${esc(j.id)}" aria-label="Opções">⋯</button></div>`).join('') || '<p class="muted small">Todos os jogadores já foram distribuídos.</p>'}</div>
@@ -769,6 +782,7 @@ function pgJogo(id) {
     <select data-in="rl-dur" style="width:auto"><option value="0">Sem limite</option>${[10, 15, 20, 25, 30, 35, 40, 45].map(x => `<option value="${x}" ${S.config.duracaoTempo === x ? 'selected' : ''}>${x} min por tempo</option>`).join('')}</select></div>
     <div class="clock ${dur && ms >= dur ? 'over' : ''}" id="clock" data-clock>${mmss(ms)}</div>
     <div class="row" style="justify-content:center">${p.relogio.rodando ? `<button class="btn" data-a="rl-pausar">${ic('pause')} Pausar</button>` : `<button class="btn pri" data-a="rl-iniciar">${ic('play')} ${ms ? 'Continuar' : 'Iniciar jogo'}</button>`}<button class="btn" data-a="tela-abrir">${ic('max')} Tela cheia</button><button class="btn ghost" data-a="rl-zerar">${ic('reset')} Zerar</button></div>
+    ${blocoSaida(p)}
     <label class="row small muted" style="justify-content:center;gap:8px;cursor:pointer"><input type="checkbox" data-in="tela-auto" ${S.config.telaCheia !== false ? 'checked' : ''} style="width:auto"> Abrir em tela cheia ao iniciar o jogo</label>
   </div>${UI.tela ? telao(p, pl, A, B, lA, lB, ms, dur) : ''}
   <div class="sec"><div class="bigbtns"><button class="bigbtn ${lA}" data-a="gol" data-t="${esc(p.timeA)}">⚽ Gol ${esc(A.sigla)}<small>${lA === 'A' ? 'Azul' : 'Vermelho'}</small></button><button class="bigbtn ${lB}" data-a="gol" data-t="${esc(p.timeB)}">⚽ Gol ${esc(B.sigla)}<small>${lB === 'A' ? 'Azul' : 'Vermelho'}</small></button></div>
@@ -802,10 +816,37 @@ function freqModal(p) {
     fq: b => { const id = b.dataset.id; if (b.dataset.v === 'f') p.freq[id] = { st: 'f', sub: freqDe(p, id).sub || '' }; else delete p.freq[id]; commit(); $('#fqc').innerHTML = corpo(); render(); }
   }, () => MODAL.el.addEventListener('change', e => { const id = e.target.dataset.fq; if (!id) return; p.freq[id] = { st: 'f', sub: e.target.value.trim() }; commit(); render(); }));
 }
+function moeda(titulo, tA, tB, aplicar) {
+  const A = time(tA), B = time(tB); let lado = null, girando = false;
+  modal(`<h2>${esc(titulo)}</h2><p class="small muted" style="text-align:center">Cara: <b>${esc(A.sigla || A.nome)}</b> • Coroa: <b>${esc(B.sigla || B.nome)}</b></p>
+  <div class="coinwrap" id="coinw"><div class="coin" id="coin"><div class="f">${crest(A)}<span>CARA</span></div><div class="f b">${crest(B)}<span>COROA</span></div></div></div>
+  <div class="coinres" id="coinres"><span class="small muted">Toque em jogar moeda.</span></div>
+  <div class="row" style="justify-content:center" id="coinbt"><button class="btn pri" data-a="mo-jogar">🪙 Jogar moeda</button></div>`, {
+    'mo-jogar': () => {
+      if (girando) return; girando = true;
+      const r = new Uint32Array(1); crypto.getRandomValues(r); lado = (r[0] & 1) ? 'B' : 'A';
+      const c = $('#coin'), w = $('#coinw');
+      c.style.transition = 'none'; c.style.transform = 'rotateY(0deg)'; w.classList.remove('jogando'); void c.offsetWidth;
+      c.style.transition = 'transform 2.2s cubic-bezier(.15,.6,.2,1)'; c.style.transform = `rotateY(${360 * 8 + (lado === 'B' ? 180 : 0)}deg)`; w.classList.add('jogando');
+      $('#coinres').innerHTML = '<span class="small muted">Girando…</span>'; $('#coinbt').innerHTML = ''; vib(30);
+      setTimeout(() => {
+        girando = false; const t = lado === 'A' ? A : B; vib([40, 60, 40]);
+        $('#coinres').innerHTML = `<div><div class="small muted">Deu ${lado === 'A' ? 'CARA' : 'COROA'}</div><b>${esc(t.nome)}</b></div>`;
+        $('#coinbt').innerHTML = `<button class="btn" data-a="mo-jogar">Jogar de novo</button><button class="btn pri" data-a="mo-ok">Confirmar</button>`;
+      }, 2300);
+    },
+    'mo-ok': () => { if (!lado) return; aplicar(lado); fecharModal(); }
+  });
+}
+function blocoSaida(p) {
+  if (!p.saida) return `<button class="btn sm" data-a="moeda-jogo">🪙 Moeda: quem começa com a bola</button>`;
+  const t1 = time(p.saida === 'A' ? p.timeA : p.timeB), t2 = time(p.saida === 'A' ? p.timeB : p.timeA);
+  return `<div class="moedainfo">🪙 Saída de bola: <b>${esc(t1.sigla || t1.nome)}</b> no 1º tempo • <b>${esc(t2.sigla || t2.nome)}</b> no 2º tempo <button class="btn sm ghost" data-a="moeda-jogo" style="margin-left:6px">Refazer</button></div>`;
+}
 function telao(p, pl, A, B, lA, lB, ms, dur) {
   const n = p.relogio.periodo;
   return `<div class="telao ${UI.telaAnim ? 'abre' : ''}" role="dialog" aria-label="Cronômetro em tela cheia">
-    <div class="tt"><span class="per">${n}º tempo${dur ? ' • ' + (dur / 60000) + ' min' : ''}</span>${p.status === 'ao_vivo' ? '<span class="live">Ao vivo</span>' : ''}<button class="btn sm" data-a="tela-fechar" aria-label="Sair da tela cheia">${ic('min')} Sair</button></div>
+    <div class="tt"><span class="per">${n}º tempo${dur ? ' • ' + (dur / 60000) + ' min' : ''}${p.saida ? ' • saída ' + esc(time((p.saida === 'A') === (n === 1) ? p.timeA : p.timeB).sigla) : ''}</span>${p.status === 'ao_vivo' ? '<span class="live">Ao vivo</span>' : ''}<button class="btn sm" data-a="tela-fechar" aria-label="Sair da tela cheia">${ic('min')} Sair</button></div>
     <div class="corpo" style="display:grid;gap:12px;align-content:center">
       <div class="meio">
         <div class="sc"><div class="tm">${crest(A)}<span>${esc(A.sigla)}</span></div><div class="pl">${pl.A}<em>×</em>${pl.B}</div><div class="tm">${crest(B)}<span>${esc(B.sigla)}</span></div></div>
@@ -985,14 +1026,22 @@ async function verVersoes() {
     })
   });
 }
-async function buscarSite() {
+async function buscarSite(silencioso) {
   try {
     const novo = await importarDoSite(); let n = 0;
-    novo.jogadores.forEach(j => { const x = jog(j.id); if (!x) { S.jogadores.push(j); n++; } else if (!x.foto && j.foto) { x.foto = j.foto; n++; } });
-    novo.meses.forEach(m => { if (!getMes(m.id)) { S.meses.push(m); n++; } });
+    novo.jogadores.forEach(j => { const x = jog(j.id); if (!x) { S.jogadores.push(j); n++; } else if (j.foto && x.foto !== j.foto && (!x.foto || !/^https?:/.test(x.foto))) { x.foto = j.foto; n++; } });
+    novo.meses.forEach(m => {
+      const x = getMes(m.id); if (!x) { S.meses.push(m); n++; return; }
+      const d = x.draft; if (d.finalizado) return;
+      const usados = new Set([...(d.azul || []), ...(d.vermelho || []), ...(d.ausentes || []), d.capA, d.capB]);
+      (m.draft.ausentes || []).forEach(id => { if (!usados.has(id)) { d.ausentes.push(id); n++; } });
+    });
     novo.partidas.forEach(p => { if (!S.partidas.find(x => x.id === p.id)) { S.partidas.push(p); n++; } });
-    commit(n ? `${n} novidade(s) importada(s).` : 'Nada novo no site.'); render();
-  } catch (e) { toast('Não foi possível ler os dados do site.', true); }
+    const mudouVersao = S.siteVersao !== novo.siteVersao; S.siteVersao = novo.siteVersao;
+    if (n || mudouVersao) commit(silencioso ? (n ? `${n} novidade(s) do site importada(s).` : undefined) : (n ? `${n} novidade(s) importada(s).` : 'Nada novo no site.'));
+    else if (!silencioso) toast('Nada novo no site.');
+    render();
+  } catch (e) { if (!silencioso) toast('Não foi possível ler os dados do site.', true); }
 }
 
 /* ---------- Compartilhar ---------- */
@@ -1004,6 +1053,7 @@ function relatorio(p) {
   const sr = serie(p.mes), rg = ranking(p.mes, 'g').slice(0, 3), ra = ranking(p.mes, 'a').slice(0, 3);
   let t = `🏆 LIGA NEO SJ • Jogo ${String(p.numero).padStart(2, '0')} (${mesLabel(p.mes)})\n${p.data ? fmtData(p.data) : ''}${p.local ? ' • ' + p.local : ''}\n\n${corA} ${A.nome} ${pl.A} x ${pl.B} ${B.nome} ${corB}\n${bloco(p.timeA)}${bloco(p.timeB)}`;
   t += `\n\n🟨 Faltas: ${A.sigla} ${faltas(p, p.timeA)} x ${faltas(p, p.timeB)} ${B.sigla}`;
+  if (p.saida) t += `\n🪙 Saída de bola (moeda): ${time(p.saida === 'A' ? p.timeA : p.timeB).nome}`;
   if (p.destaque) t += `\n⭐ Destaque: ${p.destaque}`;
   const fl = [p.timeA, p.timeB].flatMap(tt => elenco(m, tt)).filter(id => freqDe(p, id).st === 'f');
   if (fl.length) t += `\n🚫 Faltaram: ${fl.map(id => nomeJ(id) + (freqDe(p, id).sub ? ` (entrou ${freqDe(p, id).sub})` : '')).join(', ')}`;
@@ -1142,6 +1192,8 @@ const ACOES = {
   'ev-editar': b => { const p = partidaAtual(), e = p.eventos.find(x => x.id === b.dataset.id); if (!e) return; if (e.tipo === 'gol') golModal(p, e.timeId, e); else assistModal(p, e); },
   'ev-apagar': b => confirmar('Apagar este lance?', 'O placar e o ranking serão recalculados.', () => { const p = partidaAtual(); p.eventos = p.eventos.filter(x => x.id !== b.dataset.id); commit('Lance apagado.'); render(); }),
   'rk-tab': b => { UI.rkTab = b.dataset.v; render(); },
+  'moeda-draft': () => { const m = getMes(UI.draftMes), d = m.draft; if (!d.A || !d.B) { toast('Defina os dois times primeiro.', true); return; } moeda('Quem começa escolhendo?', d.A, d.B, l => { d.vez = l; d.moeda = l; commit(time(l === 'A' ? d.A : d.B).nome + ' começa escolhendo.'); render(); }); },
+  'moeda-jogo': () => { const p = partidaAtual(); if (!p) return; moeda('Quem começa com a bola?', p.timeA, p.timeB, l => { p.saida = l; commit(time(l === 'A' ? p.timeA : p.timeB).nome + ' começa com a bola.'); render(); }); },
   'freq': () => { const p = partidaAtual(); if (p) freqModal(p); },
   'nt-aj': b => { const p = partidaAtual(); if (!p) return; const id = b.dataset.id, v = Math.round(((Number(p.ajuste[id]) || 0) + Number(b.dataset.v)) * 10) / 10; if (Math.abs(v) > 3) { toast('Ajuste máximo de 3 pontos.', true); return; } if (v) p.ajuste[id] = v; else delete p.ajuste[id]; commit(); render(); },
   'rk-mes': b => { UI.rkMes = b.dataset.v; render(); }
@@ -1223,6 +1275,7 @@ async function iniciar() {
   }
   render();
   if (META.dirty) push();
+  if (SYNC.modo !== 'offline') buscarSite(true);
 }
 if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('/painel-sw.js', { scope: '/painel' }).catch(() => {}));
 if (token()) iniciar(); else telaLogin('');
