@@ -1029,7 +1029,7 @@ async function verVersoes() {
 async function buscarSite(silencioso) {
   try {
     const novo = await importarDoSite(); let n = 0;
-    novo.jogadores.forEach(j => { const x = jog(j.id); if (!x) { S.jogadores.push(j); n++; } else if (j.foto && x.foto !== j.foto && (!x.foto || !/^https?:/.test(x.foto))) { x.foto = j.foto; n++; } });
+    novo.jogadores.forEach(j => { const x = jog(j.id); if (!x) { S.jogadores.push(j); n++; } else if (j.foto && x.foto !== j.foto && (!x.foto || !/^https?:/.test(x.foto))) { x.foto = j.foto; n++; } if (x && j.posicao && !/a confirmar/i.test(j.posicao) && (!x.posicao || /a confirmar/i.test(x.posicao))) { x.posicao = j.posicao; n++; } });
     novo.meses.forEach(m => {
       const x = getMes(m.id); if (!x) { S.meses.push(m); n++; return; }
       const d = x.draft; if (d.finalizado) return;
