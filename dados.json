@@ -1,6 +1,6 @@
 {
- "versao": 7,
- "atualizadoEm": "2026-11-05T13:30:00-03:00",
+ "versao": 8,
+ "atualizadoEm": "2026-11-06T21:30:00-03:00",
  "config": {
   "nome": "Liga Neo SJ",
   "slogan": "Seja Você o protagonista desse jogo!",
@@ -285,6 +285,17 @@
    "foto": "jogador-bruno-ferraz.webp",
    "retrato": "jogador-bruno-ferraz-retrato.webp",
    "observacao": ""
+  },
+  {
+   "id": "renne-andre",
+   "nome": "Renne André",
+   "apelido": "Renne",
+   "numero": "",
+   "posicao": "A confirmar",
+   "timeId": "",
+   "foto": "jogador-renne-andre.jpg",
+   "retrato": "jogador-renne-andre-retrato.jpg",
+   "observacao": ""
   }
  ],
  "drafts": [
@@ -335,7 +346,8 @@
     "joao-batista",
     "giliard",
     "gabriel-gb",
-    "laerty-torres"
+    "laerty-torres",
+    "danilo-ramos"
    ],
    "observacao": "",
    "data": "2026-11-07",
@@ -741,7 +753,7 @@
    "ordem": 0,
    "titulo": "Draft de novembro: sábado, 07/11, às 20h00",
    "imagem": "",
-   "texto": "O Draft de novembro acontece no sábado, 07/11, às 20h00. Os capitães Eduardo Rato (Arena Lobos Esporte Clube) e Gleysson Nascimento (Arena Lobos Futebol Clube) escolhem os times a partir da lista de disponíveis.\n\nDaniel Freitas, o Chocolate, e Bruno Ferraz, o Bruninho, entram na lista de disponíveis. GB e Laerty não participam do Draft deste mês, assim como Matheus, João Batista e Gil Gol.\n\nOs números de camisa serão definidos após o Draft."
+   "texto": "O Draft de novembro acontece no sábado, 07/11, às 20h00. Os capitães Eduardo Rato (Arena Lobos Esporte Clube) e Gleysson Nascimento (Arena Lobos Futebol Clube) escolhem os times a partir da lista de disponíveis.\n\nDaniel Freitas, o Chocolate, e Bruno Ferraz, o Bruninho, entram na lista de disponíveis. GB e Laerty não participam do Draft deste mês, assim como Matheus, João Batista e Gil Gol. Renne André entra na lista de disponíveis no lugar de Danilo Ramos, que não participa do Draft deste mês.\n\nOs números de camisa serão definidos após o Draft."
   },
   {
    "id": "capitaes-novembro-2026",
