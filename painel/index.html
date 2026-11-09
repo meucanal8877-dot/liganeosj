@@ -184,24 +184,27 @@ main.pgin{animation:pgIn .22s ease-out}
 .pc b{font-size:.74rem;text-transform:uppercase;line-height:1.1}
 .pc .more{position:absolute;top:4px;right:4px;width:26px;height:26px;border-radius:8px;border:1px solid var(--line2);background:var(--card);color:var(--mut);cursor:pointer;font-weight:900;line-height:1}
 .pitch-wrap{display:grid;gap:10px}
-.pitch{position:relative;width:100%;max-width:min(440px,42vh);margin:0 auto;aspect-ratio:3/4;border-radius:18px;overflow:hidden;background:repeating-linear-gradient(180deg,#1f7a3a 0 10%,#1b6e34 10% 20%);border:3px solid rgba(255,255,255,.55);touch-action:none}
+.pitch{position:relative;width:100%;max-width:min(400px,36vh);margin:0 auto;aspect-ratio:3/4;border-radius:18px;overflow:hidden;background:repeating-linear-gradient(180deg,#1f7a3a 0 10%,#1b6e34 10% 20%);border:3px solid rgba(255,255,255,.55);touch-action:pan-y}
 .pitch:before{content:"";position:absolute;left:0;right:0;top:50%;border-top:2px solid rgba(255,255,255,.55)}
 .pitch:after{content:"";position:absolute;left:50%;top:50%;width:26%;aspect-ratio:1;border:2px solid rgba(255,255,255,.55);border-radius:50%;transform:translate(-50%,-50%)}
 .pitch .area{position:absolute;left:28%;right:28%;height:13%;border:2px solid rgba(255,255,255,.55)}
 .pitch .area.b{bottom:-2px;border-bottom:0}.pitch .area.t{top:-2px;border-top:0}
-.slot{position:absolute;transform:translate(-50%,-50%);width:23%;display:grid;justify-items:center;gap:3px;z-index:2;cursor:pointer;touch-action:none}
+.slot{position:absolute;transform:translate(-50%,-50%);width:23%;display:grid;justify-items:center;gap:3px;z-index:2;cursor:pointer;touch-action:manipulation;-webkit-touch-callout:none}
 .slot .c{width:58px;height:58px;border-radius:50%;border:3px dashed rgba(255,255,255,.7);display:grid;place-items:center;background:rgba(0,0,0,.18);overflow:hidden;color:#fff;font-weight:900;font-size:.7rem}
 .slot.f .c{border:3px solid #fff;background:var(--tc)}
 .slot .c img{width:100%;height:100%;object-fit:cover}
 .slot .n{font-size:.66rem;font-weight:900;text-transform:uppercase;background:rgba(0,0,0,.6);border-radius:6px;padding:2px 6px;white-space:nowrap;max-width:110px;overflow:hidden;text-overflow:ellipsis}
 .slot.sel .c,.chipP.sel{outline:3px solid var(--gold);outline-offset:2px}
 .slot.hov .c{border-color:var(--gold);background:rgba(245,179,1,.3)}
+.pitch.esc .slot:not(.f) .c,.bench.esc .slot:not(.f) .c{border-color:var(--gold);animation:pul 1.1s ease-in-out infinite}
+.slot.armado .c,.chipP.armado{outline:3px solid var(--gold);outline-offset:2px;transform:scale(1.08)}
+.dica{display:flex;gap:8px;align-items:center;background:rgba(245,179,1,.12);border:1px solid rgba(245,179,1,.4);color:var(--fg);border-radius:12px;padding:8px 12px;font-size:.8rem;font-weight:700}
 .bench{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:440px;margin:0 auto;width:100%}
 .bench .slot{position:relative;transform:none;width:auto;background:var(--card2);border:1px solid var(--line);border-radius:14px;padding:8px;grid-template-columns:auto 1fr;justify-items:start;align-items:center;gap:8px;left:auto;top:auto}
 .bench .slot .c{width:44px;height:44px}
 .bench .slot .n{background:none;font-size:.72rem;max-width:none}
 .chipsP{display:flex;flex-wrap:wrap;gap:6px}
-.chipP{display:flex;align-items:center;gap:6px;background:var(--card2);border:1px solid var(--line);border-radius:99px;padding:4px 10px 4px 4px;font-size:.74rem;font-weight:800;text-transform:uppercase;cursor:grab;touch-action:none;user-select:none}
+.chipP{display:flex;align-items:center;gap:6px;background:var(--card2);border:1px solid var(--line);border-radius:99px;padding:4px 10px 4px 4px;font-size:.74rem;font-weight:800;text-transform:uppercase;cursor:grab;touch-action:manipulation;-webkit-touch-callout:none;user-select:none}
 .chipP img,.chipP .ph{width:28px;height:28px;border-radius:50%;object-fit:cover;background:var(--card)}
 .slot img,.chipP img,.slot .c,.chipP{-webkit-user-drag:none;user-select:none;-webkit-user-select:none}.slot img,.chipP img{pointer-events:none}
 .dragghost{position:fixed;z-index:90;pointer-events:none;transform:translate(-50%,-50%) scale(1.06);opacity:.92;filter:drop-shadow(0 10px 18px rgba(0,0,0,.5))}
@@ -690,16 +693,17 @@ function pgCampo() {
   const l = ladoDoTime(m, tid), e = escDe(m, tid), el = elenco(m, tid);
   const fora = el.filter(id => !slotDe(e, id));
   const nT = ['gk', 'l0', 'l1', 'l2', 'l3', 'l4', 'l5'].filter(k => slotGet(e, k)).length, nR = e.reservas.filter(Boolean).length;
-  const slot = (k, x, y, lab) => { const id = slotGet(e, k), j = jog(id); return `<div class="slot ${id ? 'f' : ''} ${UI.sel && UI.sel.slot === k ? 'sel' : ''}" data-slot="${k}" ${id ? `data-drag="${esc(id)}"` : ''} style="${x != null ? `left:${x}%;top:${y}%` : ''}"><span class="c">${j ? (media(j.foto) ? `<img src="${esc(media(j.foto))}" alt="">` : esc((j.apelido || j.nome).slice(0, 2))) : esc(lab)}</span><span class="n">${j ? esc(nomeJ(id)) + (j.numero ? ' ' + esc(j.numero) : '') : (x != null ? 'Vazio' : lab)}</span></div>`; };
+  const slot = (k, x, y, lab) => { const id = slotGet(e, k), j = jog(id); return `<div class="slot ${id ? 'f' : ''} ${UI.sel && UI.sel.slot === k ? 'sel' : ''}" data-slot="${k}" ${id ? `data-drag="${esc(id)}"` : ''} style="${x != null ? `left:${x}%;top:${y}%` : ''}"><span class="c">${j ? (media(j.foto) ? `<img src="${esc(media(j.foto))}" alt="">` : esc((j.apelido || j.nome).slice(0, 2))) : esc(x != null ? lab : 'R' + lab.slice(-1))}</span><span class="n">${j ? esc(nomeJ(id)) + (j.numero ? ' ' + esc(j.numero) : '') : (x != null ? 'Vazio' : lab)}</span></div>`; };
   return `<div class="sec"><span class="eyebrow">Campo virtual</span><h1>Escalação</h1>${mesChips(m.id, 'cp-mes')}
   <div class="chips">${[m.draft.A, m.draft.B].map(t => `<button class="chip ${t === tid ? 'on' : ''}" data-a="cp-time" data-v="${esc(t)}">${esc(time(t).sigla || time(t).nome)} • ${ladoDoTime(m, t) === 'A' ? 'Azul' : 'Vermelho'}</button>`).join('')}</div></div>
   ${el.length !== 9 ? `<div class="banner" style="margin-bottom:12px">${ic('users')}<span>O ${esc(time(tid).sigla)} tem ${el.length} jogador(es) no Draft. A escalação completa tem 9: 1 goleiro, 6 de linha e 2 reservas.</span></div>` : ''}
   <div class="sec pitch-wrap ${corLado(l)}">
     <div class="row between"><b>${esc(time(tid).nome)}</b><span class="small muted">${nT}/7 titulares • ${nR}/2 reservas</span></div>
-    <div class="pitch" id="pitch"><div class="area t"></div><div class="area b"></div>${SLOTS.map(([k, x, y, lab]) => slot(k, x, y, lab)).join('')}</div>
-    <h3>Reservas</h3><div class="bench">${slot('r0', null, null, 'Reserva 1')}${slot('r1', null, null, 'Reserva 2')}</div>
     <h3>Elenco fora do campo</h3><div class="chipsP">${fora.map(id => { const j = jog(id); return `<span class="chipP ${UI.sel && UI.sel.id === id && !UI.sel.slot ? 'sel' : ''}" data-drag="${esc(id)}" data-chip="1">${media(j.foto) ? `<img src="${esc(media(j.foto))}" alt="">` : '<span class="ph"></span>'}${esc(nomeJ(id))}<small class="muted">${esc(POS_AB[j.posicao] || '')}</small></span>`; }).join('') || '<span class="small muted">Todos posicionados.</span>'}</div>
-    <p class="tiny muted">Arraste o jogador até a posição ou toque nele e depois toque na posição. Toque em dois jogadores do campo para trocar de lugar.</p>
+    ${UI.sel ? `<div class="dica">👆 ${esc(nomeJ(UI.sel.id))} selecionado. Agora toque na posição do campo${UI.sel.slot ? ' (ou em outro jogador para trocar)' : ''}.</div>` : ''}
+    <div class="pitch ${UI.sel ? 'esc' : ''}" id="pitch"><div class="area t"></div><div class="area b"></div>${SLOTS.map(([k, x, y, lab]) => slot(k, x, y, lab)).join('')}</div>
+    <h3>Reservas</h3><div class="bench ${UI.sel ? 'esc' : ''}">${slot('r0', null, null, 'Reserva 1')}${slot('r1', null, null, 'Reserva 2')}</div>
+    <p class="tiny muted">Toque no jogador e depois toque na posição. Para arrastar, segure o jogador por um instante e leve até a posição. Toque em dois jogadores do campo para trocar de lugar.</p>
     <div class="row"><button class="btn pri" data-a="cp-salvar">Salvar escalação</button><button class="btn" data-a="cp-auto">Preencher automático</button><button class="btn danger" data-a="cp-limpar">Limpar</button>${UI.sel && UI.sel.slot ? '<button class="btn" data-a="cp-tirar">Tirar do campo</button>' : ''}${UI.sel ? '<button class="btn ghost" data-a="cp-desel">Cancelar seleção</button>' : ''}</div>
     ${e.salvoEm ? `<p class="tiny muted">Escalação salva em ${new Date(e.salvoEm).toLocaleString('pt-BR')}.</p>` : ''}
   </div>`;
@@ -711,24 +715,34 @@ function campoMover(id, alvo) {
   else { const ocup = slotGet(e, alvo); if (ocup === id) return; slotSet(e, alvo, id); if (de) slotSet(e, de, ocup || null); }
   UI.sel = null; commit(); render();
 }
+let DRAG_FIM = 0;
 function ligarCampo() {
+  // Mouse: arrasta na hora. Toque: segure ~0,2s para arrastar; deslizar sem segurar rola a página normalmente.
   const root = $('#main'); let drag = null;
+  const limpar = () => { if (drag) { clearTimeout(drag.timer); if (drag.ghost) drag.ghost.remove(); if (drag.src) drag.src.classList.remove('armado'); } $$('.slot.hov').forEach(s => s.classList.remove('hov')); drag = null; };
+  const comecar = ev => { drag.moved = true; drag.ghost = drag.src.cloneNode(true); drag.ghost.classList.remove('armado'); drag.ghost.classList.add('dragghost'); drag.ghost.style.width = drag.src.offsetWidth + 'px'; drag.ghost.style.left = ev.clientX + 'px'; drag.ghost.style.top = ev.clientY + 'px'; document.body.appendChild(drag.ghost); };
   root.onpointerdown = ev => {
-    const src = ev.target.closest('[data-drag]'); if (!src) return;
-    drag = { id: src.dataset.drag, x: ev.clientX, y: ev.clientY, src, moved: false, ghost: null };
+    limpar(); const src = ev.target.closest('[data-drag]'); if (!src || ev.button > 0) return;
+    drag = { id: src.dataset.drag, x: ev.clientX, y: ev.clientY, src, moved: false, ghost: null, toque: ev.pointerType !== 'mouse', armado: ev.pointerType === 'mouse' };
+    if (drag.toque) drag.timer = setTimeout(() => { if (drag && !drag.moved) { drag.armado = true; src.classList.add('armado'); vib(15); } }, 200);
   };
   document.onpointermove = ev => {
     if (!drag) return;
-    if (!drag.moved && Math.hypot(ev.clientX - drag.x, ev.clientY - drag.y) > 8) { drag.moved = true; drag.ghost = drag.src.cloneNode(true); drag.ghost.classList.add('dragghost'); drag.ghost.style.width = drag.src.offsetWidth + 'px'; document.body.appendChild(drag.ghost); }
-    if (drag.moved) { ev.preventDefault(); if (ev.clientY > innerHeight - 90) scrollBy(0, 14); else if (ev.clientY < 110) scrollBy(0, -14); drag.ghost.style.left = ev.clientX + 'px'; drag.ghost.style.top = ev.clientY + 'px'; $$('.slot.hov').forEach(s => s.classList.remove('hov')); const t = document.elementFromPoint(ev.clientX, ev.clientY); const s = t && t.closest('[data-slot]'); if (s) s.classList.add('hov'); }
+    const dist = Math.hypot(ev.clientX - drag.x, ev.clientY - drag.y);
+    if (!drag.armado) { if (dist > 8) limpar(); return; }
+    if (!drag.moved && dist > 6) comecar(ev);
+    if (drag.moved) { ev.preventDefault(); drag.lx = ev.clientX; drag.ly = ev.clientY; if (ev.clientY > innerHeight - 90) scrollBy(0, 14); else if (ev.clientY < 110) scrollBy(0, -14); drag.ghost.style.left = ev.clientX + 'px'; drag.ghost.style.top = ev.clientY + 'px'; $$('.slot.hov').forEach(s => s.classList.remove('hov')); const t = document.elementFromPoint(ev.clientX, ev.clientY); const s = t && t.closest('[data-slot]'); if (s) s.classList.add('hov'); }
   };
   const fim = ev => {
-    if (!drag) return; const d = drag; drag = null;
-    if (d.ghost) d.ghost.remove(); $$('.slot.hov').forEach(s => s.classList.remove('hov'));
-    if (d.moved) { const t = document.elementFromPoint(ev.clientX, ev.clientY); const s = t && t.closest('[data-slot]'); if (s) campoMover(d.id, s.dataset.slot); else if (t && t.closest('.chipsP')) campoMover(d.id, 'fora'); }
+    if (!drag) return; const d = drag; clearTimeout(d.timer);
+    if (d.moved) { DRAG_FIM = Date.now(); const px = ev.clientX || d.lx, py = ev.clientY || d.ly; const t = document.elementFromPoint(px, py); const s = t && t.closest('[data-slot]'); limpar(); if (s) campoMover(d.id, s.dataset.slot); else if (t && t.closest('.chipsP')) campoMover(d.id, 'fora'); return; }
+    limpar();
   };
   root.ondragstart = ev => ev.preventDefault();
-  document.onpointerup = fim; document.onpointercancel = () => { if (drag && drag.ghost) drag.ghost.remove(); $$('.ghost').forEach(g => g.remove()); drag = null; };
+  root.oncontextmenu = ev => { if (ev.target.closest('[data-drag]')) ev.preventDefault(); };
+  document.onpointerup = fim; document.onpointercancel = limpar;
+  if (!window._campoTouch) { window._campoTouch = true; document.addEventListener('touchmove', ev => { if (window._campoArrastando && window._campoArrastando()) ev.preventDefault(); }, { passive: false }); }
+  window._campoArrastando = () => !!(drag && drag.armado);
 }
 function campoToque(el) {
   const slotEl = el.closest('[data-slot]'), chip = el.closest('[data-chip]');
@@ -1200,7 +1214,7 @@ const ACOES = {
 };
 document.addEventListener('click', e => {
   const b = e.target.closest('[data-a]');
-  if (rota().startsWith('campo') && !MODAL && (e.target.closest('[data-slot]') || e.target.closest('[data-chip]')) && !b) { campoToque(e.target); return; }
+  if (rota().startsWith('campo') && !MODAL && (e.target.closest('[data-slot]') || e.target.closest('[data-chip]')) && !b) { if (Date.now() - DRAG_FIM > 350) campoToque(e.target); return; }
   if (!b) return;
   const a = b.dataset.a;
   if (MODAL && MODAL.acoes[a]) { e.preventDefault(); MODAL.acoes[a](b); return; }
