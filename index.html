@@ -1055,8 +1055,9 @@ function pgTimes(){
 function draftTeamHtml(dr, side, compact){
   const tid = dr['time'+side+'Id'], t = team(tid), gk = player(dr['goleiro'+side+'Id']), cap = player(dr['capitao'+side+'Id']);
   const line = (dr['jogadores'+side]||[]).map(player).filter(Boolean);
+  const ordem = id => { const i = (dr.escolhas||[]).indexOf(id); return i >= 0 ? ' • ' + (i+1) + 'ª escolha' : ''; };
   const cls = D().times.indexOf(t) === 1 ? 't-red' : 't-blue';
-  const row = (p, isGk) => `<a class="drow ${isGk?'gk':''}" href="#jogador-${esc(p.id)}">${photo(p)?`<img src="${esc(photo(p))}" alt="" loading="lazy">`:'<span></span>'}<span style="min-width:0"><b>${esc(pnm(p))}${cap&&cap.id===p.id?' <span class="tie" style="color:var(--gold2)">capitão</span>':''}</b><small>${esc(p.nome)}${p.numero?' • camisa '+esc(p.numero):''}</small></span><span class="tagpos">${isGk?'GOL':esc(POS_AB[p.posicao]||p.posicao||'')}</span></a>`;
+  const row = (p, isGk) => `<a class="drow ${isGk?'gk':''}" href="#jogador-${esc(p.id)}">${photo(p)?`<img src="${esc(photo(p))}" alt="" loading="lazy">`:'<span></span>'}<span style="min-width:0"><b>${esc(pnm(p))}${cap&&cap.id===p.id?' <span class="tie" style="color:var(--gold2)">capitão</span>':''}</b><small>${esc(p.nome)}${p.numero?' • camisa '+esc(p.numero):''}${ordem(p.id)}</small></span><span class="tagpos">${isGk?'GOL':esc(POS_AB[p.posicao]||p.posicao||'')}</span></a>`;
   if(!draftFeito(dr)) return `<div class="dteam ${cls}">
     <div class="dteam-head">${crest(tid)}<div><h3>${esc(t ? t.nome : 'Time a confirmar')}</h3><span class="muted small">Draft em breve${t&&t.identidade?' • '+esc(t.identidade):''}</span></div></div>
     <span class="dlabel">Capitão</span>${cap ? row(cap, false) : `<p>${TBC}</p>`}
@@ -1083,6 +1084,7 @@ function pgDraft(){
     ${draftAviso(dr) ? `<div style="margin:4px 0 16px">${draftAviso(dr)}</div>` : ''}
     ${!feito ? `<div class="sec-head" style="margin:6px 0 14px"><div><span class="eyebrow">Draft de ${esc(mesLabel(dr.mes))}</span><h2>Capitães do mês</h2></div></div>` : ''}
     <div class="draft">${draftTeamHtml(dr,'A')}${draftTeamHtml(dr,'B')}</div>
+    ${draftFeito(dr) && dr.moeda && team(dr.moeda) ? `<p class="small muted" style="margin-top:14px">🪙 Na moeda, ${esc(team(dr.moeda).nome)} começou escolhendo.${(dr.escolhas||[]).length ? ' A ordem de cada escolha aparece ao lado do jogador.' : ''}</p>` : ''}
     ${dr.observacao ? `<div class="note" style="margin-top:16px">${ic('info')}<span>${esc(dr.observacao)}</span></div>` : ''}
     ${!feito && !draftQuando(dr) ? `<div class="note" style="margin-top:16px">${ic('calendar')}<span><b style="color:var(--fg)">Draft de ${esc(mesLabel(dr.mes))} em breve.</b> Os capitães já estão definidos. Os times aparecem aqui assim que o Draft for realizado.</span></div>` : ''}
     ${!feito ? `<div style="margin-top:26px"><div class="sec-head" style="margin-bottom:14px"><div><span class="eyebrow">Draft de ${esc(mesLabel(dr.mes))}</span><h2>Disponíveis para o Draft</h2><p class="muted">${disp.length} jogadores. Os capitães escolhem os times a partir desta lista.</p></div></div><div class="avail">${disp.map(p => `<a class="drow" href="#jogador-${esc(p.id)}">${photo(p)?`<img src="${esc(photo(p))}" alt="" loading="lazy">`:'<span></span>'}<span style="min-width:0"><b>${esc(pnm(p))}</b><small>${esc(p.nome)}</small></span><span class="tagpos">${p.posicao==='Goleiro'?'GOL':esc(POS_AB[p.posicao]||p.posicao||'')}</span></a>`).join('')}</div></div>` : ''}

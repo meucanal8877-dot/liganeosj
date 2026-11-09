@@ -1,6 +1,6 @@
 {
- "versao": 9,
- "atualizadoEm": "2026-11-06T22:10:00-03:00",
+ "versao": 10,
+ "atualizadoEm": "2026-11-09T08:15:00-03:00",
  "config": {
   "nome": "Liga Neo SJ",
   "slogan": "Seja Você o protagonista desse jogo!",
@@ -334,13 +334,31 @@
    "id": "2026-11",
    "mes": "2026-11",
    "timeAId": "al-ec",
-   "goleiroAId": "",
+   "goleiroAId": "mateus-son",
    "capitaoAId": "eduardo-rato",
-   "jogadoresA": [],
+   "jogadoresA": [
+    "eduardo-rato",
+    "bruno-ferraz",
+    "marcio-smith",
+    "daniel-freitas",
+    "carlos-henrique",
+    "caio-silva",
+    "wellington-silva",
+    "ramiri"
+   ],
    "timeBId": "al-fc",
-   "goleiroBId": "",
+   "goleiroBId": "renan-carioca",
    "capitaoBId": "gleysson-nascimento",
-   "jogadoresB": [],
+   "jogadoresB": [
+    "gleysson-nascimento",
+    "marcelo-cavalcanti",
+    "jose-hilton",
+    "vinni-mago",
+    "neto-brito",
+    "renne-andre",
+    "sergio-leopoldino",
+    "sergio-alves"
+   ],
    "ausentes": [
     "matheus-cavalcanti",
     "joao-batista",
@@ -351,7 +369,26 @@
    ],
    "observacao": "",
    "data": "2026-11-07",
-   "hora": "20:00"
+   "hora": "20:00",
+   "moeda": "al-ec",
+   "escolhas": [
+    "bruno-ferraz",
+    "marcelo-cavalcanti",
+    "marcio-smith",
+    "jose-hilton",
+    "daniel-freitas",
+    "vinni-mago",
+    "mateus-son",
+    "neto-brito",
+    "carlos-henrique",
+    "renne-andre",
+    "caio-silva",
+    "sergio-leopoldino",
+    "wellington-silva",
+    "sergio-alves",
+    "ramiri",
+    "renan-carioca"
+   ]
   }
  ],
  "partidas": [
