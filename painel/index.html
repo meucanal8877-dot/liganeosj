@@ -241,6 +241,72 @@ pre.rep{white-space:pre-wrap;background:var(--card2);border:1px solid var(--line
 .tat.cheia{position:fixed;inset:0;z-index:60;background:var(--bg);padding:10px 12px;overflow:auto;margin:0;align-content:start}
 body.tatcheia .nav,body.tatcheia header.top{display:none}
 .tatj{padding:8px 0;border-top:1px solid var(--line)}
+
+/* ===== Repaginação 2026-11 ===== */
+:root{--hdr:60px;--glass:rgba(10,16,32,.72);--card:#0e1628;--card2:#141e36;--line:#1f2c4a;--line2:#2d3e66}
+body{background:radial-gradient(900px 500px at 10% -10%,rgba(47,109,255,.16),transparent 60%),radial-gradient(800px 500px at 110% 110%,rgba(229,48,63,.13),transparent 60%),var(--bg);background-attachment:fixed}
+h1{font-size:1.65rem;letter-spacing:.02em}
+.top{background:var(--glass);backdrop-filter:blur(14px) saturate(1.3);-webkit-backdrop-filter:blur(14px) saturate(1.3);border-bottom:0}
+.top:after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,var(--blue),var(--gold),var(--red));opacity:.75}
+.nav{background:var(--glass);backdrop-filter:blur(16px) saturate(1.3);-webkit-backdrop-filter:blur(16px) saturate(1.3);border-top:1px solid rgba(255,255,255,.06)}
+.nav a{position:relative;transition:color .2s ease}
+.nav a.on{background:none;box-shadow:none;color:#fff}
+.nav a.on svg{color:var(--gold);transform:translateY(-1px) scale(1.08)}
+.nav a svg{transition:transform .25s cubic-bezier(.2,.8,.2,1),color .2s ease}
+.nav a.on:before{content:"";position:absolute;top:-6px;left:28%;right:28%;height:3px;border-radius:0 0 4px 4px;background:var(--gold);box-shadow:0 0 12px rgba(245,179,1,.7)}
+.card,.mcard,.kpi,.prow,.rk,.dcol{background:linear-gradient(var(--card),var(--card)) padding-box,linear-gradient(160deg,rgba(255,255,255,.12),rgba(255,255,255,.02) 40%,rgba(255,255,255,.05)) border-box;border:1px solid transparent}
+.prow,.rk,.mcard{background:linear-gradient(var(--card2),var(--card2)) padding-box,linear-gradient(160deg,rgba(255,255,255,.10),rgba(255,255,255,.02) 45%) border-box}
+.kpi b{background:linear-gradient(180deg,#fff,#b9c6ec);-webkit-background-clip:text;background-clip:text;color:transparent}
+.btn{border-radius:14px}
+.btn.pri{background:linear-gradient(180deg,#ffc933,#f5b301);border-color:#f5b301}
+.chip{transition:background-color .2s ease,color .2s ease,border-color .2s ease}
+.sheet{background:linear-gradient(180deg,#101a31,#0b1222);box-shadow:0 -20px 60px rgba(0,0,0,.5)}
+.overlay{backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
+::view-transition-old(root),::view-transition-new(root){animation-duration:.2s}
+/* placar do jogo */
+.sb{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;text-align:center;position:relative;overflow:hidden}
+.sb:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(47,109,255,.18),transparent 35%,transparent 65%,rgba(229,48,63,.18));pointer-events:none}
+.sbt{display:grid;justify-items:center;gap:4px;position:relative}.sbt .crest{width:54px;height:58px}
+.sbt b{font-size:1.05rem;text-transform:uppercase;letter-spacing:.04em}.sbt small{font-size:.66rem;color:var(--mut);line-height:1.1;text-transform:uppercase}
+.sbm{display:grid;justify-items:center;gap:6px;position:relative}
+.sbm .pl,.lbp{font-size:3.1rem;font-weight:900;font-variant-numeric:tabular-nums;line-height:1;display:flex;gap:10px;align-items:center}
+.sbm .pl em,.lbp em{font-style:normal;color:var(--mut);font-size:.45em}
+.bump{animation:bump .6s cubic-bezier(.2,.9,.3,1.4)}
+@keyframes bump{0%{transform:scale(1)}30%{transform:scale(1.28);color:var(--gold)}100%{transform:scale(1)}}
+/* central do cronômetro */
+.mc{display:grid;gap:12px}
+.seg{display:inline-flex;background:var(--bg2);border:1px solid var(--line2);border-radius:12px;padding:3px;gap:3px}
+.seg button{border:0;background:none;color:var(--mut);font-weight:800;font-size:.8rem;padding:8px 12px;border-radius:9px;cursor:pointer;transition:background-color .2s ease,color .2s ease}
+.seg button.on{background:var(--fg);color:var(--bg)}
+.durs{width:auto;padding:8px 10px;font-weight:800;font-size:.82rem}
+.clockwrap{display:grid;justify-items:center;gap:0;padding:4px 0}
+.clock{font-size:clamp(3.6rem,19vw,5.6rem);letter-spacing:.01em;text-shadow:0 6px 30px rgba(47,109,255,.25)}
+.extra{min-height:1.2em;font-weight:900;color:var(--gold);font-variant-numeric:tabular-nums;font-size:1.05rem;letter-spacing:.04em}
+.prog{height:8px;border-radius:99px;background:var(--bg2);border:1px solid var(--line);overflow:hidden;margin:0 auto;width:100%}
+.prog i{display:block;height:100%;transform-origin:0 50%;background:linear-gradient(90deg,var(--blue),var(--gold));transition:transform 1s linear;border-radius:99px}
+.progl{display:flex;justify-content:space-between;font-size:.7rem;color:var(--mut);font-variant-numeric:tabular-nums;margin-top:-6px}
+.ctlrow{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;justify-items:center;gap:10px}
+.cbtn{display:grid;justify-items:center;gap:4px;border:1px solid var(--line2);background:var(--card2);color:var(--fg);border-radius:16px;padding:10px 14px;min-width:84px;cursor:pointer;font-weight:800;transition:transform .12s ease}
+.cbtn svg{width:22px;height:22px}.cbtn small{font-size:.66rem;text-transform:uppercase;letter-spacing:.06em;color:var(--mut)}
+.cbtn:active,.playbtn:active,.lbplay:active{transform:scale(.94)}
+.playbtn{width:88px;height:88px;border-radius:50%;border:0;cursor:pointer;display:grid;place-items:center;color:#1a1300;background:radial-gradient(circle at 35% 30%,#ffe08a,#f5b301 60%,#c98f00);box-shadow:0 12px 30px rgba(245,179,1,.35),inset 0 2px 0 rgba(255,255,255,.4);transition:transform .15s ease,box-shadow .2s ease}
+.playbtn svg{width:38px;height:38px;fill:currentColor}
+.playbtn.on{color:#fff;background:radial-gradient(circle at 35% 30%,#5b8cff,#2f6dff 60%,#1b48c2);box-shadow:0 12px 30px rgba(47,109,255,.4),0 0 0 6px rgba(47,109,255,.15)}
+.estado{text-align:center;font-size:.8rem;color:var(--mut);font-weight:700}
+.bigbtn{padding:20px 10px;font-size:1.1rem;border-radius:20px;position:relative;overflow:hidden}
+.bigbtn .gi{font-size:1.5rem;line-height:1}
+.bigbtn:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.18),transparent 45%);pointer-events:none}
+/* barra fixa do placar ao rolar */
+.livebar{position:fixed;left:0;right:0;top:var(--hdr);z-index:25;display:grid;grid-template-columns:1fr auto 1fr auto;align-items:center;gap:8px;padding:8px 12px;background:var(--glass);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.06);transform:translateY(-130%);opacity:0;transition:transform .28s cubic-bezier(.2,.8,.2,1),opacity .2s ease;pointer-events:none}
+body.mcfora .livebar{transform:none;opacity:1;pointer-events:auto}
+.lbt{display:flex;align-items:center;gap:6px;font-weight:900;text-transform:uppercase;font-size:.85rem;min-width:0}.lbt:last-of-type{justify-content:flex-end}
+.lbt .crest{width:26px;height:28px}
+.lbm{display:grid;justify-items:center;line-height:1}.lbp{font-size:1.6rem;gap:6px}.lbc{font-weight:900;font-variant-numeric:tabular-nums;font-size:.85rem;color:var(--mut)}.lbc.over{color:var(--gold)}
+.lbplay{width:40px;height:40px;border-radius:50%;border:0;display:grid;place-items:center;background:var(--gold);color:#1a1300;cursor:pointer}
+.lbplay svg{width:18px;height:18px;fill:currentColor}.lbplay.on{background:var(--blue);color:#fff}
+@media(min-width:900px){.livebar{max-width:1100px;margin:0 auto}}
+.ev{transition:transform .2s ease}
+.telao .extra{font-size:clamp(1rem,4vw,1.6rem)}
 </style>
 </head>
 <body>
@@ -521,18 +587,41 @@ function render() {
   const r = rota(); const [pg, ...rest] = r.split('-'); const arg = rest.join('-');
   const P = { inicio: pgInicio, draft: pgDraft, campo: pgCampo, jogos: pgJogos, jogo: () => pgJogo(arg), ranking: pgRanking, mais: pgMais, jogadores: pgJogadores, jogador: () => pgJogador(arg), historico: pgHistorico, mes: pgMes, ajustes: pgAjustes, tatica: pgTatica }[pg] || pgInicio;
   const y = window.scrollY, mesmo = render._r === r; render._r = r;
-  $('#app').innerHTML = shell(P());
-  setSync(); window.scrollTo(0, mesmo ? y : 0);
-  if (!mesmo) { const mn = $('#main'); if (mn) mn.classList.add('pgin'); }
+  const app = $('#app'), html = shell(P());
+  if (mesmo && app.firstChild) morph(app, html); else app.innerHTML = html;
+  setSync(); if (!mesmo) window.scrollTo(0, 0); else if (Math.abs(window.scrollY - y) > 2) window.scrollTo(0, y);
+  if (!mesmo && !render._vt) { const mn = $('#main'); if (mn) mn.classList.add('pgin'); }
+  const hd = $('header.top'); if (hd) document.documentElement.style.setProperty('--hdr', hd.offsetHeight + 'px');
   UI.telaAnim = false;
   if (pg === 'campo') ligarCampo();
   if (pg === 'tatica') ligarTatica(!mesmo);
+  if (pg !== 'jogo') document.body.classList.remove('mcfora');
   document.body.classList.toggle('tatcheia', pg === 'tatica' && !!UI.tatCheia);
-  if (pg === 'jogo') tickRelogio();
+  if (pg === 'jogo') { tickRelogio(); posJogo(arg); }
   else if (UI.tela) { UI.tela = false; telaCheia(false); }
   document.body.style.overflow = UI.tela && pg === 'jogo' ? 'hidden' : '';
 }
-window.addEventListener('hashchange', () => { UI.sel = null; render(); });
+window.addEventListener('hashchange', () => { UI.sel = null; if (document.startViewTransition && !matchMedia('(prefers-reduced-motion: reduce)').matches) { render._vt = true; const t = document.startViewTransition(() => render()); t.finished.finally(() => { render._vt = false; }); } else render(); });
+/* Atualiza só o que mudou na tela (fotos não recarregam, campos não perdem o foco, a rolagem não pula) */
+function morph(el, html) { const t = document.createElement(el.tagName); t.innerHTML = html; morphKids(el, t); }
+function mesmoNo(a, b) { return a.nodeType === b.nodeType && a.nodeName === b.nodeName && (a.nodeType !== 1 || ((a.id || '') === (b.id || '') && (a.getAttribute('data-k') || '') === (b.getAttribute('data-k') || ''))); }
+function morphKids(a, b) {
+  const bn = [...b.childNodes];
+  bn.forEach((nb, i) => { const na = a.childNodes[i]; if (!na) a.appendChild(nb); else if (!mesmoNo(na, nb)) a.replaceChild(nb, na); else morphNo(na, nb); });
+  while (a.childNodes.length > bn.length) a.removeChild(a.lastChild);
+}
+function morphNo(a, b) {
+  if (a.nodeType !== 1) { if (a.nodeValue !== b.nodeValue) a.nodeValue = b.nodeValue; return; }
+  const tag = a.tagName, cv = tag === 'CANVAS';
+  for (const at of [...a.attributes]) if (!b.hasAttribute(at.name) && !(cv && (at.name === 'width' || at.name === 'height'))) a.removeAttribute(at.name);
+  for (const at of [...b.attributes]) if (a.getAttribute(at.name) !== at.value) a.setAttribute(at.name, at.value);
+  if (cv) return;
+  const foco = document.activeElement === a;
+  if (tag === 'INPUT') { if (a.type === 'checkbox' || a.type === 'radio') a.checked = b.hasAttribute('checked'); else if (!foco && a.value !== (b.getAttribute('value') || '')) a.value = b.getAttribute('value') || ''; return; }
+  if (tag === 'TEXTAREA') { if (!foco && a.value !== b.value) a.value = b.value; return; }
+  morphKids(a, b);
+  if (tag === 'SELECT' && !foco) { const i = [...a.options].findIndex(o => o.hasAttribute('selected')); a.selectedIndex = i >= 0 ? i : 0; }
+}
 
 const av = (j, cls = 'av') => j && media(j.foto) ? `<img class="${cls}" src="${esc(media(j.foto))}" alt="" loading="lazy">` : `<span class="${cls}" style="display:grid;place-items:center;font-weight:900;color:var(--mut)">${esc(((j && (j.apelido || j.nome)) || '?').slice(0, 1))}</span>`;
 const crest = (t, cls = 'crest') => t && t.escudo ? `<img class="${cls}" src="${esc(t.escudo)}" alt="">` : `<span class="${cls}"></span>`;
@@ -803,20 +892,27 @@ function pgJogo(id) {
   const evs = p.eventos.slice().sort((a, b) => (b.ms || 0) - (a.ms || 0) || (b.ts || 0) - (a.ts || 0));
   const enc = p.status === 'encerrada';
   const head = `<div class="sec"><a class="small" href="#jogos">← Jogos</a><div class="row between"><div><span class="eyebrow">Jogo ${String(p.numero).padStart(2, '0')} • ${esc(mesLabel(p.mes))}</span><h1>${esc(A.sigla)} × ${esc(B.sigla)}</h1><div class="small muted">${p.data ? esc(diaSemana(p.data)) + ', ' + esc(fmtData(p.data)) : 'Data a confirmar'}${p.hora ? ' • ' + esc(p.hora) : ''}${p.local ? ' • ' + esc(p.local) : ''}</div></div><button class="btn sm" data-a="pt-editar">${ic('edit')} Editar</button></div></div>
-  <div class="sec card"><div class="score"><div class="tm ${corLado(lA)}">${crest(A)}<b>${esc(A.nome)}</b><span class="tag ${corLado(lA)}"><i></i>${lA === 'A' ? 'Azul' : 'Vermelho'}</span></div><div class="pl" id="placar">${pl.A}<em>×</em>${pl.B}</div><div class="tm ${corLado(lB)}">${crest(B)}<b>${esc(B.nome)}</b><span class="tag ${corLado(lB)}"><i></i>${lB === 'A' ? 'Azul' : 'Vermelho'}</span></div></div>
-  ${p.status === 'ao_vivo' ? '<div style="text-align:center;margin-top:8px"><span class="live">Ao vivo</span></div>' : enc ? '<div style="text-align:center;margin-top:8px"><span class="badge">Encerrado</span></div>' : ''}</div>`;
+  <div class="sec card sb ${p.status === 'ao_vivo' ? 'aovivo' : ''}"><div class="sbt ${corLado(lA)}">${crest(A)}<b>${esc(A.sigla || A.nome)}</b><small>${esc(A.nome)}</small></div>
+    <div class="sbm"><div class="pl" data-placar>${pl.A}<em>×</em>${pl.B}</div>${p.status === 'ao_vivo' ? '<span class="live">Ao vivo</span>' : enc ? '<span class="badge">Encerrado</span>' : '<span class="badge b-sel">Agendado</span>'}</div>
+    <div class="sbt ${corLado(lB)}">${crest(B)}<b>${esc(B.sigla || B.nome)}</b><small>${esc(B.nome)}</small></div></div>`;
   const tl = `<div class="sec"><h2>Lances</h2><div class="tl">${evs.map(e => evLinha(p, e, m)).join('') || '<p class="muted small">Nenhum lance registrado.</p>'}</div>${p.placarManual && !p.eventos.some(e => e.tipo === 'gol') ? '<p class="tiny muted">Placar registrado sem os lances (resultado oficial).</p>' : ''}</div>`;
   if (enc) return head + blocoFreq(p) + blocoNotas(p) + tl + `<div class="sec card" style="display:grid;gap:10px"><div class="row between"><b>Faltas</b><span class="num">${esc(A.sigla)} ${faltas(p, p.timeA)} • ${faltas(p, p.timeB)} ${esc(B.sigla)}</span></div><div class="field"><label>Destaque da partida</label><input value="${esc(p.destaque || '')}" data-in="pt-dest" placeholder="Ex.: Gleysson: 2 gols e 3 assistências"></div></div>
     <div class="sec row"><button class="btn pri" data-a="compartilhar">${ic('share')} Relatório e artes</button><button class="btn" data-a="pt-reabrir">Reabrir jogo</button></div>`;
-  return head + `<div class="sec card" style="display:grid;gap:12px">
-    <div class="row between"><div class="chips">${[1, 2].map(n => `<button class="chip ${p.relogio.periodo === n ? 'on' : ''}" data-a="rl-per" data-v="${n}">${n}º tempo</button>`).join('')}</div>
-    <select data-in="rl-dur" style="width:auto"><option value="0">Sem limite</option>${[10, 15, 20, 25, 30, 35, 40, 45].map(x => `<option value="${x}" ${S.config.duracaoTempo === x ? 'selected' : ''}>${x} min por tempo</option>`).join('')}</select></div>
-    <div class="clock ${dur && ms >= dur ? 'over' : ''}" id="clock" data-clock>${mmss(ms)}</div>
-    <div class="row" style="justify-content:center">${p.relogio.rodando ? `<button class="btn" data-a="rl-pausar">${ic('pause')} Pausar</button>` : `<button class="btn pri" data-a="rl-iniciar">${ic('play')} ${ms ? 'Continuar' : 'Iniciar jogo'}</button>`}<button class="btn" data-a="tela-abrir">${ic('max')} Tela cheia</button><button class="btn ghost" data-a="rl-zerar">${ic('reset')} Zerar</button></div>
+  const over = dur && ms >= dur;
+  const livebar = `<div class="livebar" id="livebar" aria-hidden="true"><span class="lbt ${corLado(lA)}">${crest(A)}<b>${esc(A.sigla)}</b></span><span class="lbm"><b class="lbp" data-placar>${pl.A}<em>×</em>${pl.B}</b><span class="lbc ${over ? 'over' : ''}" data-clock>${mmss(ms)}</span></span><span class="lbt ${corLado(lB)}"><b>${esc(B.sigla)}</b>${crest(B)}</span><button class="lbplay ${p.relogio.rodando ? 'on' : ''}" data-a="${p.relogio.rodando ? 'rl-pausar' : 'rl-iniciar'}" aria-label="${p.relogio.rodando ? 'Pausar' : 'Iniciar'}">${ic(p.relogio.rodando ? 'pause' : 'play', '')}</button></span></div>`;
+  return head + livebar + `<div class="sec card mc" id="mc">
+    <div class="row between" style="flex-wrap:nowrap"><div class="seg">${[1, 2].map(n => `<button class="${p.relogio.periodo === n ? 'on' : ''}" data-a="rl-per" data-v="${n}">${n}º tempo</button>`).join('')}</div>
+    <select data-in="rl-dur" class="durs" aria-label="Duração de cada tempo"><option value="0">Sem limite</option>${[10, 15, 20, 25, 30, 35, 40, 45].map(x => `<option value="${x}" ${S.config.duracaoTempo === x ? 'selected' : ''}>${x} min</option>`).join('')}</select></div>
+    <div class="clockwrap"><div class="clock ${over ? 'over' : ''}" id="clock" data-clock>${mmss(ms)}</div><div class="extra" data-extra>${over ? '+' + mmss(ms - dur) : ''}</div></div>
+    ${dur ? `<div class="prog"><i data-prog style="transform:scaleX(${Math.min(1, ms / dur)})"></i></div><div class="progl"><span>00:00</span><span>${String(dur / 60000).padStart(2, '0')}:00</span></div>` : ''}
+    <div class="ctlrow"><button class="cbtn" data-a="rl-zerar">${ic('reset', '')}<small>Zerar</small></button>
+      <button class="playbtn ${p.relogio.rodando ? 'on' : ''}" data-a="${p.relogio.rodando ? 'rl-pausar' : 'rl-iniciar'}" aria-label="${p.relogio.rodando ? 'Pausar' : ms ? 'Continuar' : 'Iniciar jogo'}">${ic(p.relogio.rodando ? 'pause' : 'play', '')}</button>
+      <button class="cbtn" data-a="tela-abrir">${ic('max', '')}<small>Telão</small></button></div>
+    <div class="estado">${p.relogio.rodando ? '<span class="live">Rodando</span>' : ms ? 'Pausado' : 'Toque no play para começar'} • ${p.relogio.periodo}º tempo</div>
     ${blocoSaida(p)}
-    <label class="row small muted" style="justify-content:center;gap:8px;cursor:pointer"><input type="checkbox" data-in="tela-auto" ${S.config.telaCheia !== false ? 'checked' : ''} style="width:auto"> Abrir em tela cheia ao iniciar o jogo</label>
+    <label class="row small muted" style="justify-content:center;gap:8px;cursor:pointer"><input type="checkbox" data-in="tela-auto" ${S.config.telaCheia !== false ? 'checked' : ''} style="width:auto"> Abrir o telão ao iniciar o jogo</label>
   </div>${UI.tela ? telao(p, pl, A, B, lA, lB, ms, dur) : ''}
-  <div class="sec"><div class="bigbtns"><button class="bigbtn ${lA}" data-a="gol" data-t="${esc(p.timeA)}">⚽ Gol ${esc(A.sigla)}<small>${lA === 'A' ? 'Azul' : 'Vermelho'}</small></button><button class="bigbtn ${lB}" data-a="gol" data-t="${esc(p.timeB)}">⚽ Gol ${esc(B.sigla)}<small>${lB === 'A' ? 'Azul' : 'Vermelho'}</small></button></div>
+  <div class="sec"><div class="bigbtns"><button class="bigbtn ${lA}" data-a="gol" data-t="${esc(p.timeA)}"><span class="gi">⚽</span>Gol ${esc(A.sigla)}<small>${lA === 'A' ? 'Azul' : 'Vermelho'}</small></button><button class="bigbtn ${lB}" data-a="gol" data-t="${esc(p.timeB)}"><span class="gi">⚽</span>Gol ${esc(B.sigla)}<small>${lB === 'A' ? 'Azul' : 'Vermelho'}</small></button></div>
     <h3 style="margin-top:6px">Faltas</h3><div class="fouls">${[[p.timeA, lA], [p.timeB, lB]].map(([t, l]) => `<div class="foul ${corLado(l)}"><button class="btn sm" data-a="falta-menos" data-t="${esc(t)}" aria-label="Remover falta">−</button><div style="text-align:center"><b>${faltas(p, t)}</b><div class="tiny muted">${esc(time(t).sigla)}</div></div><button class="btn sm" data-a="falta" data-t="${esc(t)}" aria-label="Adicionar falta">+</button></div>`).join('')}</div>
     <div class="row"><button class="btn sm" data-a="assist-avulsa">${ic('plus')} Assistência sem gol</button></div></div>
   ${blocoFreq(p)}${tl}
@@ -880,8 +976,9 @@ function telao(p, pl, A, B, lA, lB, ms, dur) {
     <div class="tt"><span class="per">${n}º tempo${dur ? ' • ' + (dur / 60000) + ' min' : ''}${p.saida ? ' • saída ' + esc(time((p.saida === 'A') === (n === 1) ? p.timeA : p.timeB).sigla) : ''}</span>${p.status === 'ao_vivo' ? '<span class="live">Ao vivo</span>' : ''}<button class="btn sm" data-a="tela-fechar" aria-label="Sair da tela cheia">${ic('min')} Sair</button></div>
     <div class="corpo" style="display:grid;gap:12px;align-content:center">
       <div class="meio">
-        <div class="sc"><div class="tm">${crest(A)}<span>${esc(A.sigla)}</span></div><div class="pl">${pl.A}<em>×</em>${pl.B}</div><div class="tm">${crest(B)}<span>${esc(B.sigla)}</span></div></div>
-        <div class="big ${dur && ms >= dur ? 'over' : ''}" data-clock>${mmss(ms)}</div>
+        <div class="sc"><div class="tm">${crest(A)}<span>${esc(A.sigla)}</span></div><div class="pl" data-placar>${pl.A}<em>×</em>${pl.B}</div><div class="tm">${crest(B)}<span>${esc(B.sigla)}</span></div></div>
+        <div class="big ${dur && ms >= dur ? 'over' : ''}" data-clock>${mmss(ms)}</div><div class="extra" data-extra>${dur && ms >= dur ? '+' + mmss(ms - dur) : ''}</div>
+        ${dur ? `<div class="prog" style="width:min(720px,100%)"><i data-prog style="transform:scaleX(${Math.min(1, ms / dur)})"></i></div>` : ''}
       </div>
       <div class="acoes">
         <div class="ctl">${p.relogio.rodando ? `<button class="btn" data-a="rl-pausar">${ic('pause')} Pausar</button>` : `<button class="btn pri" data-a="rl-iniciar">${ic('play')} ${ms ? 'Continuar' : 'Iniciar'}</button>`}${[1, 2].map(x => `<button class="chip ${n === x ? 'on' : ''}" data-a="rl-per" data-v="${x}">${x}º tempo</button>`).join('')}</div>
@@ -910,14 +1007,30 @@ function evLinha(p, e, m) {
 }
 let relTimer = null, wake = null;
 function tickRelogio() {
-  clearInterval(relTimer);
-  const id = rota().slice(5), p = S.partidas.find(x => x.id === id); if (!p) return;
-  const dur = () => (S.config.duracaoTempo || 0) * 60000; let avisou = relogioMs(p) >= dur() && dur() > 0;
-  relTimer = setInterval(() => {
-    const els = document.querySelectorAll('[data-clock]'); if (!els.length || rota().slice(5) !== id) { clearInterval(relTimer); return; }
-    const ms = relogioMs(p), over = dur() && ms >= dur(); els.forEach(el => { const t = mmss(ms); if (el.textContent !== t) el.textContent = t; el.classList.toggle('over', !!over); });
-    if (over && !avisou && p.relogio.rodando) { avisou = true; vib([300, 150, 300]); toast('Tempo esgotado!'); }
-  }, 250);
+  clearTimeout(relTimer);
+  const id = rota().slice(5); if (!S.partidas.find(x => x.id === id)) return;
+  const dur = () => (S.config.duracaoTempo || 0) * 60000;
+  const passo = () => {
+    const p = S && S.partidas.find(x => x.id === id); if (!p || rota().slice(5) !== id) return;
+    const ms = relogioMs(p), d = dur(), over = d > 0 && ms >= d, t = mmss(ms), ex = over ? '+' + mmss(ms - d) : '';
+    document.querySelectorAll('[data-clock]').forEach(el => { if (el.textContent !== t) el.textContent = t; el.classList.toggle('over', over); });
+    document.querySelectorAll('[data-extra]').forEach(el => { if (el.textContent !== ex) el.textContent = ex; });
+    document.querySelectorAll('[data-prog]').forEach(el => { el.style.transform = `scaleX(${d ? Math.min(1, ms / d) : 0})`; });
+    const k = id + ':' + p.relogio.periodo; if (over && p.relogio.rodando && UI.avisoTempo !== k) { UI.avisoTempo = k; vib([300, 150, 300]); toast('Tempo esgotado!'); }
+    relTimer = setTimeout(passo, p.relogio.rodando ? 1000 - (ms % 1000) + 10 : 1000);
+  };
+  passo();
+}
+document.addEventListener('visibilitychange', () => { if (!document.hidden && S && rota().startsWith('jogo-')) tickRelogio(); });
+function posJogo(id) {
+  const p = S.partidas.find(x => x.id === id); if (!p) return;
+  const pl = placar(p), k = pl.A + '-' + pl.B; UI.placares = UI.placares || {};
+  if (UI.placares[id] && UI.placares[id] !== k) $$('[data-placar]').forEach(el => { el.classList.remove('bump'); void el.offsetWidth; el.classList.add('bump'); });
+  UI.placares[id] = k;
+  const mc = $('#mc'), lb = $('#livebar'); if (!mc || !lb || !('IntersectionObserver' in window)) return;
+  if (posJogo.io) posJogo.io.disconnect();
+  posJogo.io = new IntersectionObserver(([e]) => document.body.classList.toggle('mcfora', !e.isIntersecting && e.boundingClientRect.top < 0), { rootMargin: '-' + ((parseInt(getComputedStyle(document.documentElement).getPropertyValue('--hdr')) || 60)) + 'px 0px 0px 0px' });
+  posJogo.io.observe(mc);
 }
 async function manterTela(on) { try { if (on && 'wakeLock' in navigator) wake = await navigator.wakeLock.request('screen'); else if (!on && wake) { await wake.release(); wake = null; } } catch (e) {} }
 function partidaAtual() { return S.partidas.find(x => x.id === rota().slice(5)); }
@@ -1467,7 +1580,7 @@ function telaLogin(msg) {
     } catch (e) { telaLogin('Sem conexão com a internet.'); }
   });
 }
-function sair(msg) { ls.del(K.token); clearInterval(relTimer); fecharModal(); S = null; telaLogin(msg || ''); }
+function sair(msg) { ls.del(K.token); clearTimeout(relTimer); fecharModal(); S = null; telaLogin(msg || ''); }
 async function iniciar() {
   $('#app').innerHTML = `<div class="login"><div class="box"><img src="/logo-liga.png" alt=""><p class="muted">Carregando o painel…</p></div></div>`;
   try { const l = ls.get(K.estado); if (l) S = normalizar(JSON.parse(l)); const mt = ls.get(K.meta); if (mt) META = Object.assign(META, JSON.parse(mt)); } catch (e) { S = null; }
