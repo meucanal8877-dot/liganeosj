@@ -226,6 +226,21 @@ pre.rep{white-space:pre-wrap;background:var(--card2);border:1px solid var(--line
 .mais{display:grid;gap:8px}
 .list-sep{border:0;border-top:1px solid var(--line);margin:4px 0}
 @media(min-width:900px){.nav{left:50%;transform:translateX(-50%);max-width:720px;border:1px solid var(--line);border-radius:18px 18px 0 0}}
+
+/* Mesa tática */
+.tat{display:grid;gap:10px;margin-bottom:14px}
+.tatbar{display:grid;gap:8px;position:sticky;top:0;z-index:5;background:var(--bg);padding:6px 0}
+.tatgrp{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.tbtn{display:grid;justify-items:center;gap:1px;min-width:58px;padding:6px 8px;border-radius:12px;border:1px solid var(--line2);background:var(--card2);color:var(--fg);font-weight:800;cursor:pointer}
+.tbtn span{font-size:1.1rem;line-height:1.1}.tbtn small{font-size:.62rem;color:var(--mut)}
+.tbtn.on{background:var(--gold);border-color:var(--gold);color:#1a1300}.tbtn.on small{color:#1a1300}
+.tcor{width:34px;height:34px;border-radius:50%;border:3px solid var(--line2);background:var(--c);cursor:pointer}
+.tcor.on{border-color:var(--fg);box-shadow:0 0 0 3px var(--gold)}
+.tatboard{display:flex;justify-content:center}
+#tatcv{touch-action:none;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.45);display:block;max-width:100%}
+.tat.cheia{position:fixed;inset:0;z-index:60;background:var(--bg);padding:10px 12px;overflow:auto;margin:0;align-content:start}
+body.tatcheia .nav,body.tatcheia header.top{display:none}
+.tatj{padding:8px 0;border-top:1px solid var(--line)}
 </style>
 </head>
 <body>
@@ -342,7 +357,7 @@ function estadoVazio() {
 function normalizar(e) {
   const s = Object.assign(estadoVazio(), e || {});
   s.config = Object.assign(estadoVazio().config, s.config || {});
-  ['times', 'jogadores', 'meses', 'partidas', 'baseline', 'campeoesImportados'].forEach(k => { if (!Array.isArray(s[k])) s[k] = []; });
+  ['times', 'jogadores', 'meses', 'partidas', 'baseline', 'campeoesImportados', 'taticas'].forEach(k => { if (!Array.isArray(s[k])) s[k] = []; });
   s.meses.forEach(m => { m.draft = Object.assign({ A: '', B: '', capA: '', capB: '', azul: [], vermelho: [], ausentes: [], escolhas: [], data: '', hora: '', finalizado: false, vez: 'A' }, m.draft || {}); m.escalacao = m.escalacao || {}; });
   s.partidas.forEach(p => { p.eventos = p.eventos || []; p.freq = p.freq || {}; p.ajuste = p.ajuste || {}; p.relogio = Object.assign({ rodando: false, inicio: 0, acumulado: 0, periodo: 1 }, p.relogio || {}); });
   return s;
@@ -495,7 +510,7 @@ let UI = { draftMes: '', campoMes: '', campoTime: '', jogosMes: '', rkTab: 'g', 
 const rota = () => (location.hash || '#inicio').slice(1);
 function shell(conteudo) {
   const r = rota().split('-')[0];
-  const ativo = { jogador: 'mais', jogadores: 'mais', historico: 'mais', mes: 'mais', ajustes: 'mais', jogo: 'jogos' }[r] || r;
+  const ativo = { jogador: 'mais', jogadores: 'mais', historico: 'mais', mes: 'mais', ajustes: 'mais', jogo: 'jogos', tatica: 'campo' }[r] || r;
   return `<header class="top"><img src="/logo-liga.png" alt=""><div><b>Liga Neo SJ</b><div class="sub">Painel de controle</div></div><button class="sync" id="sync" data-a="sync-info"></button></header>
   ${SYNC.modo === 'local' ? `<div style="max-width:1100px;margin:12px auto 0;padding:0 16px"><div class="banner">${ic('gear')}<span><b>Banco online ainda não ativado.</b> As alterações estão salvas só neste aparelho e serão enviadas assim que o banco for ativado.</span></div></div>` : ''}
   <main id="main">${conteudo}</main>
@@ -504,13 +519,15 @@ function shell(conteudo) {
 function render() {
   if (!S) return;
   const r = rota(); const [pg, ...rest] = r.split('-'); const arg = rest.join('-');
-  const P = { inicio: pgInicio, draft: pgDraft, campo: pgCampo, jogos: pgJogos, jogo: () => pgJogo(arg), ranking: pgRanking, mais: pgMais, jogadores: pgJogadores, jogador: () => pgJogador(arg), historico: pgHistorico, mes: pgMes, ajustes: pgAjustes }[pg] || pgInicio;
+  const P = { inicio: pgInicio, draft: pgDraft, campo: pgCampo, jogos: pgJogos, jogo: () => pgJogo(arg), ranking: pgRanking, mais: pgMais, jogadores: pgJogadores, jogador: () => pgJogador(arg), historico: pgHistorico, mes: pgMes, ajustes: pgAjustes, tatica: pgTatica }[pg] || pgInicio;
   const y = window.scrollY, mesmo = render._r === r; render._r = r;
   $('#app').innerHTML = shell(P());
   setSync(); window.scrollTo(0, mesmo ? y : 0);
   if (!mesmo) { const mn = $('#main'); if (mn) mn.classList.add('pgin'); }
   UI.telaAnim = false;
   if (pg === 'campo') ligarCampo();
+  if (pg === 'tatica') ligarTatica(!mesmo);
+  document.body.classList.toggle('tatcheia', pg === 'tatica' && !!UI.tatCheia);
   if (pg === 'jogo') tickRelogio();
   else if (UI.tela) { UI.tela = false; telaCheia(false); }
   document.body.style.overflow = UI.tela && pg === 'jogo' ? 'hidden' : '';
@@ -555,7 +572,7 @@ function pgInicio() {
     <div class="card" style="display:grid;gap:10px"><div class="sec-h"><h2>Assistências</h2><a class="small" href="#ranking">Ver tudo</a></div>${rkList(ra.slice(0, 5), 'assist.')}</div>
   </div></div>
   <div class="sec"><h2>Acesso rápido</h2><div class="grid g3">
-    <a class="btn" href="#draft">${ic('list')} Draft</a><a class="btn" href="#campo">${ic('field')} Escalação</a><a class="btn pri" href="#jogos">${ic('clock')} Controle do jogo</a>
+    <a class="btn" href="#draft">${ic('list')} Draft</a><a class="btn" href="#campo">${ic('field')} Escalação</a><a class="btn" href="#tatica">🧠 Mesa tática</a><a class="btn pri" href="#jogos">${ic('clock')} Controle do jogo</a>
     <a class="btn" href="#ranking">${ic('chart')} Estatísticas</a><a class="btn" href="#historico">${ic('hist')} Resultados</a><a class="btn" href="#jogadores">${ic('users')} Jogadores</a></div></div>`;
 }
 function rkList(lin, un) {
@@ -694,7 +711,7 @@ function pgCampo() {
   const fora = el.filter(id => !slotDe(e, id));
   const nT = ['gk', 'l0', 'l1', 'l2', 'l3', 'l4', 'l5'].filter(k => slotGet(e, k)).length, nR = e.reservas.filter(Boolean).length;
   const slot = (k, x, y, lab) => { const id = slotGet(e, k), j = jog(id); return `<div class="slot ${id ? 'f' : ''} ${UI.sel && UI.sel.slot === k ? 'sel' : ''}" data-slot="${k}" ${id ? `data-drag="${esc(id)}"` : ''} style="${x != null ? `left:${x}%;top:${y}%` : ''}"><span class="c">${j ? (media(j.foto) ? `<img src="${esc(media(j.foto))}" alt="">` : esc((j.apelido || j.nome).slice(0, 2))) : esc(x != null ? lab : 'R' + lab.slice(-1))}</span><span class="n">${j ? esc(nomeJ(id)) + (j.numero ? ' ' + esc(j.numero) : '') : (x != null ? 'Vazio' : lab)}</span></div>`; };
-  return `<div class="sec"><span class="eyebrow">Campo virtual</span><h1>Escalação</h1>${mesChips(m.id, 'cp-mes')}
+  return `<div class="sec"><span class="eyebrow">Campo virtual</span><h1>Escalação</h1><a class="btn sm" href="#tatica" style="margin:4px 0 10px">🧠 Mesa tática dos capitães</a>${mesChips(m.id, 'cp-mes')}
   <div class="chips">${[m.draft.A, m.draft.B].map(t => `<button class="chip ${t === tid ? 'on' : ''}" data-a="cp-time" data-v="${esc(t)}">${esc(time(t).sigla || time(t).nome)} • ${ladoDoTime(m, t) === 'A' ? 'Azul' : 'Vermelho'}</button>`).join('')}</div></div>
   ${el.length !== 9 ? `<div class="banner" style="margin-bottom:12px">${ic('users')}<span>O ${esc(time(tid).sigla)} tem ${el.length} jogador(es) no Draft. A escalação completa tem 9: 1 goleiro, 6 de linha e 2 reservas.</span></div>` : ''}
   <div class="sec pitch-wrap ${corLado(l)}">
@@ -1009,6 +1026,7 @@ function pgMes() {
 function pgMais() {
   return `<div class="sec"><h1>Mais</h1><div class="mais">
   <a class="prow" href="#jogadores">${ic('users')}<span class="t"><b>Jogadores</b><small>Cadastrar, editar e status</small></span></a>
+  <a class="prow" href="#tatica">${ic('field')}<span class="t"><b>Mesa tática</b><small>Prancheta para os capitães montarem jogadas</small></span></a>
   <a class="prow" href="#historico">${ic('hist')}<span class="t"><b>Histórico e resultados</b><small>Todas as partidas, por mês</small></span></a>
   <a class="prow" href="#mes">${ic('trophy')}<span class="t"><b>Controle mensal</b><small>Série de 4 jogos e campeões</small></span></a>
   <a class="prow" href="#ajustes">${ic('gear')}<span class="t"><b>Ajustes e backup</b><small>Sincronização, versões e instalação</small></span></a>
@@ -1129,6 +1147,174 @@ async function compartilhar(p) {
 }
 
 /* =================== Modais =================== */
+/* ---------- Mesa tática (para os capitães) ---------- */
+const FORMACOES = {
+  '2-3-1': [[.3, .75], [.7, .75], [.16, .53], [.5, .56], [.84, .53], [.5, .3]],
+  '3-2-1': [[.18, .74], [.5, .77], [.82, .74], [.32, .53], [.68, .53], [.5, .3]],
+  '2-2-2': [[.3, .75], [.7, .75], [.28, .53], [.72, .53], [.34, .3], [.66, .3]],
+  '3-1-2': [[.18, .74], [.5, .77], [.82, .74], [.5, .54], [.33, .31], [.67, .31]]
+};
+const TAT_CORES = [['#ffffff', 'Branco'], ['#f5b301', 'Amarelo'], ['#2f6dff', 'Azul'], ['#e5303f', 'Vermelho']];
+const TAT_MODOS = [['mover', '✋', 'Mover'], ['livre', '✏️', 'Desenhar'], ['passe', '➜', 'Passe'], ['corrida', '⇢', 'Corrida']];
+const TAT = { chave: '', tokens: [], linhas: [], hist: [], modo: 'mover', cor: '#ffffff', form: '2-3-1', drag: null, desenho: null, imgs: {}, raf: 0 };
+const TAT_PH = 1.5, TAT_BANCO = .2; // altura do campo = 1,5 × largura; faixa do banco = 20% da altura do campo
+function tatTimes(m) { const v = UI.tatTimes || 'ambos'; return v === 'ambos' ? [m.draft.A, m.draft.B] : [v]; }
+function tatTitulares(m, tid) {
+  const e = escDe(m, tid), el = elenco(m, tid), num = id => parseInt((jog(id) || {}).numero, 10) || 99;
+  if (e.gk && e.linha.every(Boolean)) return { gk: e.gk, linha: e.linha.slice(), banco: el.filter(id => id !== e.gk && !e.linha.includes(id)) };
+  const ord = ['Zagueiro', 'Meio-campo', 'Atacante'], pi = id => { const i = ord.indexOf((jog(id) || {}).posicao); return i < 0 ? 1 : i; };
+  const gk = el.find(id => (jog(id) || {}).posicao === 'Goleiro') || el.slice().sort((a, b) => num(a) - num(b))[0];
+  const ordena = l => l.sort((a, b) => pi(a) - pi(b) || num(a) - num(b));
+  const linha = ordena(el.filter(id => id !== gk)), tit = linha.slice(0, 6), banco = linha.slice(6);
+  const cap = ladoDoTime(m, tid) === 'A' ? m.draft.capA : m.draft.capB, ic2 = banco.indexOf(cap);
+  if (ic2 >= 0 && tit.length) { const sai = tit.pop(); banco.splice(ic2, 1, sai); tit.push(cap); ordena(tit); }
+  return { gk, linha: tit, banco };
+}
+function tatPadrao(m) {
+  const tids = tatTimes(m), dois = tids.length === 2, toks = [], F = FORMACOES[TAT.form] || FORMACOES['2-3-1'];
+  tids.forEach(tid => {
+    const l = ladoDoTime(m, tid), t = tatTitulares(m, tid), cima = dois && l === 'B';
+    const map = ([x, y]) => { if (!dois) return [x, y]; const yy = .6 + (y - .3) / .63 * .345; return cima ? [1 - x, 1 - yy] : [x, yy]; };
+    const put = (id, xy) => { if (!id) return; const [x, y] = map(xy); toks.push({ k: l + ':' + id, x, y }); };
+    put(t.gk, [.5, .93]); t.linha.forEach((id, i) => F[i] && put(id, F[i]));
+    t.banco.forEach((id, i) => toks.push({ k: l + ':' + id, x: (dois ? (l === 'A' ? .08 : .58) : .08) + i * .12, y: 1 + TAT_BANCO * .55 }));
+  });
+  toks.push({ k: 'bola', x: .5, y: .5 });
+  return toks;
+}
+function tatChave(m) { return m.id + '|' + (UI.tatTimes || 'ambos'); }
+function tatCarregar(m) {
+  const ch = tatChave(m); if (TAT.chave === ch) return;
+  TAT.chave = ch; TAT.hist = []; TAT.drag = TAT.desenho = null;
+  let salvo = null; try { salvo = JSON.parse(localStorage.getItem('lneo_tat_' + ch) || 'null'); } catch (e) {}
+  if (salvo && Array.isArray(salvo.tokens)) { TAT.tokens = salvo.tokens; TAT.linhas = salvo.linhas || []; TAT.form = salvo.form || TAT.form; }
+  else { TAT.tokens = tatPadrao(m); TAT.linhas = []; }
+}
+function tatGuardar() { try { localStorage.setItem('lneo_tat_' + TAT.chave, JSON.stringify({ tokens: TAT.tokens, linhas: TAT.linhas, form: TAT.form })); } catch (e) {} }
+function tatSnap() { TAT.hist.push(JSON.stringify({ tokens: TAT.tokens, linhas: TAT.linhas })); if (TAT.hist.length > 60) TAT.hist.shift(); }
+function pgTatica() {
+  const m = getMes(UI.tatMes) || mesAtual(); if (!m) return '<p class="muted">Nenhum mês cadastrado.</p>';
+  UI.tatMes = m.id; if (UI.tatTimes && UI.tatTimes !== 'ambos' && ![m.draft.A, m.draft.B].includes(UI.tatTimes)) UI.tatTimes = 'ambos';
+  tatCarregar(m);
+  const sel = UI.tatTimes || 'ambos', jogadas = (S.taticas || []).filter(t => t.mes === m.id).sort((a, b) => b.em - a.em);
+  const opT = [['ambos', 'Os dois times'], ...[m.draft.A, m.draft.B].filter(Boolean).map(t => [t, `${time(t).sigla || time(t).nome} • ${ladoDoTime(m, t) === 'A' ? 'Azul' : 'Vermelho'}`])];
+  return `<div class="sec"><a class="small" href="#campo">← Escalação</a><span class="eyebrow" style="display:block;margin-top:6px">Para os capitães</span><h1>Mesa tática</h1>${mesChips(m.id, 'tt-mes')}
+  <div class="chips">${opT.map(([v, l]) => `<button class="chip ${v === sel ? 'on' : ''}" data-a="tt-times" data-v="${esc(v)}">${esc(l)}</button>`).join('')}</div></div>
+  <div class="tat ${UI.tatCheia ? 'cheia' : ''}" id="tatwrap">
+    <div class="tatbar">
+      <div class="tatgrp">${TAT_MODOS.map(([k, i, l]) => `<button class="tbtn ${TAT.modo === k ? 'on' : ''}" data-a="tt-modo" data-v="${k}" title="${l}"><span>${i}</span><small>${l}</small></button>`).join('')}</div>
+      <div class="tatgrp">${TAT_CORES.map(([c, n]) => `<button class="tcor ${TAT.cor === c ? 'on' : ''}" data-a="tt-cor" data-v="${c}" style="--c:${c}" aria-label="Cor ${n}"></button>`).join('')}
+        <button class="tbtn" data-a="tt-desfazer" title="Desfazer"><span>↶</span><small>Desfazer</small></button>
+        <button class="tbtn" data-a="tt-apagar" title="Apagar traços"><span>🧽</span><small>Traços</small></button>
+        <button class="tbtn" data-a="tt-cheia" title="Tela cheia"><span>${UI.tatCheia ? '✕' : '⛶'}</span><small>${UI.tatCheia ? 'Sair' : 'Tela cheia'}</small></button></div>
+    </div>
+    <div class="tatboard"><canvas id="tatcv" aria-label="Campo da mesa tática" ${UI.tatTam && !UI.tatCheia ? `style="width:${UI.tatTam.w}px;height:${UI.tatTam.h}px"` : ''}></canvas></div>
+  </div>
+  <div class="sec card" style="display:grid;gap:10px"><b>Formação inicial</b>
+    <div class="chips">${Object.keys(FORMACOES).map(f => `<button class="chip ${TAT.form === f ? 'on' : ''}" data-a="tt-form" data-v="${f}">${f}</button>`).join('')}</div>
+    <p class="tiny muted">Coloca goleiro e 6 de linha nessa formação. Os titulares vêm da Escalação; se ela não estiver completa, o app monta pela posição de cada jogador. Os outros ficam no banco, embaixo do campo.</p>
+    <div class="row" style="gap:8px;flex-wrap:wrap"><button class="btn sm" data-a="tt-reset">⟲ Reposicionar todos</button><button class="btn sm pri" data-a="tt-salvar">💾 Salvar jogada</button></div></div>
+  <div class="sec card" style="display:grid;gap:8px"><b>Jogadas salvas • ${esc(mesLabel(m.id))}</b>
+    ${jogadas.length ? jogadas.map(t => `<div class="row between tatj"><span><b>${esc(t.nome)}</b><br><small class="muted">${esc(t.times === 'ambos' || !t.times ? 'Os dois times' : (time(t.times).sigla || ''))} • ${new Date(t.em).toLocaleDateString('pt-BR')}</small></span><span class="row" style="gap:6px"><button class="btn sm" data-a="tt-abrir" data-v="${esc(t.id)}">Abrir</button><button class="btn sm ghost" data-a="tt-excluir" data-v="${esc(t.id)}" aria-label="Excluir">🗑</button></span></div>`).join('') : '<p class="small muted">Nenhuma jogada salva ainda. Monte no campo e toque em “Salvar jogada”. Fica salva no painel e aparece nos outros aparelhos.</p>'}
+  </div>
+  <p class="tiny muted" style="margin:0 2px 16px">Dica: no modo <b>Mover</b>, arraste jogadores e a bola. <b>Desenhar</b> faz traço livre, <b>Passe</b> faz seta e <b>Corrida</b> faz seta tracejada.</p>`;
+}
+function tatImg(url) {
+  if (!url) return null; let im = TAT.imgs[url];
+  if (!im) { im = new Image(); im.onload = () => tatDesenhar(); im.src = url; TAT.imgs[url] = im; }
+  return im.complete && im.naturalWidth ? im : null;
+}
+function tatTamanho() {
+  const cv = $('#tatcv'); if (!cv) return null;
+  const box = cv.parentElement, cheia = UI.tatCheia;
+  const bar = $('.tatbar') ? $('.tatbar').offsetHeight : 90, nav = $('.nav') ? $('.nav').offsetHeight : 64;
+  const hd = $('header.top') && !cheia ? $('header.top').offsetHeight : 0, tb = $('.tatbar'); if (tb) tb.style.top = hd + 'px';
+  const disp = cheia ? innerHeight - bar - 28 : innerHeight - hd - bar - nav - 20;
+  const w = Math.max(240, Math.min(box.clientWidth, 560, disp / (TAT_PH * (1 + TAT_BANCO))));
+  const h = w * TAT_PH * (1 + TAT_BANCO), dpr = Math.min(3, devicePixelRatio || 1);
+  cv.style.width = w + 'px'; cv.style.height = h + 'px'; if (!cheia) UI.tatTam = { w, h };
+  if (cv.width !== Math.round(w * dpr)) { cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr); }
+  return { cv, w, h, ph: w * TAT_PH, dpr };
+}
+function tatDesenhar() {
+  cancelAnimationFrame(TAT.raf);
+  TAT.raf = requestAnimationFrame(() => {
+    const g0 = tatTamanho(); if (!g0) return; const { cv, w, ph, dpr } = g0, g = cv.getContext('2d');
+    g.setTransform(dpr, 0, 0, dpr, 0, 0); g.clearRect(0, 0, w, g0.h);
+    // gramado
+    for (let i = 0; i < 12; i++) { g.fillStyle = i % 2 ? '#13753a' : '#178543'; g.fillRect(0, i * ph / 12, w, ph / 12 + 1); }
+    const m = w * .04, L = w - 2 * m, H = ph - 2 * m;
+    g.strokeStyle = 'rgba(255,255,255,.8)'; g.lineWidth = Math.max(2, w * .006);
+    g.strokeRect(m, m, L, H); g.beginPath(); g.moveTo(m, ph / 2); g.lineTo(m + L, ph / 2); g.stroke();
+    g.beginPath(); g.arc(w / 2, ph / 2, w * .14, 0, Math.PI * 2); g.stroke();
+    [m, ph - m].forEach((y, k) => { const s = k ? -1 : 1; g.strokeRect(w * .2, k ? y - H * .16 : y, w * .6, H * .16); g.strokeRect(w * .35, k ? y - H * .065 : y, w * .3, H * .065); g.beginPath(); g.arc(w / 2, y + s * H * .12, 3, 0, Math.PI * 2); g.fillStyle = 'rgba(255,255,255,.8)'; g.fill(); });
+    g.beginPath(); g.arc(w / 2, ph / 2, 4, 0, Math.PI * 2); g.fill();
+    // banco
+    g.fillStyle = '#0b1222'; g.fillRect(0, ph, w, ph * TAT_BANCO); g.fillStyle = 'rgba(255,255,255,.08)'; g.fillRect(0, ph, w, 2);
+    g.fillStyle = '#93a0c2'; g.font = `800 ${Math.round(w * .03)}px system-ui, sans-serif`; g.textAlign = 'left'; g.textBaseline = 'top'; g.fillText('BANCO', w * .02, ph + w * .015);
+    // traços
+    const P = ([x, y]) => [x * w, y * ph];
+    TAT.linhas.forEach(l => {
+      if (!l.pts || l.pts.length < 2) return; g.save(); g.strokeStyle = l.cor; g.fillStyle = l.cor; g.lineWidth = Math.max(3, w * .011); g.lineCap = g.lineJoin = 'round';
+      g.shadowColor = 'rgba(0,0,0,.5)'; g.shadowBlur = 4; if (l.tipo === 'corrida') g.setLineDash([w * .03, w * .022]);
+      g.beginPath(); l.pts.forEach((p, i) => { const [X, Y] = P(p); i ? g.lineTo(X, Y) : g.moveTo(X, Y); }); g.stroke(); g.setLineDash([]);
+      if (l.tipo !== 'livre') { const [x1, y1] = P(l.pts[l.pts.length - 2]), [x2, y2] = P(l.pts[l.pts.length - 1]), a = Math.atan2(y2 - y1, x2 - x1), s = w * .04; g.beginPath(); g.moveTo(x2, y2); g.lineTo(x2 - s * Math.cos(a - .45), y2 - s * Math.sin(a - .45)); g.lineTo(x2 - s * Math.cos(a + .45), y2 - s * Math.sin(a + .45)); g.closePath(); g.fill(); }
+      g.restore();
+    });
+    // peças
+    const r = w * .058, m0 = getMes(UI.tatMes) || { draft: {} };
+    TAT.tokens.forEach(t => {
+      const [X, Y] = P([t.x, t.y]), ativo = TAT.drag && TAT.drag.t === t, s = ativo ? 1.18 : 1;
+      if (t.k === 'bola') { const rb = r * .5 * s; g.save(); g.shadowColor = 'rgba(0,0,0,.6)'; g.shadowBlur = 6; g.beginPath(); g.arc(X, Y, rb, 0, Math.PI * 2); g.fillStyle = '#fff'; g.fill(); g.restore(); g.fillStyle = '#111'; g.beginPath(); g.arc(X, Y, rb * .38, 0, Math.PI * 2); g.fill(); for (let i = 0; i < 5; i++) { const a = i * 1.2566 - 1.57; g.beginPath(); g.arc(X + Math.cos(a) * rb * .78, Y + Math.sin(a) * rb * .78, rb * .17, 0, Math.PI * 2); g.fill(); } return; }
+      const [lado, id] = t.k.split(':'), j = jog(id); if (!j) return;
+      const cor = lado === 'A' ? '#2f6dff' : '#e5303f', rr2 = r * s;
+      g.save(); g.shadowColor = ativo ? '#f5b301' : 'rgba(0,0,0,.55)'; g.shadowBlur = ativo ? 16 : 6;
+      g.beginPath(); g.arc(X, Y, rr2, 0, Math.PI * 2); g.fillStyle = cor; g.fill(); g.restore();
+      const im = tatImg(media(j.foto));
+      g.save(); g.beginPath(); g.arc(X, Y, rr2 * .86, 0, Math.PI * 2); g.clip();
+      if (im) { const sc = (rr2 * 1.9) / Math.min(im.naturalWidth, im.naturalHeight); g.drawImage(im, X - im.naturalWidth * sc / 2, Y - rr2 * .95, im.naturalWidth * sc, im.naturalHeight * sc); }
+      else { g.fillStyle = '#16203a'; g.fillRect(X - rr2, Y - rr2, rr2 * 2, rr2 * 2); g.fillStyle = '#fff'; g.font = `900 ${Math.round(rr2 * .7)}px system-ui, sans-serif`; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText((j.apelido || j.nome).slice(0, 2).toUpperCase(), X, Y); }
+      g.restore();
+      g.beginPath(); g.arc(X, Y, rr2 * .93, 0, Math.PI * 2); g.lineWidth = rr2 * .14; g.strokeStyle = cor; g.stroke();
+      if (id === m0.draft.capA || id === m0.draft.capB) { const cx2 = X - rr2 * .72, cy2 = Y - rr2 * .68, cr = rr2 * .36; g.beginPath(); g.arc(cx2, cy2, cr, 0, Math.PI * 2); g.fillStyle = '#f5b301'; g.fill(); g.lineWidth = 2; g.strokeStyle = '#fff'; g.stroke(); g.fillStyle = '#1a1300'; g.font = `900 ${Math.round(cr * 1.1)}px system-ui, sans-serif`; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText('C', cx2, cy2 + 1); }
+      // número
+      if (j.numero) { const bx = X + rr2 * .72, by = Y + rr2 * .62, br = rr2 * .42; g.beginPath(); g.arc(bx, by, br, 0, Math.PI * 2); g.fillStyle = cor; g.fill(); g.lineWidth = 2; g.strokeStyle = '#fff'; g.stroke(); g.fillStyle = '#fff'; g.font = `900 ${Math.round(br * 1.05)}px system-ui, sans-serif`; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(String(j.numero).replace(/^0(?=\d)/, ''), bx, by + 1); }
+      // nome
+      const nome = (j.apelido || j.nome).toUpperCase(); g.font = `800 ${Math.round(w * .026)}px system-ui, sans-serif`; g.textAlign = 'center'; g.textBaseline = 'middle';
+      const tw = Math.min(w * .24, g.measureText(nome).width + 10), ty = Y + rr2 + w * .022;
+      g.fillStyle = 'rgba(7,11,22,.85)'; g.beginPath(); g.roundRect ? g.roundRect(X - tw / 2, ty - w * .019, tw, w * .038, w * .019) : g.rect(X - tw / 2, ty - w * .019, tw, w * .038); g.fill();
+      g.fillStyle = '#fff'; g.fillText(nome, X, ty + .5, tw - 6);
+    });
+  });
+}
+function tatBarra() { $$('[data-a="tt-modo"]').forEach(x => x.classList.toggle('on', x.dataset.v === TAT.modo)); $$('[data-a="tt-cor"]').forEach(x => x.classList.toggle('on', x.dataset.v === TAT.cor)); }
+function tatPos(e) { const r = $('#tatcv').getBoundingClientRect(); return { x: Math.max(.02, Math.min(.98, (e.clientX - r.left) / r.width)), y: Math.max(.02, Math.min(1 + TAT_BANCO - .03, (e.clientY - r.top) / (r.width * TAT_PH))) }; }
+function tatHit(p) { const r = .058 * 1.35; for (let i = TAT.tokens.length - 1; i >= 0; i--) { const t = TAT.tokens[i]; if (Math.hypot(t.x - p.x, (t.y - p.y) * TAT_PH) < r) return i; } return -1; }
+function ligarTatica(nova) {
+  const cv = $('#tatcv'); if (!cv) return;
+  tatDesenhar();
+  if (nova && !UI.tatCheia) { const wr = $('#tatwrap'); if (wr) setTimeout(() => { const hd = $('header.top') ? $('header.top').offsetHeight : 0; window.scrollTo({ top: wr.getBoundingClientRect().top + scrollY - hd - 2, behavior: 'smooth' }); }, 120); }
+  cv.onpointerdown = e => {
+    e.preventDefault(); try { cv.setPointerCapture(e.pointerId); } catch (er) {}
+    const p = tatPos(e);
+    if (TAT.modo === 'mover') { const i = tatHit(p); if (i < 0) return; tatSnap(); const t = TAT.tokens.splice(i, 1)[0]; TAT.tokens.push(t); TAT.drag = { t, dx: t.x - p.x, dy: t.y - p.y, moveu: false }; vib(10); }
+    else { tatSnap(); TAT.desenho = { tipo: TAT.modo, cor: TAT.cor, pts: [[p.x, p.y]] }; TAT.linhas.push(TAT.desenho); }
+    tatDesenhar();
+  };
+  cv.onpointermove = e => {
+    if (!TAT.drag && !TAT.desenho) return; e.preventDefault(); const p = tatPos(e);
+    if (TAT.drag) { const t = TAT.drag.t; t.x = Math.max(.02, Math.min(.98, p.x + TAT.drag.dx)); t.y = Math.max(.02, Math.min(1 + TAT_BANCO - .03, p.y + TAT.drag.dy)); TAT.drag.moveu = true; }
+    else { const d = TAT.desenho, u = d.pts[d.pts.length - 1]; if (d.tipo === 'livre') { if (Math.hypot(p.x - u[0], (p.y - u[1]) * TAT_PH) > .006) d.pts.push([p.x, p.y]); } else d.pts = [d.pts[0], [p.x, p.y]]; }
+    tatDesenhar();
+  };
+  const fim = () => {
+    if (TAT.drag) { if (!TAT.drag.moveu) TAT.hist.pop(); TAT.drag = null; }
+    if (TAT.desenho) { const d = TAT.desenho, a = d.pts[0], b = d.pts[d.pts.length - 1]; if (d.pts.length < 2 || Math.hypot(a[0] - b[0], (a[1] - b[1]) * TAT_PH) < .02 && d.tipo !== 'livre') { TAT.linhas.pop(); TAT.hist.pop(); } TAT.desenho = null; }
+    tatGuardar(); tatDesenhar();
+  };
+  cv.onpointerup = fim; cv.onpointercancel = fim;
+  if (!window._tatResize) { window._tatResize = true; addEventListener('resize', () => { if (rota().startsWith('tatica')) tatDesenhar(); }); }
+}
 let MODAL = null;
 function modal(html, acoes = {}, depois) {
   fecharModal();
@@ -1173,6 +1359,20 @@ const ACOES = {
   'dr-vez': () => { const d = getMes(UI.draftMes).draft; d.vez = d.vez === 'B' ? 'A' : 'B'; commit(); render(); },
   'dr-desfazer': () => { const d = getMes(UI.draftMes).draft; const u = (d.escolhas || []).pop(); if (!u) return; d.azul = d.azul.filter(x => x !== u.id); d.vermelho = d.vermelho.filter(x => x !== u.id); d.vez = u.lado; commit(nomeJ(u.id) + ' voltou para os disponíveis.'); render(); },
   'dr-final': () => { const d = getMes(UI.draftMes).draft; d.finalizado = !d.finalizado; commit(d.finalizado ? 'Draft finalizado.' : 'Draft reaberto.'); render(); },
+  'tt-mes': b => { UI.tatMes = b.dataset.v; render(); },
+  'tt-times': b => { UI.tatTimes = b.dataset.v; render(); },
+  'tt-modo': b => { TAT.modo = b.dataset.v; tatBarra(); },
+  'tt-cor': b => { TAT.cor = b.dataset.v; if (TAT.modo === 'mover') TAT.modo = 'passe'; tatBarra(); },
+  'tt-desfazer': () => { const h = TAT.hist.pop(); if (!h) { toast('Nada para desfazer.'); return; } const o = JSON.parse(h); TAT.tokens = o.tokens; TAT.linhas = o.linhas; tatGuardar(); tatDesenhar(); },
+  'tt-apagar': () => { if (!TAT.linhas.length) return; tatSnap(); TAT.linhas = []; tatGuardar(); tatDesenhar(); },
+  'tt-cheia': async () => { UI.tatCheia = !UI.tatCheia; render(); try { if (UI.tatCheia && document.documentElement.requestFullscreen && !document.fullscreenElement) await document.documentElement.requestFullscreen({ navigationUI: 'hide' }); else if (!UI.tatCheia && document.fullscreenElement) await document.exitFullscreen(); } catch (e) {} setTimeout(tatDesenhar, 250); },
+  'tt-form': b => { tatSnap(); TAT.form = b.dataset.v; const m = getMes(UI.tatMes); TAT.tokens = tatPadrao(m); tatGuardar(); render(); },
+  'tt-reset': () => { tatSnap(); const m = getMes(UI.tatMes); TAT.tokens = tatPadrao(m); TAT.linhas = []; tatGuardar(); render(); toast('Jogadores reposicionados.'); },
+  'tt-salvar': () => modal(`<h2>Salvar jogada</h2><div class="field"><label>Nome da jogada</label><input id="tt-nome" maxlength="40" placeholder="Ex.: Saída de bola, Escanteio a favor"></div><div class="row" style="gap:8px;justify-content:flex-end"><button class="btn ghost" data-a="fechar">Cancelar</button><button class="btn pri" data-a="tt-ok">Salvar</button></div>`, {
+    'tt-ok': () => { const nome = ($('#tt-nome').value || '').trim() || 'Jogada ' + ((S.taticas || []).length + 1); S.taticas = S.taticas || []; S.taticas.push({ id: 'tat-' + Date.now().toString(36), nome, mes: UI.tatMes, times: UI.tatTimes || 'ambos', form: TAT.form, tokens: JSON.parse(JSON.stringify(TAT.tokens)), linhas: JSON.parse(JSON.stringify(TAT.linhas)), em: Date.now() }); fecharModal(); commit('Jogada salva!'); render(); },
+    fechar: () => fecharModal() }, () => { const i = $('#tt-nome'); if (i) i.focus(); }),
+  'tt-abrir': b => { const t = (S.taticas || []).find(x => x.id === b.dataset.v); if (!t) return; UI.tatMes = t.mes; UI.tatTimes = t.times || 'ambos'; const m = getMes(t.mes); TAT.chave = ''; tatCarregar(m); tatSnap(); TAT.tokens = JSON.parse(JSON.stringify(t.tokens)); TAT.linhas = JSON.parse(JSON.stringify(t.linhas || [])); TAT.form = t.form || TAT.form; tatGuardar(); render(); window.scrollTo(0, 0); toast('Jogada “' + t.nome + '” aberta.'); },
+  'tt-excluir': b => { const t = (S.taticas || []).find(x => x.id === b.dataset.v); if (!t) return; modal(`<h2>Excluir jogada?</h2><p class="muted">“${esc(t.nome)}” será apagada do painel em todos os aparelhos.</p><div class="row" style="gap:8px;justify-content:flex-end"><button class="btn ghost" data-a="fechar">Cancelar</button><button class="btn red" data-a="tt-exc-ok">Excluir</button></div>`, { 'tt-exc-ok': () => { S.taticas = S.taticas.filter(x => x.id !== t.id); fecharModal(); commit('Jogada excluída.'); render(); }, fechar: () => fecharModal() }); },
   'cp-mes': b => { UI.campoMes = b.dataset.v; UI.sel = null; render(); },
   'cp-time': b => { UI.campoTime = b.dataset.v; UI.sel = null; render(); },
   'cp-desel': () => { UI.sel = null; render(); },
