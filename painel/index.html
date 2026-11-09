@@ -1042,15 +1042,15 @@ async function verVersoes() {
 }
 async function buscarSite(silencioso) {
   try {
-    const novo = await importarDoSite(); let n = 0;
-    novo.jogadores.forEach(j => { const x = jog(j.id); if (!x) { S.jogadores.push(j); n++; } else if (j.foto && x.foto !== j.foto && (!x.foto || !/^https?:/.test(x.foto))) { x.foto = j.foto; n++; } if (x && j.posicao && !/a confirmar/i.test(j.posicao) && (!x.posicao || /a confirmar/i.test(x.posicao))) { x.posicao = j.posicao; n++; } });
+    const novo = await importarDoSite(); let n = 0; const versaoNova = S.siteVersao !== novo.siteVersao;
+    novo.jogadores.forEach(j => { const x = jog(j.id); if (!x) { S.jogadores.push(j); n++; } else if (j.foto && x.foto !== j.foto && (!x.foto || !/^https?:/.test(x.foto))) { x.foto = j.foto; n++; } if (x && j.posicao && !/a confirmar/i.test(j.posicao) && (!x.posicao || /a confirmar/i.test(x.posicao))) { x.posicao = j.posicao; n++; } if (x && versaoNova) { if (j.numero && x.numero !== j.numero) { x.numero = j.numero; n++; } if (j.apelido && x.apelido !== j.apelido) { x.apelido = j.apelido; n++; } } });
     novo.meses.forEach(m => {
       const x = getMes(m.id); if (!x) { S.meses.push(m); n++; return; }
       const d = x.draft; if (d.finalizado) return;
       const usados = new Set([...(d.azul || []), ...(d.vermelho || []), ...(d.ausentes || []), d.capA, d.capB]);
       (m.draft.ausentes || []).forEach(id => { if (!usados.has(id)) { d.ausentes.push(id); n++; } });
     });
-    novo.partidas.forEach(p => { if (!S.partidas.find(x => x.id === p.id)) { S.partidas.push(p); n++; } });
+    novo.partidas.forEach(p => { if (!S.partidas.find(x => x.id === p.id || (x.mes === p.mes && x.numero && x.numero === p.numero))) { S.partidas.push(p); n++; } });
     const mudouVersao = S.siteVersao !== novo.siteVersao; S.siteVersao = novo.siteVersao;
     if (n || mudouVersao) commit(silencioso ? (n ? `${n} novidade(s) do site importada(s).` : undefined) : (n ? `${n} novidade(s) importada(s).` : 'Nada novo no site.'));
     else if (!silencioso) toast('Nada novo no site.');
