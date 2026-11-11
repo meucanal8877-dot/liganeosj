@@ -1,6 +1,6 @@
 {
- "versao": 11,
- "atualizadoEm": "2026-11-09T08:40:00-03:00",
+ "versao": 12,
+ "atualizadoEm": "2026-11-11T08:40:00-03:00",
  "config": {
   "nome": "Liga Neo SJ",
   "slogan": "Seja Você o protagonista desse jogo!",
@@ -517,16 +517,136 @@
    "local": "Arena Lobos",
    "mandanteId": "al-ec",
    "visitanteId": "al-fc",
-   "golsMandante": null,
-   "golsVisitante": null,
+   "golsMandante": 3,
+   "golsVisitante": 6,
    "vencedorId": "",
-   "situacao": "agendado",
-   "resumo": "Primeiro jogo de novembro, com os times definidos no Draft.",
-   "destaque": "",
-   "eventos": [],
-   "incluidoNoTotalOficial": true,
-   "midia": [],
-   "fonte": "Informado pela organização em 09/11/2026"
+   "situacao": "encerrado",
+   "resumo": "O Arena Lobos Futebol Clube venceu o Arena Lobos Esporte Clube por 6 x 3 no primeiro jogo de novembro e saiu na frente na série do mês (AL EC 0 x 1 AL FC). Faltas: AL EC 2 x 3 AL FC. Seleção da rodada: Renan (5,6), Ramiri (6,7), Neto (7,5), Serjão (8,5), Renne (8,2), Gleysson (7,9) e Mago (8,5).",
+   "destaque": "Craque do jogo: Mago, com 2 gols e nota 8,5.",
+   "eventos": [
+    {
+     "id": "2026-11-j01-01",
+     "tipo": "gol",
+     "timeId": "al-ec",
+     "jogadorId": "daniel-freitas",
+     "assistenciaId": "",
+     "minuto": ""
+    },
+    {
+     "id": "2026-11-j01-02",
+     "tipo": "gol",
+     "timeId": "al-ec",
+     "jogadorId": "ramiri",
+     "assistenciaId": "",
+     "minuto": ""
+    },
+    {
+     "id": "2026-11-j01-03",
+     "tipo": "gol",
+     "timeId": "al-ec",
+     "jogadorId": "wellington-silva",
+     "assistenciaId": "",
+     "minuto": ""
+    },
+    {
+     "id": "2026-11-j01-04",
+     "tipo": "gol",
+     "timeId": "al-fc",
+     "jogadorId": "sergio-leopoldino",
+     "assistenciaId": "",
+     "minuto": ""
+    },
+    {
+     "id": "2026-11-j01-05",
+     "tipo": "gol",
+     "timeId": "al-fc",
+     "jogadorId": "sergio-leopoldino",
+     "assistenciaId": "",
+     "minuto": ""
+    },
+    {
+     "id": "2026-11-j01-06",
+     "tipo": "gol",
+     "timeId": "al-fc",
+     "jogadorId": "renne-andre",
+     "assistenciaId": "",
+     "minuto": ""
+    },
+    {
+     "id": "2026-11-j01-07",
+     "tipo": "gol",
+     "timeId": "al-fc",
+     "jogadorId": "vinni-mago",
+     "assistenciaId": "",
+     "minuto": ""
+    },
+    {
+     "id": "2026-11-j01-08",
+     "tipo": "gol",
+     "timeId": "al-fc",
+     "jogadorId": "vinni-mago",
+     "assistenciaId": "",
+     "minuto": ""
+    },
+    {
+     "id": "2026-11-j01-09",
+     "tipo": "gol",
+     "timeId": "al-fc",
+     "jogadorId": "neto-brito",
+     "assistenciaId": "",
+     "minuto": ""
+    },
+    {
+     "id": "2026-11-j01-10",
+     "tipo": "assistencia",
+     "timeId": "al-ec",
+     "jogadorId": "carlos-henrique",
+     "assistenciaId": "",
+     "minuto": ""
+    },
+    {
+     "id": "2026-11-j01-11",
+     "tipo": "assistencia",
+     "timeId": "al-ec",
+     "jogadorId": "caio-silva",
+     "assistenciaId": "",
+     "minuto": ""
+    },
+    {
+     "id": "2026-11-j01-12",
+     "tipo": "assistencia",
+     "timeId": "al-fc",
+     "jogadorId": "renne-andre",
+     "assistenciaId": "",
+     "minuto": ""
+    },
+    {
+     "id": "2026-11-j01-13",
+     "tipo": "assistencia",
+     "timeId": "al-fc",
+     "jogadorId": "gleysson-nascimento",
+     "assistenciaId": "",
+     "minuto": ""
+    },
+    {
+     "id": "2026-11-j01-14",
+     "tipo": "assistencia",
+     "timeId": "al-fc",
+     "jogadorId": "gleysson-nascimento",
+     "assistenciaId": "",
+     "minuto": ""
+    }
+   ],
+   "incluidoNoTotalOficial": false,
+   "midia": [
+    {
+     "tipo": "instagram",
+     "titulo": "Post oficial do Jogo 01 de novembro",
+     "url": "https://www.instagram.com/liganeosj/p/DfioC0mm7ul/"
+    }
+   ],
+   "fonte": "Post oficial @liganeosj de 09/11/2026",
+   "destaqueJogadorId": "vinni-mago"
   }
  ],
  "totais": [
@@ -805,6 +925,15 @@
  ],
  "noticias": [
   {
+   "id": "jogo-01-novembro-2026",
+   "data": "2026-11-09",
+   "categoria": "Resultado",
+   "ordem": 0,
+   "titulo": "AL FC vence o Jogo 01 de novembro por 6 x 3",
+   "imagem": "escudo-al-fc.png",
+   "texto": "No primeiro jogo de novembro, na Arena Lobos, o Arena Lobos Futebol Clube venceu o Arena Lobos Esporte Clube por 6 x 3 e abriu a série do mês em 1 x 0.\n\nGols do AL FC: Serjão (2), Mago (2), Renne e Neto. Assistências: Gleysson (2) e Renne.\nGols do AL EC: Chocolate, Ramiri e Wellington. Assistências: Carlos e Caio.\n\nCraque do jogo: Mago, com nota 8,5.\n\nSeleção da rodada: Renan (5,6), Ramiri (6,7), Neto (7,5), Serjão (8,5), Renne (8,2), Gleysson (7,9) e Mago (8,5)."
+  },
+  {
    "id": "draft-novembro-2026",
    "data": "2026-11-05",
    "categoria": "Comunicado",
@@ -964,6 +1093,14 @@
   }
  ],
  "instagram": [
+  {
+   "id": "ig-jogo01-novembro",
+   "data": "2026-11-09",
+   "tipo": "Post",
+   "titulo": "AL EC 3 x 6 AL FC • Jogo 01 de novembro",
+   "imagem": "",
+   "url": "https://www.instagram.com/liganeosj/p/DfioC0mm7ul/"
+  },
   {
    "id": "ig-jogo04-ranking",
    "data": "2026-10-27",

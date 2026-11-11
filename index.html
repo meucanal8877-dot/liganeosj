@@ -700,6 +700,9 @@ function computeStats(f = {}){
         if(p.incluidoNoTotalOficial) continue;
         if(e.jogadorId){ const r = get(e.jogadorId); r.g++; r.jogos.add(p.id); }
         if(e.assistenciaId){ const r = get(e.assistenciaId); r.a++; r.jogos.add(p.id); }
+      } else if(e.tipo === 'assistencia'){
+        if(p.incluidoNoTotalOficial) continue;
+        if(e.jogadorId){ const r = get(e.jogadorId); r.a++; r.jogos.add(p.id); }
       } else if(e.tipo === 'amarelo' && e.jogadorId){ get(e.jogadorId).am++; }
       else if(e.tipo === 'vermelho' && e.jogadorId){ get(e.jogadorId).vm++; }
     }
@@ -867,7 +870,7 @@ function pgInicio(){
   </div></section>
 
   <section class="band band-alt"><div class="wrap">
-    <div class="sec-head"><div><span class="eyebrow">${esc(c.totaisRotulo||'Ranking')}</span><h2>Artilharia e assistências</h2></div><a class="btn btn-sm" href="#ranking">Ranking completo ${ic('arrowR')}</a></div>
+    <div class="sec-head"><div><span class="eyebrow">${esc(D().partidas.some(p => p.situacao === 'encerrado' && !p.incluidoNoTotalOficial && (p.eventos||[]).length) ? 'Temporada ' + (c.temporada||'') : (c.totaisRotulo||'Ranking'))}</span><h2>Artilharia e assistências</h2></div><a class="btn btn-sm" href="#ranking">Ranking completo ${ic('arrowR')}</a></div>
     <div class="grid g2">
       <div><h3 style="margin-bottom:12px">${ic('ball')} Artilharia</h3>${rankList(rg,'gols',5)}</div>
       <div><h3 style="margin-bottom:12px">${ic('users')} Assistências</h3>${rankList(ra,'assist.',5)}</div>
@@ -1003,7 +1006,8 @@ function pgJogo(id){
   const p = byId('partidas', id);
   if(!p) return notFound('Partida não encontrada', '#jogos', 'Ver todos os jogos');
   const st = status(p), all = sortedMatches(), i = all.findIndex(x => x.id === p.id), prev = all[i-1], next = all[i+1];
-  const evs = (p.eventos||[]).filter(e => e.tipo === 'gol').slice().sort((a,b) => (+a.minuto||0) - (+b.minuto||0));
+  const evs = (p.eventos||[]).filter(e => e.tipo === 'gol' || e.tipo === 'assistencia').slice().sort((a,b) => (+a.minuto||0) - (+b.minuto||0) || (a.tipo === b.tipo ? 0 : a.tipo === 'gol' ? -1 : 1));
+  const astSolta = evs.some(e => e.tipo === 'assistencia');
   const shareTxt = `Liga Neo SJ • ${p.titulo}: ${tnm(p.mandanteId,true)} ${hasScore(p)?p.golsMandante+' x '+p.golsVisitante:'x'} ${tnm(p.visitanteId,true)}`;
   const dj = player(p.destaqueJogadorId);
   return pageHead(matchTitle(p), esc(p.titulo||'Partida'), '', `<span>/</span><a href="#jogos">Jogos</a><span>/</span><span>${esc(p.titulo)}</span>`) + `
@@ -1026,7 +1030,7 @@ function pgJogo(id){
     ${p.destaque?`<div class="card" style="display:flex;gap:14px;align-items:center;flex-wrap:wrap">${dj&&photo(dj)?`<img src="${esc(photo(dj))}" alt="" style="width:64px;height:64px;border-radius:14px;object-fit:cover">`:''}<div><span class="eyebrow">Destaque da partida</span><p style="font-size:1.15rem;font-weight:600">${esc(p.destaque)}</p>${dj?`<a href="#jogador-${esc(dj.id)}">Ver perfil de ${esc(pnm(dj))}</a>`:''}</div></div>`:''}
     <div><h3 style="margin-bottom:12px">Gols e assistências</h3>
       ${evs.length ? `<div class="evlist">${evs.map(e => { const pl = player(e.jogadorId), as = player(e.assistenciaId);
-        return `<div class="ev"><span class="min">${e.minuto!==''&&e.minuto!=null?esc(e.minuto)+"'":'—'}</span>${ic('ball')}<span><b>${esc(pnm(pl)||'Jogador')}</b> <span class="muted small">gol • ${esc(tnm(e.timeId,true))}</span>${as?`<br><span class="small muted">Assistência: ${esc(pnm(as))}</span>`:''}</span></div>`; }).join('')}</div>`
+        return `<div class="ev"><span class="min">${e.minuto!==''&&e.minuto!=null?esc(e.minuto)+"'":'—'}</span>${ic(e.tipo==='gol'?'ball':'users')}<span><b>${esc(pnm(pl)||'Jogador')}</b> <span class="muted small">${e.tipo==='gol'?'gol':'assistência'} • ${esc(tnm(e.timeId,true))}</span>${as?`<br><span class="small muted">Assistência: ${esc(pnm(as))}</span>`:''}</span></div>`; }).join('')}</div>${astSolta?`<p class="small muted" style="margin-top:10px">Gols e assistências conforme o registro oficial da partida. O minuto de cada lance e qual assistência gerou cada gol não foram informados.</p>`:''}`
       : `<div class="note">${ic('info')}<span>${p.incluidoNoTotalOficial ? 'Os gols e assistências desta partida já estão nos totais oficiais do mês. O detalhamento lance a lance não foi registrado.' : 'Nenhum lançamento individual registrado para esta partida.'}</span></div>`}
     </div>
     ${(p.midia||[]).length ? `<div><h3 style="margin-bottom:12px">Fotos e vídeos</h3><div class="links">${p.midia.map(m => safeUrl(m.url) ? `<a class="link-row" href="${esc(m.url)}" target="_blank" rel="noopener noreferrer">${ic(/instagram/.test(m.url)?'insta':'ext')}<span>${esc(m.titulo||m.url)}</span>${ic('ext')}</a>` : '').join('')}</div></div>` : ''}
@@ -1506,9 +1510,9 @@ function fieldHtml(f, v, isNew){
   }
 }
 function evRow(e = {}){
-  const tipo = 'gol', ps = refOpts('jogadores'), ts = D().times.map(t => [t.id, t.sigla||t.nome]);
+  const tipo = e.tipo === 'assistencia' ? 'assistencia' : 'gol', ps = refOpts('jogadores'), ts = D().times.map(t => [t.id, t.sigla||t.nome]);
   return `<div class="ev-row" data-eid="${esc(e.id||uid())}" data-tipo="${esc(tipo)}">
-    <input type="hidden" class="ev-tipo" value="gol">
+    <input type="hidden" class="ev-tipo" value="${esc(tipo)}">
     <select class="ev-time" aria-label="Time">${optList(ts, e.timeId, 'Time…')}</select>
     <select class="ev-jog" aria-label="Jogador">${optList(ps, e.jogadorId, 'Jogador…')}</select>
     <select class="ev-ast" aria-label="Assistência">${optList(ps, e.assistenciaId, 'Sem assistência')}</select>
