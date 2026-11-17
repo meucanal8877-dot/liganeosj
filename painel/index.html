@@ -347,7 +347,7 @@ const IC = {
   hist: '<path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5M12 7v5l4 2"/>',
   cal: '<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',
   play: '<path d="M7 4l13 8-13 8z"/>', max: '<path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/>', min: '<path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/>', pause: '<path d="M7 4h4v16H7zM14 4h4v16h-4z"/>', reset: '<path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/>',
-  plus: '<path d="M12 5v14M5 12h14"/>', down: '<path d="M12 4v12M6 11l6 6 6-6M5 20h14"/>', copy: '<rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/>',
+  plus: '<path d="M12 5v14M5 12h14"/>', up: '<path d="M12 19V5M5 12l7-7 7 7"/><path d="M5 21h14"/>', down: '<path d="M12 4v12M6 11l6 6 6-6M5 20h14"/>', copy: '<rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/>',
   out: '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/>', phone: '<rect x="6" y="2" width="12" height="20" rx="2"/><path d="M11 18h2"/>', ext: '<path d="M14 3h7v7M10 14L21 3M21 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5"/>',
   whats: '<path d="M3 21l1.6-4.8A8.5 8.5 0 1 1 8 19.6z"/>', edit: '<path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>', trash: '<path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/>'
 };
@@ -897,7 +897,7 @@ function pgJogo(id) {
     <div class="sbt ${corLado(lB)}">${crest(B)}<b>${esc(B.sigla || B.nome)}</b><small>${esc(B.nome)}</small></div></div>`;
   const tl = `<div class="sec"><h2>Lances</h2><div class="tl">${evs.map(e => evLinha(p, e, m)).join('') || '<p class="muted small">Nenhum lance registrado.</p>'}</div>${p.placarManual && !p.eventos.some(e => e.tipo === 'gol') ? '<p class="tiny muted">Placar registrado sem os lances (resultado oficial).</p>' : ''}</div>`;
   if (enc) return head + blocoFreq(p) + blocoNotas(p) + tl + `<div class="sec card" style="display:grid;gap:10px"><div class="row between"><b>Faltas</b><span class="num">${esc(A.sigla)} ${faltas(p, p.timeA)} • ${faltas(p, p.timeB)} ${esc(B.sigla)}</span></div><div class="field"><label>Destaque da partida</label><input value="${esc(p.destaque || '')}" data-in="pt-dest" placeholder="Ex.: Gleysson: 2 gols e 3 assistências"></div></div>
-    <div class="sec row"><button class="btn pri" data-a="compartilhar">${ic('share')} Relatório e artes</button><button class="btn" data-a="pt-reabrir">Reabrir jogo</button></div>`;
+    <div class="sec row"><button class="btn pri" data-a="compartilhar">${ic('share')} Relatório e artes</button><button class="btn pri" data-a="pub-site">${ic('up')} Publicar no site</button><button class="btn" data-a="pt-reabrir">Reabrir jogo</button></div>${p.publicadoSite ? `<p class="tiny muted sec" style="margin-top:-6px">Publicado no site em ${new Date(p.publicadoSite.em).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' })}${p.publicadoSite.em < Math.max(0, ...p.eventos.map(e => e.ts || 0)) ? ' • houve alterações depois: publique de novo' : ''}.</p>` : ''}`;
   const over = dur && ms >= dur;
   const livebar = `<div class="livebar" id="livebar" aria-hidden="true"><span class="lbt ${corLado(lA)}">${crest(A)}<b>${esc(A.sigla)}</b></span><span class="lbm"><b class="lbp" data-placar>${pl.A}<em>×</em>${pl.B}</b><span class="lbc ${over ? 'over' : ''}" data-clock>${mmss(ms)}</span></span><span class="lbt ${corLado(lB)}"><b>${esc(B.sigla)}</b>${crest(B)}</span><button class="lbplay ${p.relogio.rodando ? 'on' : ''}" data-a="${p.relogio.rodando ? 'rl-pausar' : 'rl-iniciar'}" aria-label="${p.relogio.rodando ? 'Pausar' : 'Iniciar'}">${ic(p.relogio.rodando ? 'pause' : 'play', '')}</button></span></div>`;
   return head + livebar + `<div class="sec card mc" id="mc">
@@ -1187,6 +1187,68 @@ async function buscarSite(silencioso) {
     else if (!silencioso) toast('Nada novo no site.');
     render();
   } catch (e) { if (!silencioso) toast('Não foi possível ler os dados do site.', true); }
+}
+
+/* ---------- Publicar no site ---------- */
+const slugMes = m => { const [y, mm] = String(m).split('-'); return String(MESES[+mm - 1] || mm).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase() + '-' + y; };
+const idSite = v => String(v || '').toLowerCase().replace(/[^a-z0-9-]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 80) || uid();
+const listaNomes = arr => { const c = {}; arr.forEach(n => c[n] = (c[n] || 0) + 1); const xs = Object.entries(c).sort((a, b) => b[1] - a[1]).map(([n, k]) => k > 1 ? `${n} (${k})` : n); return xs.length > 1 ? xs.slice(0, -1).join(', ') + ' e ' + xs[xs.length - 1] : (xs[0] || ''); };
+const juntar = xs => xs.length > 1 ? xs.slice(0, -1).join(', ') + ' e ' + xs[xs.length - 1] : (xs[0] || '');
+function minutoSite(e) { if (!e.ms) return ''; return Math.floor(e.ms / 60000) + 1 + Math.max(0, (e.periodo || 1) - 1) * (S.config.duracaoTempo || 0); }
+function dadosParaSite(p) {
+  const NN = String(p.numero).padStart(2, '0'), pl = placar(p), A = time(p.timeA), B = time(p.timeB), mesN = mesCurto(p.mes).toLowerCase();
+  const id = /^\d{4}-\d{2}-jogo-\d{2,}$/.test(p.id) ? p.id : `${p.mes}-jogo-${NN}`;
+  const eventos = [], citados = new Set(), semMin = !S.config.duracaoTempo && p.eventos.some(e => (e.periodo || 1) > 1), minS = e => semMin ? '' : minutoSite(e);
+  p.eventos.slice().sort((a, b) => (a.periodo || 1) - (b.periodo || 1) || (a.ms || 0) - (b.ms || 0) || (a.ts || 0) - (b.ts || 0)).forEach(e => {
+    if (e.tipo === 'gol') {
+      const ev = { id: idSite(e.id), tipo: 'gol', timeId: e.timeId, jogadorId: (e.golContra || e.diarista) ? '' : (e.autorId || ''), assistenciaId: e.assistDiarista ? '' : (e.assistId || ''), minuto: minS(e) };
+      if (e.golContra) ev.contra = true; else if (e.diarista) { ev.diarista = true; ev.nomeDiarista = e.nomeDiarista || ''; }
+      eventos.push(ev); if (ev.jogadorId) citados.add(ev.jogadorId); if (ev.assistenciaId) citados.add(ev.assistenciaId);
+    } else if (e.tipo === 'assistencia' && !e.diarista && e.autorId) { eventos.push({ id: idSite(e.id), tipo: 'assistencia', timeId: e.timeId, jogadorId: e.autorId, assistenciaId: '', minuto: minS(e) }); citados.add(e.autorId); }
+  });
+  const golsDe = t => p.eventos.filter(e => e.tipo === 'gol' && e.timeId === t).map(e => e.golContra ? 'gol contra' : e.diarista ? 'Diarista' + (e.nomeDiarista ? ' ' + e.nomeDiarista : '') : nomeJ(e.autorId));
+  const astDe = t => p.eventos.flatMap(e => e.tipo === 'gol' && e.timeId === t && e.assistId && !e.assistDiarista ? [nomeJ(e.assistId)] : e.tipo === 'assistencia' && e.timeId === t && e.autorId && !e.diarista ? [nomeJ(e.autorId)] : []);
+  const sr = serie(p.mes), sel = selecaoRodada(p), c = sel && sel.craque;
+  const venc = pl.A > pl.B ? A : pl.B > pl.A ? B : null, perd = venc === A ? B : venc === B ? A : null, mx = Math.max(pl.A, pl.B), mn = Math.min(pl.A, pl.B);
+  const serieTxt = `${time(sr.tA).sigla} ${sr.vA} x ${sr.vB} ${time(sr.tB).sigla}`;
+  const selTxt = sel ? juntar([sel.gk, ...sel.back, ...sel.mid, sel.atk].filter(Boolean).map(r => `${nomeJ(r.id)} (${ntFmt(r.n)})`)) : '';
+  const frase = venc ? `O ${venc.nome} venceu o ${perd.nome} por ${mx} x ${mn}` : `${A.nome} e ${B.nome} empataram por ${pl.A} x ${pl.B}`;
+  const campeao = sr.campeao ? ` ${time(sr.campeao).nome} é campeão de ${mesN}!` : '';
+  const resumo = `${frase} no Jogo ${NN} de ${mesN}. Série do mês: ${serieTxt}.${campeao} Faltas: ${A.sigla} ${faltas(p, p.timeA)} x ${faltas(p, p.timeB)} ${B.sigla}.` + (selTxt ? ` Seleção da rodada: ${selTxt}.` : '');
+  const partes = c ? [c.g ? c.g + (c.g > 1 ? ' gols' : ' gol') : '', c.a ? c.a + (c.a > 1 ? ' assistências' : ' assistência') : ''].filter(Boolean) : [];
+  const destaque = c ? `Craque do jogo: ${nomeJ(c.id)}, com ${partes.length ? partes.join(', ') + ' e ' : ''}nota ${ntFmt(c.n)}.` : '';
+  const bloco = t => { const g = golsDe(t.id), a = astDe(t.id); return g.length ? `Gols do ${t.sigla}: ${listaNomes(g)}.${a.length ? ` Assistências: ${listaNomes(a)}.` : ''}` : `O ${t.sigla} não marcou.`; };
+  const blocos = (venc === B ? [B, A] : [A, B]).map(bloco).join('\n');
+  const titulo = venc ? `${venc.sigla} vence o Jogo ${NN} de ${mesN} por ${mx} x ${mn}` + (sr.campeao === venc.id ? ' e é campeão do mês' : '') : `${A.sigla} e ${B.sigla} empatam por ${pl.A} x ${pl.B} no Jogo ${NN} de ${mesN}`;
+  const texto = [`${frase} no Jogo ${NN} de ${mesN}, na ${p.local || S.config.local || 'Arena Lobos'}. Série do mês: ${serieTxt}.${campeao}`, blocos, c ? `Craque do jogo: ${nomeJ(c.id)}, com nota ${ntFmt(c.n)}.` : '', selTxt ? `Seleção da rodada: ${selTxt}.` : ''].filter(Boolean).join('\n\n');
+  const jogadores = [...citados, c && c.id].filter(Boolean).map(jog).filter(Boolean).map(j => ({ id: j.id, nome: j.nome || '', apelido: j.apelido || '', numero: j.numero || '', posicao: j.posicao || '' }));
+  return {
+    partida: { id, titulo: `Jogo ${NN}`, rodada: p.numero, mes: p.mes, data: p.data || '', hora: p.hora || '', local: p.local || S.config.local || '', mandanteId: p.timeA, visitanteId: p.timeB,
+      golsMandante: pl.A, golsVisitante: pl.B, situacao: 'encerrado', resumo, destaque, eventos, midia: [], fonte: `Painel oficial da Liga Neo SJ • publicado em ${new Date().toLocaleDateString('pt-BR')}`, destaqueJogadorId: c ? c.id : '' },
+    noticia: { id: `jogo-${NN}-${slugMes(p.mes)}`, data: p.data || new Date().toISOString().slice(0, 10), titulo, texto },
+    jogadores
+  };
+}
+function publicarSite(p) {
+  if (!p) return;
+  if (p.status !== 'encerrada') { toast('Encerre o jogo antes de publicar no site.', true); return; }
+  if (!p.numero) { toast('Defina o número do jogo (Editar jogo) antes de publicar.', true); return; }
+  const d = dadosParaSite(p), pl = placar(p), A = time(p.timeA), B = time(p.timeB);
+  const nG = d.partida.eventos.filter(e => e.tipo === 'gol').length, nA = d.partida.eventos.filter(e => (e.tipo === 'gol' && e.assistenciaId) || e.tipo === 'assistencia').length;
+  modal(`<h2>Publicar no site</h2><p class="small muted">O site oficial vai receber:</p>
+    <div class="card" style="display:grid;gap:6px;margin:8px 0"><b>${esc(d.partida.titulo)} • ${esc(A.sigla)} ${pl.A} x ${pl.B} ${esc(B.sigla)}</b>
+    <span class="small">${nG} gol(s) e ${nA} assistência(s) com os autores</span>${d.partida.destaque ? `<span class="small">${esc(d.partida.destaque)}</span>` : ''}<span class="small">Notícia: “${esc(d.noticia.titulo)}”</span></div>
+    <p class="tiny muted">Se o jogo já estiver no site, ele é atualizado. Os links de fotos e do Instagram que já estão lá são mantidos. O site atualiza em cerca de 1 minuto.</p>
+    <div class="row" style="justify-content:flex-end"><button class="btn ghost" data-a="fechar">Cancelar</button><button class="btn pri" data-a="ok">${ic('up')} Publicar</button></div>`, {
+    ok: async b => {
+      if (b.disabled) return; b.disabled = true; b.textContent = 'Publicando…';
+      let r; try { r = await api('painel-publicar', { method: 'POST', body: JSON.stringify(d) }); } catch (e) { r = { status: 0, j: {} }; }
+      fecharModal();
+      if (r.status === 200 && r.j.ok) { p.publicadoSite = { em: Date.now(), versao: r.j.versao }; commit(); render(); toast('Publicado! O site atualiza em cerca de 1 minuto.'); return; }
+      const msg = { sem_token: 'Falta configurar a chave do GitHub (GITHUB_TOKEN) na Vercel.', sessao: 'Sessão expirada. Entre de novo no painel.', github_leitura: 'O GitHub recusou a leitura. Confira a chave GITHUB_TOKEN na Vercel.', github_escrita: 'O GitHub recusou a gravação. A chave precisa da permissão “Contents: Read and write”.', times: 'Os times deste jogo não existem no site.', conflito: 'O site estava sendo atualizado ao mesmo tempo. Tente de novo.' }[r.j.erro];
+      toast(msg || (r.status ? 'Não foi possível publicar no site (erro ' + r.status + ').' : 'Sem conexão. Tente de novo quando tiver internet.'), true);
+    }
+  });
 }
 
 /* ---------- Compartilhar ---------- */
@@ -1506,6 +1568,7 @@ const ACOES = {
   'pt-reabrir': () => { const p = partidaAtual(); p.status = p.eventos.length || p.relogio.acumulado ? 'ao_vivo' : 'agendada'; commit('Jogo reaberto para correções.'); render(); },
   'pt-encerrar': () => confirmar('Encerrar o jogo?', 'O placar fica registrado e o ranking é atualizado. Dá para reabrir depois para corrigir.', () => { const p = partidaAtual(); if (p.relogio.rodando) { p.relogio.acumulado += Date.now() - p.relogio.inicio; p.relogio.rodando = false; } p.status = 'encerrada'; manterTela(false); commit('Jogo encerrado.'); render(); compartilhar(p); }),
   compartilhar: () => compartilhar(partidaAtual()),
+  'pub-site': () => publicarSite(partidaAtual()),
   'rl-iniciar': () => { const p = partidaAtual(); p.relogio.rodando = true; p.relogio.inicio = Date.now(); if (p.status === 'agendada') p.status = 'ao_vivo'; manterTela(true); if (!UI.tela && S.config.telaCheia !== false) { UI.tela = true; UI.telaAnim = true; telaCheia(true); } commit(); render(); },
     'tela-abrir': () => { UI.tela = true; UI.telaAnim = true; telaCheia(true); manterTela(true); render(); },
     'tela-fechar': () => { UI.tela = false; telaCheia(false); render(); },
