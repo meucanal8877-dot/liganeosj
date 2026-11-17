@@ -1,6 +1,6 @@
 {
- "versao": 13,
- "atualizadoEm": "2026-11-16T22:55:00-03:00",
+ "versao": 14,
+ "atualizadoEm": "2026-11-16T23:30:00-03:00",
  "config": {
   "nome": "Liga Neo SJ",
   "slogan": "Seja Você o protagonista desse jogo!",
@@ -658,22 +658,213 @@
    "local": "Arena Lobos",
    "mandanteId": "al-ec",
    "visitanteId": "al-fc",
-   "golsMandante": null,
-   "golsVisitante": null,
+   "golsMandante": 6,
+   "golsVisitante": 10,
    "vencedorId": "",
-   "situacao": "agendado",
-   "resumo": "Segundo jogo de novembro. O placar será publicado assim que for confirmado pela organização.",
-   "destaque": "",
-   "eventos": [],
+   "situacao": "encerrado",
+   "resumo": "O Arena Lobos Futebol Clube venceu o Arena Lobos Esporte Clube por 10 x 6 e ampliou a vantagem na série do mês (AL EC 0 x 2 AL FC). Um dos gols do AL EC foi contra. Faltas: AL EC 4 x 3 AL FC. Seleção da rodada: Renan (4,7), Mago (7,5), Caio (8,1), Gleysson (9,9), Garotinho (8,5), Neto (8,2) e Renne (10,0).",
+   "destaque": "Craque do jogo: Renne, com 3 gols, 1 assistência e nota 10,0.",
+   "eventos": [
+    {
+     "id": "2026-11-j02-01",
+     "tipo": "gol",
+     "timeId": "al-ec",
+     "jogadorId": "",
+     "assistenciaId": "",
+     "minuto": ""
+    },
+    {
+     "id": "2026-11-j02-02",
+     "tipo": "gol",
+     "timeId": "al-ec",
+     "jogadorId": "eduardo-rato",
+     "assistenciaId": "",
+     "minuto": ""
+    },
+    {
+     "id": "2026-11-j02-03",
+     "tipo": "gol",
+     "timeId": "al-ec",
+     "jogadorId": "caio-silva",
+     "assistenciaId": "",
+     "minuto": ""
+    },
+    {
+     "id": "2026-11-j02-04",
+     "tipo": "gol",
+     "timeId": "al-ec",
+     "jogadorId": "bruno-ferraz",
+     "assistenciaId": "",
+     "minuto": ""
+    },
+    {
+     "id": "2026-11-j02-05",
+     "tipo": "gol",
+     "timeId": "al-ec",
+     "jogadorId": "wellington-silva",
+     "assistenciaId": "",
+     "minuto": ""
+    },
+    {
+     "id": "2026-11-j02-06",
+     "tipo": "gol",
+     "timeId": "al-ec",
+     "jogadorId": "marcio-smith",
+     "assistenciaId": "",
+     "minuto": ""
+    },
+    {
+     "id": "2026-11-j02-07",
+     "tipo": "gol",
+     "timeId": "al-fc",
+     "jogadorId": "vinni-mago",
+     "assistenciaId": "",
+     "minuto": ""
+    },
+    {
+     "id": "2026-11-j02-08",
+     "tipo": "gol",
+     "timeId": "al-fc",
+     "jogadorId": "gleysson-nascimento",
+     "assistenciaId": "",
+     "minuto": ""
+    },
+    {
+     "id": "2026-11-j02-09",
+     "tipo": "gol",
+     "timeId": "al-fc",
+     "jogadorId": "gleysson-nascimento",
+     "assistenciaId": "",
+     "minuto": ""
+    },
+    {
+     "id": "2026-11-j02-10",
+     "tipo": "gol",
+     "timeId": "al-fc",
+     "jogadorId": "sergio-alves",
+     "assistenciaId": "",
+     "minuto": ""
+    },
+    {
+     "id": "2026-11-j02-11",
+     "tipo": "gol",
+     "timeId": "al-fc",
+     "jogadorId": "sergio-alves",
+     "assistenciaId": "",
+     "minuto": ""
+    },
+    {
+     "id": "2026-11-j02-12",
+     "tipo": "gol",
+     "timeId": "al-fc",
+     "jogadorId": "neto-brito",
+     "assistenciaId": "",
+     "minuto": ""
+    },
+    {
+     "id": "2026-11-j02-13",
+     "tipo": "gol",
+     "timeId": "al-fc",
+     "jogadorId": "sergio-leopoldino",
+     "assistenciaId": "",
+     "minuto": ""
+    },
+    {
+     "id": "2026-11-j02-14",
+     "tipo": "gol",
+     "timeId": "al-fc",
+     "jogadorId": "renne-andre",
+     "assistenciaId": "",
+     "minuto": ""
+    },
+    {
+     "id": "2026-11-j02-15",
+     "tipo": "gol",
+     "timeId": "al-fc",
+     "jogadorId": "renne-andre",
+     "assistenciaId": "",
+     "minuto": ""
+    },
+    {
+     "id": "2026-11-j02-16",
+     "tipo": "gol",
+     "timeId": "al-fc",
+     "jogadorId": "renne-andre",
+     "assistenciaId": "",
+     "minuto": ""
+    },
+    {
+     "id": "2026-11-j02-17",
+     "tipo": "assistencia",
+     "timeId": "al-ec",
+     "jogadorId": "caio-silva",
+     "assistenciaId": "",
+     "minuto": ""
+    },
+    {
+     "id": "2026-11-j02-18",
+     "tipo": "assistencia",
+     "timeId": "al-ec",
+     "jogadorId": "caio-silva",
+     "assistenciaId": "",
+     "minuto": ""
+    },
+    {
+     "id": "2026-11-j02-19",
+     "tipo": "assistencia",
+     "timeId": "al-fc",
+     "jogadorId": "renne-andre",
+     "assistenciaId": "",
+     "minuto": ""
+    },
+    {
+     "id": "2026-11-j02-20",
+     "tipo": "assistencia",
+     "timeId": "al-fc",
+     "jogadorId": "marcelo-cavalcanti",
+     "assistenciaId": "",
+     "minuto": ""
+    },
+    {
+     "id": "2026-11-j02-21",
+     "tipo": "assistencia",
+     "timeId": "al-fc",
+     "jogadorId": "gleysson-nascimento",
+     "assistenciaId": "",
+     "minuto": ""
+    },
+    {
+     "id": "2026-11-j02-22",
+     "tipo": "assistencia",
+     "timeId": "al-fc",
+     "jogadorId": "gleysson-nascimento",
+     "assistenciaId": "",
+     "minuto": ""
+    },
+    {
+     "id": "2026-11-j02-23",
+     "tipo": "assistencia",
+     "timeId": "al-fc",
+     "jogadorId": "neto-brito",
+     "assistenciaId": "",
+     "minuto": ""
+    }
+   ],
    "incluidoNoTotalOficial": false,
    "midia": [
     {
      "tipo": "fotos",
      "titulo": "Fotos do Jogo 02 • Liedson Juan Photo & Film",
      "url": "https://juanphotoevideo.fotop.com/fotos/eventos/index/evento/363131"
+    },
+    {
+     "tipo": "instagram",
+     "titulo": "Post oficial do Jogo 02 de novembro",
+     "url": "https://www.instagram.com/liganeosj/p/Df0l9eqRepc/"
     }
    ],
-   "fonte": "Informado pela organização em 16/11/2026"
+   "fonte": "Post oficial @liganeosj de 16/11/2026",
+   "destaqueJogadorId": "renne-andre"
   }
  ],
  "totais": [
@@ -952,6 +1143,15 @@
  ],
  "noticias": [
   {
+   "id": "jogo-02-novembro-2026",
+   "data": "2026-11-16",
+   "categoria": "Resultado",
+   "ordem": 0,
+   "titulo": "AL FC vence o Jogo 02 por 10 x 6 e abre 2 x 0 na série de novembro",
+   "imagem": "escudo-al-fc.png",
+   "texto": "No segundo jogo de novembro, na Arena Lobos, o Arena Lobos Futebol Clube venceu o Arena Lobos Esporte Clube por 10 x 6 e abriu 2 x 0 na série do mês.\n\nGols do AL FC: Renne (3), Gleysson (2), Garotinho (2), Mago, Neto e Serjão. Assistências: Gleysson (2), Renne, Marcelo e Neto.\nGols do AL EC: Rato, Caio, Bruninho, Wellington e Márcio, além de um gol contra. Assistências: Caio (2).\n\nCraque do jogo: Renne, com nota 10,0.\n\nSeleção da rodada: Renan (4,7), Mago (7,5), Caio (8,1), Gleysson (9,9), Garotinho (8,5), Neto (8,2) e Renne (10,0)."
+  },
+  {
    "id": "fotos-jogo-02-novembro-2026",
    "data": "2026-11-16",
    "categoria": "Bastidores",
@@ -1131,6 +1331,14 @@
   }
  ],
  "instagram": [
+  {
+   "id": "ig-jogo02-novembro",
+   "data": "2026-11-16",
+   "tipo": "Post",
+   "titulo": "AL EC 6 x 10 AL FC • Jogo 02 de novembro",
+   "imagem": "",
+   "url": "https://www.instagram.com/liganeosj/p/Df0l9eqRepc/"
+  },
   {
    "id": "ig-jogo01-novembro",
    "data": "2026-11-09",

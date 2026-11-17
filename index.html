@@ -1030,7 +1030,7 @@ function pgJogo(id){
     ${p.destaque?`<div class="card" style="display:flex;gap:14px;align-items:center;flex-wrap:wrap">${dj&&photo(dj)?`<img src="${esc(photo(dj))}" alt="" style="width:64px;height:64px;border-radius:14px;object-fit:cover">`:''}<div><span class="eyebrow">Destaque da partida</span><p style="font-size:1.15rem;font-weight:600">${esc(p.destaque)}</p>${dj?`<a href="#jogador-${esc(dj.id)}">Ver perfil de ${esc(pnm(dj))}</a>`:''}</div></div>`:''}
     <div><h3 style="margin-bottom:12px">Gols e assistências</h3>
       ${evs.length ? `<div class="evlist">${evs.map(e => { const pl = player(e.jogadorId), as = player(e.assistenciaId);
-        return `<div class="ev"><span class="min">${e.minuto!==''&&e.minuto!=null?esc(e.minuto)+"'":'—'}</span>${ic(e.tipo==='gol'?'ball':'users')}<span><b>${esc(pnm(pl)||'Jogador')}</b> <span class="muted small">${e.tipo==='gol'?'gol':'assistência'} • ${esc(tnm(e.timeId,true))}</span>${as?`<br><span class="small muted">Assistência: ${esc(pnm(as))}</span>`:''}</span></div>`; }).join('')}</div>${astSolta?`<p class="small muted" style="margin-top:10px">Gols e assistências conforme o registro oficial da partida. O minuto de cada lance e qual assistência gerou cada gol não foram informados.</p>`:''}`
+        return `<div class="ev"><span class="min">${e.minuto!==''&&e.minuto!=null?esc(e.minuto)+"'":'—'}</span>${ic(e.tipo==='gol'?'ball':'users')}<span><b>${esc(pnm(pl)||(e.tipo==='gol'&&!e.jogadorId?'Gol contra':'Jogador'))}</b> <span class="muted small">${e.tipo==='gol'?'gol':'assistência'} • ${esc(tnm(e.timeId,true))}</span>${as?`<br><span class="small muted">Assistência: ${esc(pnm(as))}</span>`:''}</span></div>`; }).join('')}</div>${astSolta?`<p class="small muted" style="margin-top:10px">Gols e assistências conforme o registro oficial da partida. O minuto de cada lance e qual assistência gerou cada gol não foram informados.</p>`:''}`
       : `<div class="note">${ic('info')}<span>${p.incluidoNoTotalOficial ? 'Os gols e assistências desta partida já estão nos totais oficiais do mês. O detalhamento lance a lance não foi registrado.' : 'Nenhum lançamento individual registrado para esta partida.'}</span></div>`}
     </div>
     ${(p.midia||[]).length ? `<div><h3 style="margin-bottom:12px">Fotos e vídeos</h3><div class="links">${p.midia.map(m => safeUrl(m.url) ? `<a class="link-row" href="${esc(m.url)}" target="_blank" rel="noopener noreferrer">${ic(/instagram/.test(m.url)?'insta':m.tipo==='fotos'?'image':'ext')}<span>${esc(m.titulo||m.url)}</span>${ic('ext')}</a>` : '').join('')}</div></div>` : ''}
@@ -1431,7 +1431,7 @@ function validatePartida(o){
   const seen = new Set();
   o.eventos.forEach((e,i) => {
     const n = i+1;
-    if(!e.jogadorId) err.push(`Lançamento ${n}: escolha o jogador.`);
+    if(!e.jogadorId && e.tipo !== 'gol') err.push(`Lançamento ${n}: escolha o jogador.`);
     if(e.timeId !== o.mandanteId && e.timeId !== o.visitanteId) err.push(`Lançamento ${n}: escolha um dos times da partida.`);
     if(e.assistenciaId && e.assistenciaId === e.jogadorId) err.push(`Lançamento ${n}: o autor do gol não pode ser o autor da assistência.`);
     if(e.minuto !== '' && e.minuto != null){ const key = [e.tipo,e.jogadorId,e.minuto].join('|'); if(seen.has(key)) err.push(`Lançamento ${n} está repetido (mesmo tipo, jogador e minuto).`); seen.add(key); }
@@ -1518,7 +1518,7 @@ function evRow(e = {}){
   return `<div class="ev-row" data-eid="${esc(e.id||uid())}" data-tipo="${esc(tipo)}">
     <input type="hidden" class="ev-tipo" value="${esc(tipo)}">
     <select class="ev-time" aria-label="Time">${optList(ts, e.timeId, 'Time…')}</select>
-    <select class="ev-jog" aria-label="Jogador">${optList(ps, e.jogadorId, 'Jogador…')}</select>
+    <select class="ev-jog" aria-label="Jogador">${optList(ps, e.jogadorId, e.tipo === 'assistencia' ? 'Jogador…' : 'Gol contra (sem autor)')}</select>
     <select class="ev-ast" aria-label="Assistência">${optList(ps, e.assistenciaId, 'Sem assistência')}</select>
     <input class="ev-min" type="number" min="0" max="120" inputmode="numeric" placeholder="Minuto" aria-label="Minuto" value="${e.minuto==null?'':esc(e.minuto)}">
     <button type="button" class="ibtn" data-act="ev-del" aria-label="Remover lançamento">${ic('trash')}</button></div>`;
