@@ -1033,7 +1033,7 @@ function pgJogo(id){
         return `<div class="ev"><span class="min">${e.minuto!==''&&e.minuto!=null?esc(e.minuto)+"'":'—'}</span>${ic(e.tipo==='gol'?'ball':'users')}<span><b>${esc(pnm(pl)||'Jogador')}</b> <span class="muted small">${e.tipo==='gol'?'gol':'assistência'} • ${esc(tnm(e.timeId,true))}</span>${as?`<br><span class="small muted">Assistência: ${esc(pnm(as))}</span>`:''}</span></div>`; }).join('')}</div>${astSolta?`<p class="small muted" style="margin-top:10px">Gols e assistências conforme o registro oficial da partida. O minuto de cada lance e qual assistência gerou cada gol não foram informados.</p>`:''}`
       : `<div class="note">${ic('info')}<span>${p.incluidoNoTotalOficial ? 'Os gols e assistências desta partida já estão nos totais oficiais do mês. O detalhamento lance a lance não foi registrado.' : 'Nenhum lançamento individual registrado para esta partida.'}</span></div>`}
     </div>
-    ${(p.midia||[]).length ? `<div><h3 style="margin-bottom:12px">Fotos e vídeos</h3><div class="links">${p.midia.map(m => safeUrl(m.url) ? `<a class="link-row" href="${esc(m.url)}" target="_blank" rel="noopener noreferrer">${ic(/instagram/.test(m.url)?'insta':'ext')}<span>${esc(m.titulo||m.url)}</span>${ic('ext')}</a>` : '').join('')}</div></div>` : ''}
+    ${(p.midia||[]).length ? `<div><h3 style="margin-bottom:12px">Fotos e vídeos</h3><div class="links">${p.midia.map(m => safeUrl(m.url) ? `<a class="link-row" href="${esc(m.url)}" target="_blank" rel="noopener noreferrer">${ic(/instagram/.test(m.url)?'insta':m.tipo==='fotos'?'image':'ext')}<span>${esc(m.titulo||m.url)}</span>${ic('ext')}</a>` : '').join('')}</div></div>` : ''}
     <div class="btns">${shareBtn(shareTxt, 'jogo-'+p.id)}</div>
     ${p.fonte?`<p class="small muted">Fonte: ${esc(p.fonte)}</p>`:''}
     <div class="pager">${prev?`<a class="btn btn-sm" href="#jogo-${esc(prev.id)}">${ic('arrowL')} ${esc(prev.titulo)}</a>`:'<span></span>'}${next?`<a class="btn btn-sm" href="#jogo-${esc(next.id)}">${esc(next.titulo)} ${ic('arrowR')}</a>`:''}</div>
@@ -1250,11 +1250,13 @@ function pgMidia(){
   const cats = Array.from(new Set(vids.map(v => v.categoria).filter(Boolean)));
   const list = vids.filter(v => !u.cat || v.categoria === u.cat).map(videoCard).filter(Boolean);
   const gal = D().galeria.slice().sort(ord);
+  const fotosJogos = sortedMatches().slice().reverse().flatMap(p => (p.midia||[]).filter(m => m.tipo === 'fotos' && safeUrl(m.url)).map(m => ({p, m})));
   return pageHead('Mídia', 'Vídeos e galeria', 'Vídeos oficiais da liga e as publicações em vídeo do Instagram.', '<span>/</span><span>Mídia</span>') + `
   <section class="band" style="padding-top:20px"><div class="wrap">
     ${cats.length>1?`<div class="chips" role="group" aria-label="Filtrar por categoria" style="margin-bottom:18px">${['',...cats].map(c => `<button type="button" class="chip" data-act="chip" data-f="midia.cat" data-v="${esc(c)}" aria-pressed="${u.cat===c}">${esc(c||'Todos')}</button>`).join('')}</div>`:''}
     ${list.length ? `<div class="grid g4">${list.join('')}</div>` : emptyBox('video','Nenhum vídeo nesta categoria','')}
   </div></section>
+  ${fotosJogos.length ? `<section class="band"><div class="wrap"><div class="sec-head"><div><span class="eyebrow">Fotos dos jogos</span><h2>Fotos oficiais das partidas</h2></div></div><div class="links">${fotosJogos.map(({p, m}) => `<a class="link-row" href="${esc(m.url)}" target="_blank" rel="noopener noreferrer">${ic('image')}<span><b>${esc(p.titulo||'Jogo')} • ${esc(fmtDate(p.data))}</b><br><span class="small muted">${esc(m.titulo||'Ver fotos')}</span></span>${ic('ext')}</a>`).join('')}</div></div></section>` : ''}
   <section class="band band-alt"><div class="wrap"><div class="sec-head"><div><span class="eyebrow">Galeria</span><h2>Fotos e artes</h2></div></div>${gal.length ? galleryGrid(gal) : emptyBox('image','Galeria vazia','As fotos oficiais aparecem aqui.')}</div></section>`;
 }
 
@@ -1276,6 +1278,7 @@ function pgNoticia(id){
   <section class="band" style="padding-top:8px"><div class="wrap"><article class="article">
     ${src?`<img class="lead-img" src="${esc(src)}" alt="">`:''}
     ${String(n.texto||'').split(/\n\s*\n/).map(t => `<p>${esc(t)}</p>`).join('')}
+    ${safeUrl(n.link)?`<div class="btns" style="margin-bottom:14px"><a class="btn" href="${esc(n.link)}" target="_blank" rel="noopener noreferrer">${ic('image')} ${esc(n.linkTitulo||'Abrir link')} ${ic('ext')}</a></div>`:''}
     <div class="btns">${shareBtn(n.titulo, tok)}${url?`<button type="button" class="btn btn-sm" data-act="copy" data-v="${esc(url)}">${ic('copy')} Copiar link</button>`:''}</div>
   </article>
   ${others.length?`<div style="margin-top:36px"><h2 style="margin-bottom:14px">Mais notícias</h2><div class="grid g3">${others.map(newsCard).join('')}</div></div>`:''}
@@ -1386,7 +1389,8 @@ const SCHEMA = {
   ]},
   noticias:{label:'Notícias', icon:'news', idFrom:o => o.titulo, title:o => o.titulo, sub:o => `${o.categoria||''} • ${fmtDate(o.data)}`, img:o => media(o.imagem), sort:(a,b) => (b.data||'').localeCompare(a.data||''), fields:[
     {k:'titulo',l:'Título',t:'text',req:true},{k:'data',l:'Data',t:'date',req:true},{k:'categoria',l:'Categoria',t:'select',opts:['Comunicado','Resultado','Ranking','Regras','Bastidores','Apoiadores','Premiação'].map(x=>[x,x]),req:true},
-    {k:'imagem',l:'Imagem',t:'image'},{k:'texto',l:'Texto',t:'textarea',req:true,rows:8,h:'Separe parágrafos com uma linha em branco.'}
+    {k:'imagem',l:'Imagem',t:'image'},{k:'texto',l:'Texto',t:'textarea',req:true,rows:8,h:'Separe parágrafos com uma linha em branco.'},
+    {k:'link',l:'Link (opcional)',t:'url',h:'Ex.: galeria de fotos do fotógrafo.'},{k:'linkTitulo',l:'Texto do botão do link',t:'text'}
   ]},
   videos:{label:'Vídeos', icon:'video', idFrom:o => o.titulo, title:o => o.titulo, sub:o => `${o.categoria||''} • ${o.arquivo?'arquivo':'link'}`, img:o => media(o.poster), sort:(a,b) => (b.data||'').localeCompare(a.data||''), fields:[
     {k:'titulo',l:'Título',t:'text',req:true},{k:'categoria',l:'Categoria',t:'select',opts:['Melhores gols','Melhores lances','Resumo das partidas','Entrevistas','Bastidores','Apresentação dos elencos','Premiações','Comunicados','Apresentação da liga','Ranking'].map(x=>[x,x]),req:true},
@@ -1545,7 +1549,7 @@ function collect(sec, form){
       const n = Number(v); if(!Number.isInteger(n) || (f.min!=null && n < f.min)){ errs.push(`"${f.l}" precisa ser um número inteiro${f.min!=null?' a partir de '+f.min:''}.`); continue; }
       o[f.k] = n; continue;
     }
-    if(f.t === 'links'){ o[f.k] = v.split('\n').map(s => s.trim()).filter(Boolean).map(s => { const i = s.lastIndexOf('|'); const url = (i>=0?s.slice(i+1):s).trim(), titulo = i>=0?s.slice(0,i).trim():''; if(!/^https:\/\//i.test(url)) errs.push(`Link inválido em "${f.l}": ${url}`); return {tipo:/instagram/i.test(url)?'instagram':'link', titulo, url}; }); continue; }
+    if(f.t === 'links'){ o[f.k] = v.split('\n').map(s => s.trim()).filter(Boolean).map(s => { const i = s.lastIndexOf('|'); const url = (i>=0?s.slice(i+1):s).trim(), titulo = i>=0?s.slice(0,i).trim():''; if(!/^https:\/\//i.test(url)) errs.push(`Link inválido em "${f.l}": ${url}`); return {tipo:/instagram/i.test(url)?'instagram':(/fotop\.com|\/fotos?\b|photos?/i.test(url)||/\bfotos?\b/i.test(titulo))?'fotos':'link', titulo, url}; }); continue; }
     if(f.req && !v) errs.push(`Preencha "${f.l}".`);
     if(v && f.t === 'url' && !/^https:\/\/[^\s]+\.[^\s]+/i.test(v)) errs.push(`"${f.l}" precisa começar com https://`);
     if(v && f.t === 'month' && !/^\d{4}-(0[1-9]|1[0-2])$/.test(v)) errs.push(`"${f.l}" precisa estar no formato AAAA-MM.`);

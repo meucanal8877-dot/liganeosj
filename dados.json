@@ -1,6 +1,6 @@
 {
- "versao": 12,
- "atualizadoEm": "2026-11-11T08:40:00-03:00",
+ "versao": 13,
+ "atualizadoEm": "2026-11-16T22:55:00-03:00",
  "config": {
   "nome": "Liga Neo SJ",
   "slogan": "Seja Você o protagonista desse jogo!",
@@ -647,6 +647,33 @@
    ],
    "fonte": "Post oficial @liganeosj de 09/11/2026",
    "destaqueJogadorId": "vinni-mago"
+  },
+  {
+   "id": "2026-11-jogo-02",
+   "titulo": "Jogo 02",
+   "rodada": 2,
+   "mes": "2026-11",
+   "data": "2026-11-16",
+   "hora": "19:00",
+   "local": "Arena Lobos",
+   "mandanteId": "al-ec",
+   "visitanteId": "al-fc",
+   "golsMandante": null,
+   "golsVisitante": null,
+   "vencedorId": "",
+   "situacao": "agendado",
+   "resumo": "Segundo jogo de novembro. O placar será publicado assim que for confirmado pela organização.",
+   "destaque": "",
+   "eventos": [],
+   "incluidoNoTotalOficial": false,
+   "midia": [
+    {
+     "tipo": "fotos",
+     "titulo": "Fotos do Jogo 02 • Liedson Juan Photo & Film",
+     "url": "https://juanphotoevideo.fotop.com/fotos/eventos/index/evento/363131"
+    }
+   ],
+   "fonte": "Informado pela organização em 16/11/2026"
   }
  ],
  "totais": [
@@ -924,6 +951,17 @@
   }
  ],
  "noticias": [
+  {
+   "id": "fotos-jogo-02-novembro-2026",
+   "data": "2026-11-16",
+   "categoria": "Bastidores",
+   "ordem": 0,
+   "titulo": "Fotos do Jogo 02 já estão no ar",
+   "imagem": "logo-liga.png",
+   "texto": "As fotos do Jogo 02 de novembro, na Arena Lobos, já estão disponíveis na galeria do fotógrafo Liedson Juan (Photo & Film).\n\nSão 1.046 fotos e 15 vídeos da partida. Toque no botão abaixo para ver a galeria e encontrar as suas.",
+   "link": "https://juanphotoevideo.fotop.com/fotos/eventos/index/evento/363131",
+   "linkTitulo": "Ver as fotos do Jogo 02"
+  },
   {
    "id": "jogo-01-novembro-2026",
    "data": "2026-11-09",
