@@ -321,6 +321,9 @@ main{display:block;min-height:60vh}
 .tcard{display:grid;gap:14px;justify-items:center;text-align:center;padding:26px 20px;border-radius:var(--r2);border:1px solid var(--line);text-decoration:none;color:var(--fg);position:relative;overflow:hidden}
 .tcard img{width:140px;height:150px;object-fit:contain}
 .tcard h3{font-size:1.7rem;text-transform:uppercase;font-weight:800}
+.tcard.t-novo{background:linear-gradient(165deg,rgba(255,255,255,.06),rgba(255,255,255,.015))}
+.tcard.t-novo img{width:170px;height:200px}
+.tcard .breve{display:inline-block;padding:5px 14px;border-radius:999px;border:1px solid var(--gold);color:var(--gold);font-weight:800;font-size:.74rem;letter-spacing:.14em;text-transform:uppercase}
 .t-blue{background:linear-gradient(180deg,var(--blue-bg),var(--card) 70%);border-color:#24418a}
 .t-red{background:linear-gradient(180deg,var(--red-bg),var(--card) 70%);border-color:#6a1d29}
 .tdot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:1px}
@@ -834,6 +837,14 @@ function pageHead(eyebrow, title, text, crumbs){
   return `<section class="page-head"><div class="wrap">${crumbs?`<nav class="crumbs" aria-label="Você está em"><a href="#inicio">Início</a>${crumbs}</nav>`:''}<span class="eyebrow">${esc(eyebrow)}</span><h1 tabindex="-1">${title}</h1>${text?`<p>${text}</p>`:''}</div></section>`;
 }
 
+function novasEquipesHtml(alt){
+  const c = D().config, xs = (Array.isArray(c.novasEquipes) ? c.novasEquipes : []).filter(t => t && t.nome);
+  if(!xs.length) return '';
+  return `<section class="band${alt?' band-alt':''}"><div class="wrap">
+    <div class="sec-head"><div><span class="eyebrow">${ic('shield')} Em breve</span><h2>${esc(c.novasEquipesTitulo||'Novas equipes na liga')}</h2>${c.novasEquipesTexto?`<p>${esc(c.novasEquipesTexto)}</p>`:''}</div></div>
+    <div class="grid g2">${xs.map(t => { const src = media(t.escudo); return `<div class="tcard t-novo">${src?`<img src="${esc(src)}" alt="Escudo do ${esc(t.nome)}" loading="lazy">`:''}<h3>${esc(t.nome)}</h3><span class="breve">Em breve</span></div>`; }).join('')}</div>
+  </div></section>`;
+}
 function pgInicio(){
   const c = D().config, last = finished()[0], next = upcoming()[0], champ = latestChamp();
   const st = computeStats(), rg = rankBy(st,'g'), ra = rankBy(st,'a');
@@ -868,6 +879,8 @@ function pgInicio(){
       <div class="btns" style="margin-top:12px"><a class="btn btn-sm" href="#campeoes">Hall dos campeões ${ic('arrowR')}</a></div></div></div>`
       : `<div class="card">${emptyBox('trophy','Campeão do mês a definir','O campeão aparece aqui quando uma equipe chegar a 3 vitórias no mês.')}</div>`}
   </div></section>
+
+  ${novasEquipesHtml(false)}
 
   <section class="band band-alt"><div class="wrap">
     <div class="sec-head"><div><span class="eyebrow">${esc(D().partidas.some(p => p.situacao === 'encerrado' && !p.incluidoNoTotalOficial && (p.eventos||[]).length) ? 'Temporada ' + (c.temporada||'') : (c.totaisRotulo||'Ranking'))}</span><h2>Artilharia e assistências</h2></div><a class="btn btn-sm" href="#ranking">Ranking completo ${ic('arrowR')}</a></div>
@@ -1049,6 +1062,7 @@ function pgTimes(){
       <div class="kpis" style="width:100%"><div class="kpi"><b>${tb?.v||0}</b><span>Vitórias</span></div><div class="kpi"><b>${tb?.j||0}</b><span>Jogos</span></div><div class="kpi"><b>${titlesOf(t.id)}</b><span>Títulos</span></div></div>
       <span class="btn btn-sm">Ver time ${ic('arrowR')}</span></a>`; }).join('') || emptyBox('shield','Nenhum time cadastrado','')}
   </div></section>
+  ${novasEquipesHtml(true)}
   <section class="band band-alt"><div class="wrap">
     <div class="sec-head"><div><span class="eyebrow">${D().jogadores.length} jogadores</span><h2>Jogadores da liga</h2><p>Toque no card para ver o perfil completo.</p></div>
       <div class="chips" role="group" aria-label="Filtrar por posição">${['','Goleiro','Zagueiro','Meio-campo','Atacante'].map(p => `<button type="button" class="chip" data-act="chip" data-f="jog.pos" data-v="${p}" aria-pressed="${u.pos===p}">${p||'Todos'}</button>`).join('')}</div></div>

@@ -1,6 +1,6 @@
 {
- "versao": 15,
- "atualizadoEm": "2026-11-17T23:28:38.435Z",
+ "versao": 16,
+ "atualizadoEm": "2026-11-18T14:07:38.024Z",
  "config": {
   "nome": "Liga Neo SJ",
   "slogan": "Seja Você o protagonista desse jogo!",
@@ -26,7 +26,19 @@
   "regraPrincipal": "Respeito, compromisso e espírito esportivo. A Liga Neo SJ é uma competição entre amigos. A intenção é competir, se divertir e manter o ambiente organizado, garantindo uma experiência justa e positiva para todos.",
   "totaisReferencia": "Ranking final de outubro de 2026 (após o Jogo 04)",
   "totaisMes": "2026-10",
-  "totaisRotulo": "Ranking final de outubro"
+  "totaisRotulo": "Ranking final de outubro",
+  "novasEquipesTitulo": "Duas novas equipes chegando",
+  "novasEquipesTexto": "A Liga Neo SJ vai ganhar duas novas equipes. Elencos e data de estreia a confirmar.",
+  "novasEquipes": [
+   {
+    "nome": "Clube Atlético Lobos",
+    "escudo": "escudo-clube-atletico-lobos.webp"
+   },
+   {
+    "nome": "Associação Esportiva Lobos",
+    "escudo": "escudo-associacao-esportiva-lobos.webp"
+   }
+  ]
  },
  "times": [
   {
@@ -1087,6 +1099,15 @@
   }
  ],
  "noticias": [
+  {
+   "id": "novas-equipes-lobos",
+   "data": "2026-11-18",
+   "categoria": "Comunicado",
+   "ordem": 0,
+   "titulo": "Em breve: duas novas equipes na Liga Neo SJ",
+   "imagem": "escudo-clube-atletico-lobos.webp",
+   "texto": "A Liga Neo SJ vai ganhar duas novas equipes: o Clube Atlético Lobos e a Associação Esportiva Lobos.\n\nOs elencos e a data de estreia serão divulgados em breve no Instagram oficial da liga."
+  },
   {
    "id": "jogo-02-novembro-2026",
    "data": "2026-11-16",
